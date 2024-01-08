@@ -29,25 +29,25 @@ it('validates login page accessible only to guests', function () {
 });
 
 it('validates login process using valid and invalid credentials', function () {
-    $email = 'test@example.com';
+    $user = 'john.doe';
     $invalidPassword = 'wrong';
 
     // Test scenarios with invalid parameters
     testLoginWithCredentials('', '')
-        ->assertHasErrors(['email' => 'required', 'password' => 'required']);
-    testLoginWithCredentials($email, $invalidPassword)
-        ->assertHasErrors('email');
+        ->assertHasErrors(['username' => 'required', 'password' => 'required']);
+    testLoginWithCredentials($user, $invalidPassword)
+        ->assertHasErrors('username');
 
     // Test scenarios with valid parameters
     $validPassword = 'password';
     $user = User::factory()->create(['password' => Hash::make($validPassword)]);
-    testLoginWithCredentials($user->email, $validPassword)
+    testLoginWithCredentials($user->username, $validPassword)
         ->assertRedirect(route('dashboard'));
 });
 
-it('has an email input field', function () {
+it('has an username input field', function () {
     Livewire::test(Login::class)
-        ->assertPropertyWired('email');
+        ->assertPropertyWired('username');
 });
 
 it('has a password input field', function () {
@@ -61,20 +61,20 @@ it('can submit the login form', function () {
 });
 
 it('shows an error message if the login failed', function () {
-    $email = 'test@example.com';
+    $username = 'john.doe';
     $invalidPassword = 'wrong';
 
     // Test scenario with invalid parameters
-    testLoginWithCredentials($email, $invalidPassword)
-        ->assertHasErrors('email')
+    testLoginWithCredentials($username, $invalidPassword)
+        ->assertHasErrors('username')
         ->assertSee(__('auth.failed'));
 });
 
 // Helper function to test login with provided credentials
-function testLoginWithCredentials($email, $password)
+function testLoginWithCredentials($username, $password)
 {
     return Livewire::test('auth.login')
-        ->set('email', $email)
+        ->set('username', $username)
         ->set('password', $password)
         ->call('login');
 }

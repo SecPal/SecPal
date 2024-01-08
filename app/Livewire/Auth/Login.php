@@ -19,7 +19,7 @@ use Livewire\Component;
 class Login extends Component
 {
     #[Validate]
-    public $email = '';
+    public $username = '';
 
     public $password = '';
 
@@ -28,7 +28,7 @@ class Login extends Component
     public function rules(): array
     {
         return [
-            'email' => [
+            'username' => [
                 'required',
             ],
             'password' => [
@@ -41,11 +41,11 @@ class Login extends Component
     {
         $this->validate();
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['username' => $this->username, 'password' => $this->password])) {
             session()->regenerate();
             $this->redirectRoute('dashboard', navigate: true);
         } else {
-            $this->addError('email', __('auth.failed'));
+            $this->addError('username', __('auth.failed'));
             $this->showErrorIndicator = true;
         }
     }

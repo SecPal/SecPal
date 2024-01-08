@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,8 +27,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->name;
+
         return [
-            'name' => fake()->name(),
+            'username' => strtolower(str_replace(' ', '.', $name)),
+            'fullname' => $name,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
