@@ -45,6 +45,31 @@ it('validates login process using valid and invalid credentials', function () {
         ->assertRedirect(route('dashboard'));
 });
 
+it('has an email input field', function () {
+    Livewire::test(Login::class)
+        ->assertPropertyWired('email');
+});
+
+it('has a password input field', function () {
+    Livewire::test(Login::class)
+        ->assertPropertyWired('password');
+});
+
+it('can submit the login form', function () {
+    Livewire::test(Login::class)
+        ->assertMethodWiredToForm('login');
+});
+
+it('shows an error message if the login failed', function () {
+    $email = 'test@example.com';
+    $invalidPassword = 'wrong';
+
+    // Test scenario with invalid parameters
+    testLoginWithCredentials($email, $invalidPassword)
+        ->assertHasErrors('email')
+        ->assertSee(__('auth.failed'));
+});
+
 // Helper function to test login with provided credentials
 function testLoginWithCredentials($email, $password)
 {

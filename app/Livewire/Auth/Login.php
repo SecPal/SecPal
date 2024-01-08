@@ -23,6 +23,8 @@ class Login extends Component
 
     public $password = '';
 
+    public $showErrorIndicator = false;
+
     public function rules(): array
     {
         return [
@@ -44,6 +46,7 @@ class Login extends Component
             $this->redirectRoute('dashboard', navigate: true);
         } else {
             $this->addError('email', __('auth.failed'));
+            $this->showErrorIndicator = true;
         }
     }
 
