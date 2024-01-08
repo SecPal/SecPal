@@ -18,24 +18,13 @@ use Livewire\Component;
 
 class Login extends Component
 {
-    #[Validate]
+    #[Validate('required')]
     public $username = '';
 
+    #[Validate('required')]
     public $password = '';
 
     public $showErrorIndicator = false;
-
-    public function rules(): array
-    {
-        return [
-            'username' => [
-                'required',
-            ],
-            'password' => [
-                'required',
-            ],
-        ];
-    }
 
     public function login(): void
     {
