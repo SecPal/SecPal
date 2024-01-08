@@ -5,9 +5,11 @@
  */
 
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Logout;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
@@ -79,6 +81,22 @@ it('shows an error message if the login failed', function () {
 
     $this->assertGuest();
 });
+
+it('can logout an user', function () {
+    actingAs($this->user);
+
+    $this->assertAuthenticatedAs($this->user);
+
+    Livewire::test(Logout::class)
+        ->call('logout')
+        ->assertRedirect('/');
+
+    $this->assertGuest();
+});
+
+it('has a logout button', function () {
+
+})->todo();
 
 // Helper function to test login with provided credentials
 function testLoginWithCredentials($username, $password)
