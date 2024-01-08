@@ -12,8 +12,11 @@ use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
+
 it('validates live wire login page', function () {
-    // Keep the login page load test inline
     get(route('login'))
         ->assertOk()
         ->assertSeeLivewire(Login::class);
@@ -22,8 +25,7 @@ it('validates live wire login page', function () {
 it('validates login page accessible only to guests', function () {
     get(route('login'))
         ->assertOk();
-    $user = User::factory()->create();
-    $this->actingAs($user);
+    $this->actingAs($this->user);
     get(route('login'))
         ->assertRedirectToRoute('dashboard');
 });
@@ -32,17 +34,23 @@ it('validates login process using valid and invalid credentials', function () {
     $user = 'john.doe';
     $invalidPassword = 'wrong';
 
+    $this->assertGuest();
+
     // Test scenarios with invalid parameters
     testLoginWithCredentials('', '')
         ->assertHasErrors(['username' => 'required', 'password' => 'required']);
     testLoginWithCredentials($user, $invalidPassword)
         ->assertHasErrors('username');
 
+    $this->assertGuest();
+
     // Test scenarios with valid parameters
     $validPassword = 'password';
     $user = User::factory()->create(['password' => Hash::make($validPassword)]);
     testLoginWithCredentials($user->username, $validPassword)
         ->assertRedirect(route('dashboard'));
+
+    $this->assertAuthenticatedAs($user);
 });
 
 it('has an username input field', function () {
@@ -68,6 +76,8 @@ it('shows an error message if the login failed', function () {
     testLoginWithCredentials($username, $invalidPassword)
         ->assertHasErrors('username')
         ->assertSee(__('auth.failed'));
+
+    $this->assertGuest();
 });
 
 // Helper function to test login with provided credentials
