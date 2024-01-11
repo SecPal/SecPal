@@ -5,6 +5,7 @@
  */
 
 use App\Livewire\Auth\Login;
+use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +23,7 @@ Route::get('login', Login::class)
     ->name('login')
     ->middleware('guest');
 
-Route::get('home', function () {
-    return true;
-})
+Route::get('home', Dashboard::class)
     ->name('dashboard')
     ->middleware('auth');
 
