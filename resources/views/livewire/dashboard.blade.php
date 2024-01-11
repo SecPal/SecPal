@@ -1,3 +1,4 @@
 <div>
+    <x-nav/>
 
 </div>

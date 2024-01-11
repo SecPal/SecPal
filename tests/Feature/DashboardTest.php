@@ -3,6 +3,7 @@
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
 
+use App\Livewire\Dashboard;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -29,4 +30,9 @@ it('redirects unauthenticated guests to login', function () {
 
     get($this->dashboardRoute)
         ->assertRedirectToRoute('login');
+});
+
+it('has a logout button', function () {
+    Livewire::test(Dashboard::class)
+        ->assertMethodWired('$dispatchTo(\'auth.logout\', \'logout\')');
 });
