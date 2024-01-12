@@ -94,10 +94,6 @@ it('can logout an user', function () {
     $this->assertGuest();
 });
 
-it('has a logout button', function () {
-
-})->todo();
-
 // Helper function to test login with provided credentials
 function testLoginWithCredentials($username, $password)
 {

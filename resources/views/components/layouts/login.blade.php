@@ -4,16 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $title ?? 'SecPal' }}</title>
+    <title>{{ $title ?? 'SecPal Login' }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
-    <script>
-        window.addEventListener('popstate', function () {
-            location.reload();
-        });
-    </script>
 </head>
 <body class="h-full">
 {{ $slot }}
