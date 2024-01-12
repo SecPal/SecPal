@@ -8,6 +8,12 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
+    <script>
+        window.addEventListener('popstate', function () {
+            location.reload();
+        });
+    </script>
 </head>
 <body class="h-full">
 {{ $slot }}
