@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -14,7 +18,9 @@
 uses(
     Tests\TestCase::class,
     // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+)->beforeEach(function () {
+    $this->withoutVite();
+})->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
