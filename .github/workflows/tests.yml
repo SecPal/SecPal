@@ -50,7 +50,7 @@ jobs:
         run: npm install
 
       - name: Compile
-        run: npm run build
+        run: node_modules/.bin/vite build
 
       - name: Install dependencies
         run: |
