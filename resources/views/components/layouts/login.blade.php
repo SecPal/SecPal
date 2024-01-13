@@ -10,6 +10,7 @@
     @livewireStyles
 </head>
 <body class="h-full">
+{{ str_replace(url('/'), '', url()->previous()) }}
 {{ $slot }}
 @livewireScripts
 <livewire:auth.logout/>
