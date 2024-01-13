@@ -46,8 +46,8 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: Install node dependencies
-        uses: bahmutov/npm-install@v1
+      - name: npm install
+        run: npm install
 
       - name: Compile
         run: npm run build
