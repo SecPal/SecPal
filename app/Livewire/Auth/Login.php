@@ -30,7 +30,7 @@ class Login extends Component
     private function checkForRedirect(): void
     {
         // check if we want to redirect after successful login
-        if (url()->current() != url()->previous()) {
+        if (str_replace(url('/'), '', url()->previous()) != '/') {
             $this->redirectUrl = str_replace(url('/'), '', url()->previous());
         }
     }
