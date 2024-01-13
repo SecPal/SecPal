@@ -13,6 +13,7 @@ use function Pest\Laravel\get;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    $this->withoutVite();
     $this->user = User::factory()->create();
     $this->dashboardRoute = route('dashboard');
 });
