@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,10 +15,15 @@
 |
 */
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\CreatesApplication;
+use Tests\TestCase;
+
 uses(
-    Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+    TestCase::class,
+    CreatesApplication::class,
+    RefreshDatabase::class
+)->in('Feature', 'Unit', 'Policies');
 
 /*
 |--------------------------------------------------------------------------
