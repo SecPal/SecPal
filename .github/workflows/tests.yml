@@ -46,11 +46,11 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: npm install
-        run: npm install
+      - name: Install node dependencies
+        uses: bahmutov/npm-install@v1
 
       - name: Compile
-        run: node_modules/.bin/vite build
+        run: npm run build
 
       - name: Install dependencies
         run: |
