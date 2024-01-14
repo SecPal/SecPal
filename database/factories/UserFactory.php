@@ -7,6 +7,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -30,10 +31,14 @@ class UserFactory extends Factory
         $name = fake()->name;
 
         return [
+            'personal-number' => fake()->numberBetween(100, 1000),
             'username' => strtolower(str_replace(' ', '.', $name)),
             'fullname' => $name,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'active' => $this->faker->boolean(),
+            'active_since' => Carbon::now(),
+            'active_until' => Carbon::now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
