@@ -54,18 +54,15 @@ class Login extends Component
         if (Auth::attempt(['username' => $this->username, 'password' => $this->password])) {
             session()->regenerate();
 
-            try {
-                // Get location_id if user is on shift
-                $locationId = $this->getLocationIdIfOnShift(auth()->user());
+            // Get location_id if user is on shift and shift status
+            $shiftData = $this->getLocationIdIfOnShift(auth()->user());
 
-                // Store on_duty and location_id in the session
+            // Store on_duty and location_id in the session
+            if ($shiftData['onDuty']) {
                 session([
                     'on_duty' => true,
-                    'location_id' => $locationId,
+                    'location_id' => $shiftData['locationId'],
                 ]);
-                ray('session set');
-            } catch (\Exception $e) {
-                // User is not on shift, do not set on_duty in the session
             }
 
             $this->handleSuccessfulLogin();
@@ -80,7 +77,7 @@ class Login extends Component
      *
      * @throws \Exception If user is not on shift
      */
-    private function getLocationIdIfOnShift(User $user): ?int
+    private function getLocationIdIfOnShift(User $user): array
     {
         // Retrieve the last record for the given user
         $timeTracker = TimeTracker::where('user_id', $user->id)
@@ -89,16 +86,16 @@ class Login extends Component
 
         // If there's no record, then the user isn't on a shift
         if (! $timeTracker) {
-            throw new \Exception('User is not on shift.');
+            return ['onDuty' => false, 'locationId' => null];
         }
 
         // If the last 'event' is 'ShiftEnd' or 'ShiftAbort', the user isn't on a shift
         if ($timeTracker->event === ShiftStatus::ShiftEnd || $timeTracker->event === ShiftStatus::ShiftAbort) {
-            throw new \Exception('User is not on shift.');
+            return ['onDuty' => false, 'locationId' => null];
         }
 
         // For all other 'event' types ('ShiftStart', 'BreakStart', 'BreakEnd', 'BreakAbort'), it means the user is on a shift
-        return $timeTracker->location_id;
+        return ['onDuty' => true, 'locationId' => $timeTracker->location_id];
     }
 
     private function handleSuccessfulLogin(): void

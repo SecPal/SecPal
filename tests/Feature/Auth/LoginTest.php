@@ -14,22 +14,34 @@ use App\Models\TimeTracker;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
+const KNOWN_PASSWORD = 'password';
+
 beforeEach(function () {
+    session()->flush();
     $this->withoutVite();
-    $company = Company::factory()->create();
-    $this->user = User::factory()->for($company)->create();
+    $this->customer = Customer::factory()->create();
+    $this->company = Company::factory()->create();
+
+    $this->user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt(KNOWN_PASSWORD),
+        'company_id' => $this->company->id,
+    ]);
+
+    $this->location = Location::factory()->create(['customer_id' => $this->customer->id]);
 });
 
-it('validates live wire login page', function () {
-    get(route('login'))
-        ->assertOk()
-        ->assertSeeLivewire(Login::class);
+it('shows login page', function () {
+    get(route('login'))->assertOk();
+});
+
+it('sees livewire on login page', function () {
+    get(route('login'))->assertSeeLivewire(Login::class);
 });
 
 it('validates login page accessible only to guests', function () {
@@ -41,27 +53,21 @@ it('validates login page accessible only to guests', function () {
 });
 
 it('validates login process using valid and invalid credentials', function () {
-    $user = 'john.doe';
-    $invalidPassword = 'wrong';
-
     $this->assertGuest();
 
     // Test scenarios with invalid parameters
     testLoginWithCredentials('', '')
         ->assertHasErrors(['username' => 'required', 'password' => 'required']);
-    testLoginWithCredentials($user, $invalidPassword)
+    testLoginWithCredentials($this->user->username, 'invalid')
         ->assertHasErrors('username');
 
     $this->assertGuest();
 
     // Test scenarios with valid parameters
-    $validPassword = 'password';
-    $company = Company::factory()->create();
-    $user = User::factory()->for($company)->create(['password' => Hash::make($validPassword)]);
-    testLoginWithCredentials($user->username, $validPassword)
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD)
         ->assertRedirect(route('dashboard'));
 
-    $this->assertAuthenticatedAs($user);
+    $this->assertAuthenticatedAs($this->user);
 });
 
 it('has an username input field', function () {
@@ -80,11 +86,8 @@ it('can submit the login form', function () {
 });
 
 it('shows an error message if the login failed', function () {
-    $username = 'john.doe';
-    $invalidPassword = 'wrong';
-
     // Test scenario with invalid parameters
-    testLoginWithCredentials($username, $invalidPassword)
+    testLoginWithCredentials($this->user->username, 'invalid')
         ->assertHasErrors('username')
         ->assertSee(__('auth.failed'));
 
@@ -104,93 +107,26 @@ it('can logout an user', function () {
 });
 
 it('gets location id when user is on shift and sets session variables after login', function () {
-    // Create a new customer
-    $customer = Customer::factory()->create();
-    $company = Company::factory()->create();
-
-    // Create a new user with a known password
-    $user = User::factory()->create([
-        'username' => 'john.doe',
-        'password' => bcrypt('password'),
-        'company_id' => $company->id,
-    ]);
-
-    // Create a location associated with the customer
-    $location = Location::factory()->create(['customer_id' => $customer->id]);
-
     // Start and end the user shift, then start again
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => $location->id,
-        'created_at' => Carbon::now()->subMinutes(2),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftEnd,
-        'location_id' => $location->id,
-        'created_at' => Carbon::now()->subMinute(),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => $location->id,
-    ]);
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinutes(2));
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id);
 
     // Act: Attempt to login user
-    Livewire::test(Login::class, [
-        'username' => 'john.doe',
-        'password' => 'password',
-    ])->call('login');
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
     $this->assertEquals(session('on_duty'), true);
-    $this->assertEquals(session('location_id'), $location->id);
+    $this->assertEquals(session('location_id'), $this->location->id);
 });
 
 it('returns on_duty even if location_id is null', function () {
-    // Create a new customer
-    $customer = Customer::factory()->create();
-    $company = Company::factory()->create();
-
-    // Create a new user with a known password
-    $user = User::factory()->create([
-        'username' => 'john.doe',
-        'password' => bcrypt('password'),
-        'company_id' => $company->id,
-    ]);
-
-    // Create a location associated with the customer
-    $location = Location::factory()->create(['customer_id' => $customer->id]);
-
-    // Start and end the user shift, then start again
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => null,
-        'created_at' => Carbon::now()->subMinutes(2),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftEnd,
-        'location_id' => null,
-        'created_at' => Carbon::now()->subMinute(),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => null,
-    ]);
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null, Carbon::now()->subMinutes(2));
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, null, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null);
 
     // Act: Attempt to login user
-    Livewire::test(Login::class, [
-        'username' => 'john.doe',
-        'password' => 'password',
-    ])->call('login');
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
     $this->assertEquals(session('on_duty'), true);
@@ -198,79 +134,23 @@ it('returns on_duty even if location_id is null', function () {
 });
 
 it('should not set on_duty after ShiftEnd', function () {
-    // Create required instances
-    $customer = Customer::factory()->create();
-    $company = Company::factory()->create();
-
-    // Create a new user with a known password
-    $user = User::factory()->create([
-        'username' => 'john.doe',
-        'password' => bcrypt('password'),
-        'company_id' => $company->id,
-    ]);
-
-    // Create a location associated with the customer
-    $location = Location::factory()->create(['customer_id' => $customer->id]);
-
-    // Start and end the user shift
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => $location->id,
-        'created_at' => Carbon::now()->subMinute(),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftEnd,
-        'location_id' => $location->id,
-    ]);
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id);
 
     // Act: Attempt to login user
-    Livewire::test(Login::class, [
-        'username' => 'john.doe',
-        'password' => 'password',
-    ])->call('login');
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
-    $this->assertEquals(session('on_duty'), null);
-    $this->assertEquals(session('location_id'), null);
+    $this->assertFalse(session()->has('on_duty'));
+    $this->assertFalse(session()->has('location_id'));
 });
 
 it('should not set on_duty after ShiftAbort', function () {
-    // Create required instances
-    $customer = Customer::factory()->create();
-    $company = Company::factory()->create();
-
-    // Create a new user with a known password
-    $user = User::factory()->create([
-        'username' => 'john.doe',
-        'password' => bcrypt('password'),
-        'company_id' => $company->id,
-    ]);
-
-    // Create a location associated with the customer
-    $location = Location::factory()->create(['customer_id' => $customer->id]);
-
-    // Start and abort the user shift
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftStart,
-        'location_id' => null,
-        'created_at' => Carbon::now()->subMinute(),
-    ]);
-
-    TimeTracker::factory()->create([
-        'user_id' => $user->id,
-        'event' => ShiftStatus::ShiftAbort,
-        'location_id' => null,
-    ]);
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftAbort, $this->location->id);
 
     // Act: Attempt to login user
-    Livewire::test(Login::class, [
-        'username' => 'john.doe',
-        'password' => 'password',
-    ])->call('login');
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
     $this->assertFalse(session()->has('on_duty'));
@@ -284,4 +164,14 @@ function testLoginWithCredentials($username, $password)
         ->set('username', $username)
         ->set('password', $password)
         ->call('login');
+}
+
+function createTimeTracker($userId, $event, $locationId = null, $createdAt = null): void
+{
+    TimeTracker::factory()->create([
+        'user_id' => $userId,
+        'event' => $event,
+        'location_id' => $locationId,
+        'created_at' => $createdAt ?? now(),
+    ]);
 }
