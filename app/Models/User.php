@@ -60,4 +60,9 @@ class User extends Authenticatable implements LaratrustUser
     {
         return $this->hasMany(Location::class);
     }
+
+    public function timeTrackers(): HasMany
+    {
+        return $this->hasMany(TimeTracker::class);
+    }
 }
