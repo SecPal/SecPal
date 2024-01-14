@@ -15,8 +15,8 @@ class CreateLocationUserTable extends Migration
     public function up(): void
     {
         Schema::create('location_user', function (Blueprint $table) {
-            $table->foreignIdFor(Location::class);
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Location::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
 
             $table->primary(['location_id', 'user_id']);
