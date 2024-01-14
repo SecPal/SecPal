@@ -17,7 +17,7 @@ class CreateTimeTrackersTable extends Migration
         Schema::create('time_trackers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Location::class)->constrained();
+            $table->foreignIdFor(Location::class)->nullable()->constrained();
             $table->string('event');
             $table->dateTime('real_time');
             $table->dateTime('plan_time');
