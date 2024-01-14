@@ -4,6 +4,7 @@
  */
 
 use App\Livewire\Dashboard;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -14,7 +15,8 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutVite();
-    $this->user = User::factory()->create();
+    $company = Company::factory()->create();
+    $this->user = User::factory()->for($company)->create();
     $this->dashboardRoute = route('dashboard');
 });
 

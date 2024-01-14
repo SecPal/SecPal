@@ -6,6 +6,7 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -16,7 +17,8 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutVite();
-    $this->user = User::factory()->create();
+    $company = Company::factory()->create();
+    $this->user = User::factory()->for($company)->create();
 });
 
 it('validates live wire login page', function () {
@@ -49,7 +51,8 @@ it('validates login process using valid and invalid credentials', function () {
 
     // Test scenarios with valid parameters
     $validPassword = 'password';
-    $user = User::factory()->create(['password' => Hash::make($validPassword)]);
+    $company = Company::factory()->create();
+    $user = User::factory()->for($company)->create(['password' => Hash::make($validPassword)]);
     testLoginWithCredentials($user->username, $validPassword)
         ->assertRedirect(route('dashboard'));
 
