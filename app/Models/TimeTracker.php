@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\ShiftStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,7 @@ class TimeTracker extends Model
     ];
 
     protected $casts = [
+        'event' => ShiftStatus::class,
         'real_time' => 'datetime',
         'plan_time' => 'datetime',
     ];
