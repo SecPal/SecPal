@@ -6,9 +6,11 @@ namespace App\Providers;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Location;
+use App\Models\TimeTracker;
 use App\Policies\CompanyPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\LocationPolicy;
+use App\Policies\TimeTrackerPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         Company::class => CompanyPolicy::class,
         Customer::class => CustomerPolicy::class,
         Location::class => LocationPolicy::class,
+        TimeTracker::class => TimeTrackerPolicy::class,
     ];
 
     /**
