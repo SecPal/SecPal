@@ -4,10 +4,15 @@
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
 
+use App\Enums\ShiftStatus;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
 use App\Models\Company;
+use App\Models\Customer;
+use App\Models\Location;
+use App\Models\TimeTracker;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\actingAs;
@@ -96,6 +101,180 @@ it('can logout an user', function () {
         ->assertRedirect('/');
 
     $this->assertGuest();
+});
+
+it('gets location id when user is on shift and sets session variables after login', function () {
+    // Create a new customer
+    $customer = Customer::factory()->create();
+    $company = Company::factory()->create();
+
+    // Create a new user with a known password
+    $user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt('password'),
+        'company_id' => $company->id,
+    ]);
+
+    // Create a location associated with the customer
+    $location = Location::factory()->create(['customer_id' => $customer->id]);
+
+    // Start and end the user shift, then start again
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => $location->id,
+        'created_at' => Carbon::now()->subMinutes(2),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftEnd,
+        'location_id' => $location->id,
+        'created_at' => Carbon::now()->subMinute(),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => $location->id,
+    ]);
+
+    // Act: Attempt to login user
+    Livewire::test(Login::class, [
+        'username' => 'john.doe',
+        'password' => 'password',
+    ])->call('login');
+
+    // Assert: Check session values
+    $this->assertEquals(session('on_duty'), true);
+    $this->assertEquals(session('location_id'), $location->id);
+});
+
+it('returns on_duty even if location_id is null', function () {
+    // Create a new customer
+    $customer = Customer::factory()->create();
+    $company = Company::factory()->create();
+
+    // Create a new user with a known password
+    $user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt('password'),
+        'company_id' => $company->id,
+    ]);
+
+    // Create a location associated with the customer
+    $location = Location::factory()->create(['customer_id' => $customer->id]);
+
+    // Start and end the user shift, then start again
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => null,
+        'created_at' => Carbon::now()->subMinutes(2),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftEnd,
+        'location_id' => null,
+        'created_at' => Carbon::now()->subMinute(),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => null,
+    ]);
+
+    // Act: Attempt to login user
+    Livewire::test(Login::class, [
+        'username' => 'john.doe',
+        'password' => 'password',
+    ])->call('login');
+
+    // Assert: Check session values
+    $this->assertEquals(session('on_duty'), true);
+    $this->assertEquals(session('location_id'), null);
+});
+
+it('should not set on_duty after ShiftEnd', function () {
+    // Create required instances
+    $customer = Customer::factory()->create();
+    $company = Company::factory()->create();
+
+    // Create a new user with a known password
+    $user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt('password'),
+        'company_id' => $company->id,
+    ]);
+
+    // Create a location associated with the customer
+    $location = Location::factory()->create(['customer_id' => $customer->id]);
+
+    // Start and end the user shift
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => $location->id,
+        'created_at' => Carbon::now()->subMinute(),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftEnd,
+        'location_id' => $location->id,
+    ]);
+
+    // Act: Attempt to login user
+    Livewire::test(Login::class, [
+        'username' => 'john.doe',
+        'password' => 'password',
+    ])->call('login');
+
+    // Assert: Check session values
+    $this->assertEquals(session('on_duty'), null);
+    $this->assertEquals(session('location_id'), null);
+});
+
+it('should not set on_duty after ShiftAbort', function () {
+    // Create required instances
+    $customer = Customer::factory()->create();
+    $company = Company::factory()->create();
+
+    // Create a new user with a known password
+    $user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt('password'),
+        'company_id' => $company->id,
+    ]);
+
+    // Create a location associated with the customer
+    $location = Location::factory()->create(['customer_id' => $customer->id]);
+
+    // Start and abort the user shift
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftStart,
+        'location_id' => null,
+        'created_at' => Carbon::now()->subMinute(),
+    ]);
+
+    TimeTracker::factory()->create([
+        'user_id' => $user->id,
+        'event' => ShiftStatus::ShiftAbort,
+        'location_id' => null,
+    ]);
+
+    // Act: Attempt to login user
+    Livewire::test(Login::class, [
+        'username' => 'john.doe',
+        'password' => 'password',
+    ])->call('login');
+
+    // Assert: Check session values
+    $this->assertFalse(session()->has('on_duty'));
+    $this->assertFalse(session()->has('location_id'));
 });
 
 // Helper function to test login with provided credentials
