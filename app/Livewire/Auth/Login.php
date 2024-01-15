@@ -6,6 +6,9 @@
 
 namespace App\Livewire\Auth;
 
+use App\Enums\ShiftStatus;
+use App\Models\TimeTracker;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -50,10 +53,49 @@ class Login extends Component
     {
         if (Auth::attempt(['username' => $this->username, 'password' => $this->password])) {
             session()->regenerate();
+
+            // Get location_id if user is on shift and shift status
+            $shiftData = $this->getLocationIdIfOnShift(auth()->user());
+
+            // Store on_duty and location_id in the session
+            if ($shiftData['onDuty']) {
+                session([
+                    'on_duty' => true,
+                    'location_id' => $shiftData['locationId'],
+                ]);
+            }
+
             $this->handleSuccessfulLogin();
         } else {
             $this->handleFailedLogin();
         }
+    }
+
+    /**
+     * Check if the user is on shift (including break time) and has not ended or aborted the shift,
+     * then return the corresponding location_id
+     *
+     * @throws \Exception If user is not on shift
+     */
+    private function getLocationIdIfOnShift(User $user): array
+    {
+        // Retrieve the last record for the given user
+        $timeTracker = TimeTracker::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // If there's no record, then the user isn't on a shift
+        if (! $timeTracker) {
+            return ['onDuty' => false, 'locationId' => null];
+        }
+
+        // If the last 'event' is 'ShiftEnd' or 'ShiftAbort', the user isn't on a shift
+        if ($timeTracker->event === ShiftStatus::ShiftEnd || $timeTracker->event === ShiftStatus::ShiftAbort) {
+            return ['onDuty' => false, 'locationId' => null];
+        }
+
+        // For all other 'event' types ('ShiftStart', 'BreakStart', 'BreakEnd', 'BreakAbort'), it means the user is on a shift
+        return ['onDuty' => true, 'locationId' => $timeTracker->location_id];
     }
 
     private function handleSuccessfulLogin(): void

@@ -4,27 +4,44 @@
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
 
+use App\Enums\ShiftStatus;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Logout;
 use App\Models\Company;
+use App\Models\Customer;
+use App\Models\Location;
+use App\Models\TimeTracker;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
+const KNOWN_PASSWORD = 'password';
+
 beforeEach(function () {
+    session()->flush();
     $this->withoutVite();
-    $company = Company::factory()->create();
-    $this->user = User::factory()->for($company)->create();
+    $this->customer = Customer::factory()->create();
+    $this->company = Company::factory()->create();
+
+    $this->user = User::factory()->create([
+        'username' => 'john.doe',
+        'password' => bcrypt(KNOWN_PASSWORD),
+        'company_id' => $this->company->id,
+    ]);
+
+    $this->location = Location::factory()->create(['customer_id' => $this->customer->id]);
 });
 
-it('validates live wire login page', function () {
-    get(route('login'))
-        ->assertOk()
-        ->assertSeeLivewire(Login::class);
+it('shows login page', function () {
+    get(route('login'))->assertOk();
+});
+
+it('sees livewire on login page', function () {
+    get(route('login'))->assertSeeLivewire(Login::class);
 });
 
 it('validates login page accessible only to guests', function () {
@@ -36,27 +53,21 @@ it('validates login page accessible only to guests', function () {
 });
 
 it('validates login process using valid and invalid credentials', function () {
-    $user = 'john.doe';
-    $invalidPassword = 'wrong';
-
     $this->assertGuest();
 
     // Test scenarios with invalid parameters
     testLoginWithCredentials('', '')
         ->assertHasErrors(['username' => 'required', 'password' => 'required']);
-    testLoginWithCredentials($user, $invalidPassword)
+    testLoginWithCredentials($this->user->username, 'invalid')
         ->assertHasErrors('username');
 
     $this->assertGuest();
 
     // Test scenarios with valid parameters
-    $validPassword = 'password';
-    $company = Company::factory()->create();
-    $user = User::factory()->for($company)->create(['password' => Hash::make($validPassword)]);
-    testLoginWithCredentials($user->username, $validPassword)
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD)
         ->assertRedirect(route('dashboard'));
 
-    $this->assertAuthenticatedAs($user);
+    $this->assertAuthenticatedAs($this->user);
 });
 
 it('has an username input field', function () {
@@ -75,11 +86,8 @@ it('can submit the login form', function () {
 });
 
 it('shows an error message if the login failed', function () {
-    $username = 'john.doe';
-    $invalidPassword = 'wrong';
-
     // Test scenario with invalid parameters
-    testLoginWithCredentials($username, $invalidPassword)
+    testLoginWithCredentials($this->user->username, 'invalid')
         ->assertHasErrors('username')
         ->assertSee(__('auth.failed'));
 
@@ -98,6 +106,57 @@ it('can logout an user', function () {
     $this->assertGuest();
 });
 
+it('gets location id when user is on shift and sets session variables after login', function () {
+    // Start and end the user shift, then start again
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinutes(2));
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id);
+
+    // Act: Attempt to login user
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
+
+    // Assert: Check session values
+    $this->assertEquals(session('on_duty'), true);
+    $this->assertEquals(session('location_id'), $this->location->id);
+});
+
+it('returns on_duty even if location_id is null', function () {
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null, Carbon::now()->subMinutes(2));
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, null, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null);
+
+    // Act: Attempt to login user
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
+
+    // Assert: Check session values
+    $this->assertEquals(session('on_duty'), true);
+    $this->assertEquals(session('location_id'), null);
+});
+
+it('should not set on_duty after ShiftEnd', function () {
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id);
+
+    // Act: Attempt to login user
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
+
+    // Assert: Check session values
+    $this->assertFalse(session()->has('on_duty'));
+    $this->assertFalse(session()->has('location_id'));
+});
+
+it('should not set on_duty after ShiftAbort', function () {
+    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimeTracker($this->user->id, ShiftStatus::ShiftAbort, $this->location->id);
+
+    // Act: Attempt to login user
+    testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
+
+    // Assert: Check session values
+    $this->assertFalse(session()->has('on_duty'));
+    $this->assertFalse(session()->has('location_id'));
+});
+
 // Helper function to test login with provided credentials
 function testLoginWithCredentials($username, $password)
 {
@@ -105,4 +164,14 @@ function testLoginWithCredentials($username, $password)
         ->set('username', $username)
         ->set('password', $password)
         ->call('login');
+}
+
+function createTimeTracker($userId, $event, $locationId = null, $createdAt = null): void
+{
+    TimeTracker::factory()->create([
+        'user_id' => $userId,
+        'event' => $event,
+        'location_id' => $locationId,
+        'created_at' => $createdAt ?? now(),
+    ]);
 }
