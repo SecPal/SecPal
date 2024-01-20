@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "christophrumpel/missing-livewire-assertions": "^2.3",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
