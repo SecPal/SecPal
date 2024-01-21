@@ -26,13 +26,13 @@
                     <div
                         class="pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-inset ring-gray-300 dark:ring-gray-700"></div>
                     <div>
-                        <label for="current_password" class="sr-only">{{ __('Your actual Password') }}</label>
+                        <label for="current_password" class="sr-only">{{ __('Your current Password') }}</label>
                         <input wire:model.blur="current_password" id="current_password" name="current_password"
                                type="password" autocomplete="password"
                                autofocus
                                required
                                class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 ring-1 ring-inset ring-gray-100 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-300 sm:text-sm sm:leading-6"
-                               placeholder="{{ __('Actual Password') }}">
+                               placeholder="{{ __('Current Password') }}">
                     </div>
                     <div>
                         <label for="password" class="sr-only">{{ __('New Password') }}</label>
