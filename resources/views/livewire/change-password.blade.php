@@ -42,12 +42,12 @@
                                placeholder="{{ __('New Password') }}">
                     </div>
                     <div>
-                        <label for="password_confirmation" class="sr-only">{{ __('Password Repeat') }}</label>
+                        <label for="password_confirmation" class="sr-only">{{ __('Repeat Password') }}</label>
                         <input wire:model.blur="password_confirmation" id="password_confirmation"
                                name="password_confirmation" type="password"
                                required
                                class="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 ring-1 ring-inset ring-gray-100 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-300 sm:text-sm sm:leading-6"
-                               placeholder="{{ __('Password Repeat') }}">
+                               placeholder="{{ __('Repeat Password') }}">
                     </div>
                 </div>
 
