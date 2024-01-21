@@ -162,6 +162,7 @@
          });
      "
          :class="{ 'bg-green-50 dark:bg-green-900': showSuccess, 'hidden': !showSuccess }"
+         style="display: none;"
     >
         <div class="flex">
             <div class="flex-shrink-0">
