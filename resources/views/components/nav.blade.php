@@ -1,4 +1,4 @@
-<header {{ $attributes->class(['bg-white dark:bg-gray-900']) }} x-data="{ open: false,  settingsFlyout: false }">
+<header {{ $attributes->class(['bg-white dark:bg-gray-900']) }} x-data="{ mobileMenu: false,  settingsFlyout: false }">
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
             <a href="#" class="-m-1.5 p-1.5">
@@ -8,7 +8,7 @@
             </a>
         </div>
         <div class="flex lg:hidden">
-            <button type="button" x-on:click="open = !open; settingsFlyout = false"
+            <button type="button" x-on:click="mobileMenu = !mobileMenu; settingsFlyout = false"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                 <span class="sr-only">Open main menu</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -53,7 +53,7 @@
     </nav>
 
     <!-- Mobile menu, show/hide based on menu open state. -->
-    <div class="lg:hidden" x-show="open" role="dialog" style="display: none;" aria-modal="true">
+    <div class="lg:hidden" x-show="mobileMenu" role="dialog" style="display: none;" aria-modal="true">
         <div class="fixed inset-0 z-10"></div>
         <div
             class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white dark:bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
@@ -63,7 +63,7 @@
                     <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                          alt="">
                 </a>
-                <button type="button" x-on:click="open = false; settingsFlyout = false"
+                <button type="button" x-on:click="mobileMenu = false; settingsFlyout = false"
                         class="-m-2.5 rounded-md p-2.5 text-gray-700">
                     <span class="sr-only">Close menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
