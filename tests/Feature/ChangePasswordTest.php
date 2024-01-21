@@ -135,3 +135,15 @@ it('does not update password when user is unauthenticated', function () {
         ->call('changePassword')
         ->assertStatus(403); // Assuming that unauthenticated users are handled with a 403 response
 });
+
+it('shows necessary input fields', function () {
+    Livewire::test(ChangePassword::class)
+        ->assertPropertyWired('current_password')
+        ->assertPropertyWired('password')
+        ->assertPropertyWired('password_confirmation');
+});
+
+it('can submit the change password form', function () {
+    Livewire::test(ChangePassword::class)
+        ->assertMethodWiredToForm('changePassword');
+});
