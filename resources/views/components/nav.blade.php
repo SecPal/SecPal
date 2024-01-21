@@ -2,6 +2,7 @@
     {{ $attributes->class(['bg-white dark:bg-gray-900']) }}
     x-data="{ mobileMenu: false,  settingsFlyout: false, slideOver: false }"
     @keydown.window.escape="slideOver = false"
+    x-on:password-changed.window="slideOver = false"
 >
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
@@ -143,33 +144,51 @@
                 x-transition:leave-end="translate-x-full"
             >
                 <div @click.away="slideOver = false" class="pointer-events-auto w-screen max-w-md">
-                    <div
-                        class="flex h-full flex-col overflow-y-scroll bg-white dark:bg-gray-900 py-6 shadow-xl">
-                        <div class="px-4 sm:px-6">
-                            <div class="flex items-start justify-between">
-                                <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200"
-                                    id="slide-over-title">Panel title</h2>
-                                <div class="ml-3 flex h-7 items-center">
-                                    <button type="button"
-                                            x-on:click="slideOver = false"
-                                            class="relative rounded-md bg-white dark:bg-gray-900 text-gray-400 hover:text-gray-500 dark:hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                        <span class="absolute -inset-2.5"></span>
-                                        <span class="sr-only">Close panel</span>
-                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                             stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="relative mt-6 flex-1 px-4 sm:px-6">
-                            <!-- Your content -->
-                        </div>
-                    </div>
+                    <livewire:change-password/>
                 </div>
             </section>
+        </div>
+    </div>
+
+    <!-- Success Alert TODO: refactor to a reusable component -->
+    <div class="rounded-md p-4 fixed right-0 top-0 m-6"
+         x-data="{ showSuccess: false, message: 'Success!' }"
+         x-show="showSuccess"
+         x-init="
+         window.addEventListener('password-changed', event => {
+             showSuccess = true;
+             message = event.detail.message || message;
+             setTimeout(() => { showSuccess = false }, 3000);
+         });
+     "
+         :class="{ 'bg-green-50 dark:bg-green-900': showSuccess, 'hidden': !showSuccess }"
+    >
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400 dark:text-green-200" viewBox="0 0 20 20" fill="currentColor"
+                     aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium" x-text="message"
+                   :class="{ 'text-green-800 dark:text-green-200': showSuccess }"></p>
+            </div>
+            <div class="ml-auto pl-3">
+                <div class="-mx-1.5 -my-1.5">
+                    <button type="button"
+                            class="inline-flex rounded-md bg-green-50 dark:bg-green-900 p-1.5 text-green-500 dark:text-green-200 hover:bg-green-100 dark:hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
+                            @click="showSuccess = false">
+                        <span class="sr-only">Dismiss</span>
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </header>

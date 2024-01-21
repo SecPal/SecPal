@@ -74,8 +74,6 @@ class Login extends Component
     /**
      * Check if the user is on shift (including break time) and has not ended or aborted the shift,
      * then return the corresponding location_id
-     *
-     * @throws \Exception If user is not on shift
      */
     private function getLocationIdIfOnShift(User $user): array
     {
