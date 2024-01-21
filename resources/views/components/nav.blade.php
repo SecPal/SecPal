@@ -1,4 +1,8 @@
-<header {{ $attributes->class(['bg-white dark:bg-gray-900']) }} x-data="{ mobileMenu: false,  settingsFlyout: false }">
+<header
+    {{ $attributes->class(['bg-white dark:bg-gray-900']) }}
+    x-data="{ mobileMenu: false,  settingsFlyout: false, slideOver: false }"
+    @keydown.window.escape="slideOver = false"
+>
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div class="flex lg:flex-1">
             <a href="#" class="-m-1.5 p-1.5">
@@ -40,7 +44,8 @@
                         <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Security</a>
                         <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Integrations</a>
                         <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Automations</a>
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Reports</a>
+                        <a href="#" x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
+                           class="block p-2 text-gray-900 dark:text-gray-200">{{ __('Change Password') }}</a>
                     </div>
                 </div>
             </div>
@@ -98,7 +103,8 @@
                                 <a href="#"
                                    class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Automations</a>
                                 <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Reports</a>
+                                   x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
+                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
                             </div>
                         </div>
                     </div>
@@ -111,5 +117,71 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Slide-out panel markup starts... -->
+    <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" x-show="slideOver"
+         x-cloak @click.away="slideOver = false">
+        <!-- Your slide-out panel content goes here -->
+        <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+            <!--
+              Background backdrop, show/hide based on slide-over state.
+
+              Entering: "ease-in-out duration-500"
+                From: "opacity-0"
+                To: "opacity-100"
+              Leaving: "ease-in-out duration-500"
+                From: "opacity-100"
+                To: "opacity-0"
+            -->
+            <div
+                class="fixed inset-0 bg-gray-500 dark:bg-gray-700 bg-opacity-75 dark:bg-opacity-75 transition-opacity"></div>
+
+            <div class="fixed inset-0 overflow-hidden">
+                <div class="absolute inset-0 overflow-hidden">
+                    <div @click.away="slideOver = false"
+                         class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                        <!--
+                          Slide-over panel, show/hide based on slide-over state.
+
+                          Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+                            From: "translate-x-full"
+                            To: "translate-x-0"
+                          Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+                            From: "translate-x-0"
+                            To: "translate-x-full"
+                        -->
+                        <div class="pointer-events-auto w-screen max-w-md">
+                            <div
+                                class="flex h-full flex-col overflow-y-scroll bg-white dark:bg-gray-900 py-6 shadow-xl">
+                                <div class="px-4 sm:px-6">
+                                    <div class="flex items-start justify-between">
+                                        <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200"
+                                            id="slide-over-title">Panel title</h2>
+                                        <div class="ml-3 flex h-7 items-center">
+                                            <button type="button"
+                                                    x-on:click="slideOver = false"
+                                                    class="relative rounded-md bg-white dark:bg-gray-900 text-gray-400 hover:text-gray-500 dark:hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                <span class="absolute -inset-2.5"></span>
+                                                <span class="sr-only">Close panel</span>
+                                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                                     stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                                    <!-- Your content -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </header>
