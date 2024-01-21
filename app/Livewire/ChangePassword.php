@@ -20,6 +20,11 @@ class ChangePassword extends Component
 
     public $password_confirmation = '';
 
+    public function updated(): void
+    {
+        $this->resetErrorBag();
+    }
+
     public function changePassword(): void
     {
         abort_unless(auth()->check(), 403);
@@ -28,7 +33,7 @@ class ChangePassword extends Component
         $user = Auth::user();
         if ($user->checkPassword($this->current_password)) {
             $user->changePassword($this->password);
-            $this->dispatch('password-changed', message: __('Your password was successfully changed.'));
+            $this->dispatch('password-changed', message: __('You have successfully changed your password.'));
             $this->reset();
         }
     }
