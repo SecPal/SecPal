@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 use Laravel\Sanctum\HasApiTokens;
@@ -50,6 +51,17 @@ class User extends Authenticatable implements LaratrustUser
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function checkPassword($currentPassword): bool
+    {
+        return Hash::check($currentPassword, $this->password);
+    }
+
+    public function changePassword($newPassword): void
+    {
+        $this->password = Hash::make($newPassword);
+        $this->save();
+    }
 
     public function company(): BelongsTo
     {
