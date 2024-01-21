@@ -15,13 +15,14 @@ class ChangePassword extends Component
     #[Validate('required|current_password', onUpdate: false)]
     public $current_password = '';
 
-    #[Validate('required|min:5|confirmed', onUpdate: false)]
+    #[Validate('required|min:5|confirmed|different:current_password', onUpdate: false)]
     public $password = '';
 
     public $password_confirmation = '';
 
     public function changePassword(): void
     {
+        abort_unless(auth()->check(), 403);
         $this->validate();
 
         $user = Auth::user();

@@ -32,7 +32,6 @@ beforeEach(function () {
 });
 
 it('shows change password form', function () {
-    //  $this->user = User::factory()->create();
     $this->actingAs($this->user);
     $component = Livewire::test(ChangePassword::class);
     $component->assertSee('current_password')
@@ -41,7 +40,6 @@ it('shows change password form', function () {
 });
 
 it('updates the password', function () {
-    //  $this->user = User::factory()->create(['password' => 'current_password']);
     $this->actingAs($this->user);
     $component = Livewire::test(ChangePassword::class)
         ->set('current_password', OLD_PASSWORD)
@@ -52,7 +50,6 @@ it('updates the password', function () {
 });
 
 it('does not update password when current password is incorrect', function () {
-    //   $this->user = User::factory()->create(['password' => 'current_password']);
     $this->actingAs($this->user);
     $component = Livewire::test(ChangePassword::class)
         ->set('current_password', 'wrong_password')
@@ -64,7 +61,6 @@ it('does not update password when current password is incorrect', function () {
 });
 
 it('throws validation error when password is less than minimum length', function () {
-    //    $this->user = User::factory()->create(['password' => 'current_password']);
     $this->actingAs($this->user);
     $component = Livewire::test(ChangePassword::class)
         ->set('current_password', OLD_PASSWORD)
@@ -75,7 +71,6 @@ it('throws validation error when password is less than minimum length', function
 });
 
 it('fires an event when the password is changed', function () {
-    //  $user = User::factory()->create(['password' => 'current_password']);
     $this->actingAs($this->user);
 
     Livewire::test('change-password')
@@ -84,4 +79,59 @@ it('fires an event when the password is changed', function () {
         ->set('password_confirmation', 'new_password')
         ->call('changePassword')
         ->assertDispatched('password-changed');
+});
+
+it('does not update password when password confirmation does not match', function () {
+    $this->actingAs($this->user);
+    Livewire::test(ChangePassword::class)
+        ->set('current_password', OLD_PASSWORD)
+        ->set('password', 'new_password')
+        ->set('password_confirmation', 'different_password')
+        ->call('changePassword')
+        ->assertHasErrors(['password' => 'confirmed']);
+    $this->assertTrue(auth()->user()->checkPassword(OLD_PASSWORD));
+});
+
+it('does not update when new password is the same as the old password', function () {
+    $this->actingAs($this->user);
+
+    Livewire::test(ChangePassword::class)
+        ->set('current_password', OLD_PASSWORD)
+        ->set('password', OLD_PASSWORD)
+        ->set('password_confirmation', OLD_PASSWORD)
+        ->call('changePassword')
+        ->assertHasErrors(['password' => 'different']);
+});
+
+it('handles sql injection attempts into the password field', function () {
+    $this->actingAs($this->user);
+    $injectedSQL = "'; DROP TABLE users; --";
+    Livewire::test(ChangePassword::class)
+        ->set('current_password', OLD_PASSWORD)
+        ->set('password', $injectedSQL)
+        ->set('password_confirmation', $injectedSQL)
+        ->call('changePassword');
+    $this->assertTrue(auth()->user()->checkPassword($injectedSQL));
+});
+
+it('fails when the password is empty', function () {
+    $this->actingAs($this->user);
+
+    Livewire::test(ChangePassword::class)
+        ->set('current_password', OLD_PASSWORD)
+        ->set('password', '')
+        ->set('password_confirmation', '')
+        ->call('changePassword')
+        ->assertHasErrors(['password' => 'required']);
+});
+
+it('does not update password when user is unauthenticated', function () {
+    // Here we don't authenticate the user using $this->actingAs($this->user)
+
+    Livewire::test(ChangePassword::class)
+        ->set('current_password', OLD_PASSWORD)
+        ->set('password', 'new_password')
+        ->set('password_confirmation', 'new_password')
+        ->call('changePassword')
+        ->assertStatus(403); // Assuming that unauthenticated users are handled with a 403 response
 });
