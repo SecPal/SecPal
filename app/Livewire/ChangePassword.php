@@ -25,7 +25,7 @@ class ChangePassword extends Component
         $this->validate();
 
         $user = Auth::user();
-        if ($user->checkCurrentPassword($this->current_password)) {
+        if ($user->checkPassword($this->current_password)) {
             $user->changePassword($this->password);
             $this->dispatch('password-changed', message: __('Your password was successfully changed.'));
             $this->reset();

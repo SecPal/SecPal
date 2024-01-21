@@ -52,7 +52,7 @@ class User extends Authenticatable implements LaratrustUser
         'password' => 'hashed',
     ];
 
-    public function checkCurrentPassword($currentPassword): bool
+    public function checkPassword($currentPassword): bool
     {
         return Hash::check($currentPassword, $this->password);
     }
