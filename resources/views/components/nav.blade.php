@@ -13,6 +13,30 @@
             </a>
         </div>
         <div class="flex lg:hidden">
+            @if (session('on_shift'))
+                <button type="button"
+                        class="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
+                        aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="grey"
+                         class="h-6 w-6 dark:stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </button>
+            @else
+                <button type="button"
+                        class="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
+                        aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="grey"
+                         class="w-6 h-6 dark:stroke-white">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </button>
+            @endif
+            <!-- Hamburger Menu Button -->
             <button type="button" x-on:click="mobileMenu = !mobileMenu; settingsFlyout = false"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                 <span class="sr-only">Open main menu</span>
@@ -52,7 +76,27 @@
             </div>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <!-- Insert bell icon here -->
+            @if (session('on_duty'))
+                <button type="button"
+                        class="relative rounded-full bg-white dark:bg-gray-700 p-1 text-gray-400 dark:text-gray-200 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-3">
+                    <span class="sr-only">active shift</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </button>
+            @else
+                <button type="button"
+                        class="relative rounded-full bg-white dark:bg-gray-700 p-1 text-gray-400 dark:text-gray-200 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-3">
+                    <span class="sr-only">active shift</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </button>
+            @endif
             <button type="button"
                     class="relative rounded-full bg-white dark:bg-gray-700 p-1 text-gray-400 dark:text-gray-200 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <span class="sr-only">View notifications</span>
