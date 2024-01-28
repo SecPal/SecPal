@@ -8,6 +8,7 @@ namespace App\Livewire;
 
 use App\Enums\ShiftStatus;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -47,6 +48,8 @@ class Shift extends Component
 
     private function getCurrentUser()
     {
+        abort_if(! Auth::check(), 403);
+
         return auth()->user();
     }
 
