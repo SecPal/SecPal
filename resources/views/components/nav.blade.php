@@ -13,7 +13,7 @@
             </a>
         </div>
         <div class="flex lg:hidden">
-            <livewire:shift/>
+            <livewire:shift identifier="mobile"/>
             <!-- Hamburger Menu Button -->
             <button type="button" x-on:click="mobileMenu = !mobileMenu; settingsFlyout = false"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <livewire:shift/>
+            <livewire:shift identifier="desktop"/>
 
             <!--User menu-->
             <div class="relative ml-3" x-data="{ userMenu: false }" @click.away="userMenu = false">
