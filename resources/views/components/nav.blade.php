@@ -13,8 +13,10 @@
             </a>
         </div>
         <div class="flex lg:hidden">
-            @if (session('on_shift'))
+            @if (session('on_duty'))
                 <button type="button"
+                        wire:click="$dispatchTo('shift', 'end-shift')"
+                        wire:confirm="{{ __('Do you want to end your shift and log out?') }}"
                         class="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
                         aria-label="Menu">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -78,6 +80,8 @@
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             @if (session('on_duty'))
                 <button type="button"
+                        wire:click="$dispatchTo('shift', 'end-shift')"
+                        wire:confirm="{{ __('Do you want to end your shift and log out?') }}"
                         class="relative rounded-full bg-white dark:bg-gray-700 p-1 text-gray-400 dark:text-gray-200 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-3">
                     <span class="sr-only">active shift</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

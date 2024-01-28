@@ -18,10 +18,12 @@ class TimeTracker extends Model
 
     protected $fillable = [
         'user_id',
+        'location_id',
         'event',
         'real_time',
         'plan_time',
         'comment',
+        'entry_by',
     ];
 
     protected $casts = [

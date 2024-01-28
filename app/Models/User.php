@@ -7,6 +7,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -71,6 +72,17 @@ class User extends Authenticatable implements LaratrustUser
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
+    }
+
+    public function createTimeTracker($locationId, $event, $plan_time): void
+    {
+        $this->timeTrackers()->create([
+            'location_id' => $locationId,
+            'event' => $event,
+            'real_time' => Carbon::now(),
+            'plan_time' => $plan_time,
+            'entry_by' => $this->id,
+        ]);
     }
 
     public function timeTrackers(): HasMany
