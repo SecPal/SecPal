@@ -36,6 +36,8 @@ it('redirects unauthenticated guests to login', function () {
 });
 
 it('has a logout button', function () {
+    actingAs($this->user);
+
     Livewire::test(Dashboard::class)
         ->assertMethodWired('$dispatchTo(\'auth.logout\', \'logout\')');
 });

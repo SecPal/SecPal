@@ -13,6 +13,8 @@
             </a>
         </div>
         <div class="flex lg:hidden">
+            <livewire:shift identifier="mobile"/>
+            <!-- Hamburger Menu Button -->
             <button type="button" x-on:click="mobileMenu = !mobileMenu; settingsFlyout = false"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                 <span class="sr-only">Open main menu</span>
@@ -52,9 +54,39 @@
             </div>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <button type="button" wire:click="$dispatchTo('auth.logout', 'logout')"
-                    class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">{{ __('Logout') }} <span
-                    aria-hidden="true">&rarr;</span></button>
+            <livewire:shift identifier="desktop"/>
+
+            <!--User menu-->
+            <div class="relative ml-3" x-data="{ userMenu: false }" @click.away="userMenu = false">
+                <button @click="userMenu = !userMenu" type="button"
+                        class="relative flex max-w-xs items-center rounded-full bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                    <span class="sr-only">Open user menu</span>
+                    <img class="h-8 w-8 rounded-full"
+                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                         alt="">
+                </button>
+
+                <div
+                    x-show="userMenu"
+                    class=" absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-700 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
+                    style="display: none;">
+                    <a href="#"
+                       x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false, userMenu = false"
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                       role="menuitem" tabindex="-1" id="user-menu-item-0">{{ __('Change Password') }}</a>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                       role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                    <div role="menuitem" tabindex="-1" id="user-menu-item-2">
+                        <button type="button" wire:click="$dispatchTo('auth.logout', 'logout')"
+                                class="w-full text-left px-4 py-2 text-sm font-semibold leading-6 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
+                            {{ __('Logout') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -87,9 +119,9 @@
                            class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Features</a>
                         <a href="#"
                            class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Marketplace</a>
-                        <div class="relative">
+                        <div class="relative w-full">
                             <button @click="settingsFlyout = !settingsFlyout" type="button"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    class="-mx-3 w-full block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 text-left">
                                 <span>{{ __('Settings') }}</span>
                             </button>
                             <div x-show="settingsFlyout">
@@ -109,11 +141,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="py-6">
-                        <button type="button" wire:click="$dispatchTo('auth.logout', 'logout')"
-                                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            {{ __('Logout') }}
-                        </button>
+                    <div class="border-t border-gray-200 pt-4 pb-3">
+                        <div class="flex items-center px-4">
+                            <div class="flex-shrink-0">
+                                <img class="h-10 w-10 rounded-full"
+                                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                     alt="">
+                            </div>
+                            <div class="ml-3">
+                                <div class="text-base font-medium text-gray-800 dark:text-gray-200">Tom Cook</div>
+                                <div class="text-sm font-medium text-gray-500 dark:text-gray-400">tom@example.com</div>
+                            </div>
+                        </div>
+                        <div class="mt-3 space-y-1">
+                            <a href="#"
+                               x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false, userMenu = false"
+                               class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
+                            <a href="#"
+                               class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Settings</a>
+                            <button wire:click="$dispatchTo('auth.logout', 'logout')"
+                                    class="block w-full text-left px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Logout') }}</button>
+                        </div>
                     </div>
                 </div>
             </div>

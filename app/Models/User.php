@@ -7,8 +7,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -68,9 +70,20 @@ class User extends Authenticatable implements LaratrustUser
         return $this->belongsTo(Company::class);
     }
 
-    public function locations(): HasMany
+    public function locations(): BelongsToMany
     {
-        return $this->hasMany(Location::class);
+        return $this->belongsToMany(Location::class);
+    }
+
+    public function createTimeTracker($locationId, $event, $plan_time): void
+    {
+        $this->timeTrackers()->create([
+            'location_id' => $locationId,
+            'event' => $event,
+            'real_time' => Carbon::now(),
+            'plan_time' => $plan_time,
+            'entry_by' => $this->id,
+        ]);
     }
 
     public function timeTrackers(): HasMany
