@@ -18,7 +18,6 @@
 <body class="h-full">
 {{ $slot }}
 @livewireScripts
-<livewire:shift/>
 <livewire:auth.logout/>
 </body>
 </html>

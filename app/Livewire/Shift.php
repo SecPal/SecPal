@@ -25,7 +25,6 @@ class Shift extends Component
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[On('end-shift')]
     public function endShift(): void
     {
         $locationId = session()->get('location_id');
@@ -38,10 +37,6 @@ class Shift extends Component
 
     public function render(): string
     {
-        return <<<'blade'
-            <div>
-                {{-- no cool stuff here, sry ;-) --}}
-            </div>
-        blade;
+        return view('livewire.shift');
     }
 }
