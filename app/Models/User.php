@@ -10,6 +10,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,9 +70,9 @@ class User extends Authenticatable implements LaratrustUser
         return $this->belongsTo(Company::class);
     }
 
-    public function locations(): HasMany
+    public function locations(): BelongsToMany
     {
-        return $this->hasMany(Location::class);
+        return $this->belongsToMany(Location::class);
     }
 
     public function createTimeTracker($locationId, $event, $plan_time): void
