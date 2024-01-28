@@ -52,6 +52,8 @@ class Shift extends Component
 
     public function startShift(): void
     {
+        $this->validate();
+
         abort_unless($this->locations->contains('id', $this->shift_location), 403);
 
         $shift_start = Carbon::createFromFormat('H:i', $this->shift_start);
