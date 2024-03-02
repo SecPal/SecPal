@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
@@ -11,7 +10,8 @@ use Livewire\Component;
 
 class Logout extends Component
 {
-    protected $listeners = ['logout'];
+    // Update listeners to include 'idle-timeout' event
+    protected $listeners = ['logout', 'idle-timeout' => 'logout'];
 
     public function logout(): void
     {
@@ -33,7 +33,7 @@ class Logout extends Component
 
     private function redirectHome(): void
     {
-        $this->redirect('/', navigate: true);
+        $this->redirect('/', navigate: false);
     }
 
     public function render(): string
