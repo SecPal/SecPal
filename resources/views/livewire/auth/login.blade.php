@@ -60,4 +60,10 @@
             </div>
         </form>
     </div>
+
+    <script>
+        window.addEventListener('clearLocalStorage', function () {
+            localStorage.clear();
+        })
+    </script>
 </div>
