@@ -28,5 +28,5 @@ Route::get('home', Dashboard::class)
     ->middleware('auth');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
