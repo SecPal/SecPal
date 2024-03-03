@@ -98,7 +98,7 @@ class Login extends Component
 
     private function handleSuccessfulLogin(): void
     {
-        $this->dispatch('clearLocalStorage');
+        $this->dispatch('removeLastAction');
 
         // redirect to previous url or to the dashboard
         if ($this->redirectUrl) {
