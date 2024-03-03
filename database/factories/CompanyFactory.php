@@ -19,7 +19,7 @@ class CompanyFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'shortname' => $this->faker->name(),
-            'subcontractor' => $this->faker->boolean,
+            'subcontractor' => $this->faker->boolean(),
             'active' => $this->faker->boolean(),
             'active_since' => Carbon::now(),
             'active_until' => Carbon::now(),
