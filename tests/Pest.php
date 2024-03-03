@@ -16,12 +16,10 @@
 */
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\CreatesApplication;
 use Tests\TestCase;
 
 uses(
     TestCase::class,
-    CreatesApplication::class,
     RefreshDatabase::class
 )->in('Feature', 'Unit', 'Policies');
 
