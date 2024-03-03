@@ -8,8 +8,6 @@ use Illuminate\Support\Carbon;
 
 class LocationFactory extends Factory
 {
-    protected $model = Location::class;
-
     public function definition(): array
     {
         return [

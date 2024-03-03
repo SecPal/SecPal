@@ -12,8 +12,6 @@ use Illuminate\Support\Carbon;
 
 class CustomerFactory extends Factory
 {
-    protected $model = Customer::class;
-
     public function definition(): array
     {
         return [

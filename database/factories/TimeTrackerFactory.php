@@ -12,8 +12,6 @@ use Illuminate\Support\Carbon;
 
 class TimeTrackerFactory extends Factory
 {
-    protected $model = TimeTracker::class;
-
     public function definition(): array
     {
         return [

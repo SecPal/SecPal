@@ -12,8 +12,6 @@ use Illuminate\Support\Carbon;
 
 class CompanyFactory extends Factory
 {
-    protected $model = Company::class;
-
     public function definition(): array
     {
         return [
