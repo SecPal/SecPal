@@ -11,10 +11,11 @@ use Livewire\Component;
 class Logout extends Component
 {
     // Update listeners to include 'idle-timeout' event
-    protected $listeners = ['logout', 'idle-timeout' => 'logout'];
+    protected $listeners = ['logout', 'idle-timeout' => 'idle_logout'];
 
     public function logout(): void
     {
+        $this->dispatch('showLogoutModal');
         $this->performLogout();
         $this->invalidateSession();
         $this->redirectHome();
@@ -34,6 +35,11 @@ class Logout extends Component
     private function redirectHome(): void
     {
         $this->redirect('/', navigate: false);
+    }
+
+    public function idle_logout(): void
+    {
+        $this->performLogout();
     }
 
     public function render(): string

@@ -66,4 +66,15 @@
             localStorage.removeItem('lastAction');
         })
     </script>
+
+    <div
+        x-data="{ showSpinner: false }"
+        x-show="showSpinner"
+        x-on:show-spinner.window="showSpinner = true"
+        x-on:hide-spinner.window="showSpinner = false"
+        style="display: none"
+        class="fixed inset-0 flex items-center justify-center z-50 bg-opacity-80 bg-black"
+    >
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-white dark:border-gray-400"></div>
+    </div>
 </div>
