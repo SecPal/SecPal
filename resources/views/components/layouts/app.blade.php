@@ -8,12 +8,6 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-
-    <script>
-        window.addEventListener('popstate', function () {
-            location.reload();
-        });
-    </script>
 </head>
 <body class="h-full"
       x-data="{
@@ -21,7 +15,7 @@
         showLogoutModal: false,
         timeoutInterval: null,
         countDownValue: 60,
-        timeoutValue: 300,
+        timeoutValue: 240,
         timePassed: Math.floor((Date.now() - (parseInt(localStorage.getItem('lastAction')) || Date.now())) / 1000),
 
         // If timeout is exceeded on load, show modal or log out.
@@ -63,7 +57,16 @@
             this.startTimer();
         }
       }"
-      x-init="startTimer"
+      x-init="
+      () => {
+            startTimer();
+            window.addEventListener('idle-timeout', () => {
+                showLogoutModal = true
+            });
+            window.addEventListener('showLogoutModal', () => {
+                showLogoutModal = true
+            });
+      }"
       @mousemove="resetTimer"
       @keydown.window="resetTimer"
       @scroll.window="resetTimer">
@@ -84,7 +87,7 @@
 <!-- Logout Modal -->
 <div x-show="showLogoutModal"
      style="display: none"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80">
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 sm:p-10 mx-2 sm:mx-0 sm:w-1/3">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ __('You are going to be logged out!') }}</h2>
     </div>

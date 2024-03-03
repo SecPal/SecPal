@@ -98,13 +98,14 @@ class Login extends Component
 
     private function handleSuccessfulLogin(): void
     {
+        $this->dispatch('show-spinner');
         $this->dispatch('removeLastAction');
 
         // redirect to previous url or to the dashboard
         if ($this->redirectUrl) {
-            $this->redirect($this->redirectUrl, navigate: false);
+            $this->redirect($this->redirectUrl, navigate: true);
         } else {
-            $this->redirectRoute('dashboard', navigate: false);
+            $this->redirectRoute('dashboard', navigate: true);
         }
     }
 
