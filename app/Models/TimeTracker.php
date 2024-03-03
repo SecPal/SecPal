@@ -26,11 +26,14 @@ class TimeTracker extends Model
         'entry_by',
     ];
 
-    protected $casts = [
-        'event' => ShiftStatus::class,
-        'real_time' => 'datetime',
-        'plan_time' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'event' => ShiftStatus::class,
+            'real_time' => 'datetime',
+            'plan_time' => 'datetime',
+        ];
+    }
 
     public function user(): BelongsTo
     {
