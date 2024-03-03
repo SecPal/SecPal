@@ -62,8 +62,8 @@
     </div>
 
     <script>
-        window.addEventListener('clearLocalStorage', function () {
-            localStorage.clear();
+        window.addEventListener('removeLastAction', function () {
+            localStorage.removeItem('lastAction');
         })
     </script>
 </div>
