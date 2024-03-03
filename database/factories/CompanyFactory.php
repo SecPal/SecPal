@@ -6,20 +6,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class CompanyFactory extends Factory
 {
-    protected $model = Company::class;
-
     public function definition(): array
     {
         return [
             'name' => $this->faker->name(),
             'shortname' => $this->faker->name(),
-            'subcontractor' => $this->faker->boolean,
+            'subcontractor' => $this->faker->boolean(),
             'active' => $this->faker->boolean(),
             'active_since' => Carbon::now(),
             'active_until' => Carbon::now(),

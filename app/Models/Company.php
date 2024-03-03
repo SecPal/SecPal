@@ -21,10 +21,13 @@ class Company extends Model
         'active_until',
     ];
 
-    protected $casts = [
-        'active_since' => 'date',
-        'active_until' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'active_since' => 'date',
+            'active_until' => 'date',
+        ];
+    }
 
     public function users(): HasMany
     {
