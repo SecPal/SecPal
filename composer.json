@@ -23,12 +23,14 @@
         "php": "^8.2",
         "christophrumpel/missing-livewire-assertions": "dev-l11-compatibility",
         "guzzlehttp/guzzle": "^7.8",
+        "jfcherng/php-diff": "^6.16",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "dev-master",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.3",
-        "spatie/laravel-ray": "^1.35",
-        "santigarcor/laratrust": "^8.2"
+        "overtrue/laravel-versionable": "^5.1",
+        "santigarcor/laratrust": "^8.2",
+        "spatie/laravel-ray": "^1.35"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
