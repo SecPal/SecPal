@@ -23,6 +23,7 @@
         "php": "^8.2",
         "christophrumpel/missing-livewire-assertions": "dev-l11-compatibility",
         "guzzlehttp/guzzle": "^7.8",
+        "jfcherng/php-diff": "^6.16",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "dev-master",
         "laravel/tinker": "^2.9",
