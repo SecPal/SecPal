@@ -13,15 +13,9 @@
             "homepage": "https://prevplan.de"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laravel-shift/missing-livewire-assertions.git"
-        }
-    ],
     "require": {
         "php": "^8.2",
-        "christophrumpel/missing-livewire-assertions": "dev-l11-compatibility",
+        "christophrumpel/missing-livewire-assertions": "^2.7",
         "guzzlehttp/guzzle": "^7.8",
         "jfcherng/php-diff": "^6.16",
         "laravel/framework": "^11.0",

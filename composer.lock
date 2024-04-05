@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88b2b4fc9cfcf0958aea20c8b37a61bb",
+    "content-hash": "be5dbde815f765dfe91382db56e046dc",
     "packages": [
         {
             "name": "brick/math",
@@ -132,16 +132,16 @@
         },
         {
             "name": "christophrumpel/missing-livewire-assertions",
-            "version": "dev-l11-compatibility",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laravel-shift/missing-livewire-assertions.git",
-                "reference": "d23db129cd73bfa5383795780bb0f98c02397c6d"
+                "url": "https://github.com/christophrumpel/missing-livewire-assertions.git",
+                "reference": "58374de520c8741106c678265537ace1f38cdde6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-shift/missing-livewire-assertions/zipball/d23db129cd73bfa5383795780bb0f98c02397c6d",
-                "reference": "d23db129cd73bfa5383795780bb0f98c02397c6d",
+                "url": "https://api.github.com/repos/christophrumpel/missing-livewire-assertions/zipball/58374de520c8741106c678265537ace1f38cdde6",
+                "reference": "58374de520c8741106c678265537ace1f38cdde6",
                 "shasum": ""
             },
             "require": {
@@ -169,19 +169,7 @@
                     "Christophrumpel\\MissingLivewireAssertions\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "./vendor/bin/testbench package:test --parallel --no-coverage"
-                ],
-                "test-coverage": [
-                    "vendor/bin/phpunit --coverage-html coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -201,9 +189,10 @@
                 "livewire"
             ],
             "support": {
-                "source": "https://github.com/laravel-shift/missing-livewire-assertions/tree/l11-compatibility"
+                "issues": "https://github.com/christophrumpel/missing-livewire-assertions/issues",
+                "source": "https://github.com/christophrumpel/missing-livewire-assertions/tree/v2.7.0"
             },
-            "time": "2024-03-02T06:32:50+00:00"
+            "time": "2024-03-26T20:42:30+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -10714,9 +10703,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "christophrumpel/missing-livewire-assertions": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
