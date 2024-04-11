@@ -26,7 +26,7 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-            @if(session('on_duty')) {{-- don't show menu if not on duty --}}
+            @if(auth()->user()->isOnDuty()) {{-- don't show menu if not on duty --}}
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Product</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Features</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Marketplace</a>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-            @else
+            @elseif(auth()->user()->locations()->count())
                 <a href="#" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</a>
             @endif
         </div>
@@ -117,33 +117,39 @@
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-gray-500/10">
                     <div class="space-y-2 py-6">
-                        <a href="#"
-                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Product</a>
-                        <a href="#"
-                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Features</a>
-                        <a href="#"
-                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Marketplace</a>
-                        <div class="relative w-full">
-                            <button @click="settingsFlyout = !settingsFlyout" type="button"
-                                    class="-mx-3 w-full block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 text-left">
-                                <span>{{ __('Settings') }}</span>
-                            </button>
-                            <div x-show="settingsFlyout">
-                                <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Analytics</a>
-                                <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Engagement</a>
-                                <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Security</a>
-                                <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Integrations</a>
-                                <a href="#"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Automations</a>
-                                <a href="#"
-                                   x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
-                                   class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
+                        @if(auth()->user()->isOnDuty()) {{-- don't show menu if not on duty --}}
+                            <a href="#"
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Product</a>
+                            <a href="#"
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Features</a>
+                            <a href="#"
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Marketplace</a>
+                            <div class="relative w-full">
+                                <button @click="settingsFlyout = !settingsFlyout" type="button"
+                                        class="-mx-3 w-full block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 text-left">
+                                    <span>{{ __('Settings') }}</span>
+                                </button>
+                                <div x-show="settingsFlyout">
+                                    <a href="#"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Analytics</a>
+                                    <a href="#"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Engagement</a>
+                                    <a href="#"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Security</a>
+                                    <a href="#"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Integrations</a>
+                                    <a href="#"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Automations</a>
+                                    <a href="#"
+                                       x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
+                                </div>
                             </div>
-                        </div>
+                        @elseif(auth()->user()->locations()->count())
+                        <a href="#"
+                           @click="$dispatch('start-shift')"
+                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Please start your shift or log out!') }}</a>
+                        @endif
                     </div>
                     <div class="border-t border-gray-200 pt-4 pb-3">
                         <div class="flex items-center px-4">

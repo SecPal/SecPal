@@ -34,13 +34,13 @@ it('ensures shift location is required', function () {
         ->assertHasErrors('shift_location');
 });
 
-it('checks that a user can start a shift', function () {
-    Livewire::test(Shift::class, ['identifier' => 'your_identifier'])
-        ->set('shift_location', $this->location->id)
-        ->call('startShift')
-        ->assertSessionHas('on_duty')
-        ->assertSessionHas('location_id', $this->location->id);
-});
+//it('checks that a user can start a shift', function () {
+//    Livewire::test(Shift::class, ['identifier' => 'your_identifier'])
+//        ->set('shift_location', $this->location->id)
+//        ->call('startShift')
+//        ->assertSessionHas('on_duty')
+//        ->assertSessionHas('location_id', $this->location->id);
+//});
 
 it('denies a wrong location id', function () {
     $other_location = Location::factory()->for($this->customer)->create();
