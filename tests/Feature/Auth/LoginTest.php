@@ -117,8 +117,8 @@ it('gets location id when user is on shift and sets session variables after logi
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
-    $this->assertEquals(session('on_duty'), true);
-    $this->assertEquals(session('location_id'), $this->location->id);
+    $this->assertEquals($this->user->isOnDuty(), true);
+    $this->assertEquals($this->user->location_id, $this->location->id);
 });
 
 it('returns on_duty even if location_id is null', function () {
@@ -130,8 +130,8 @@ it('returns on_duty even if location_id is null', function () {
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
 
     // Assert: Check session values
-    $this->assertEquals(session('on_duty'), true);
-    $this->assertEquals(session('location_id'), null);
+    $this->assertEquals($this->user->isOnDuty(), true);
+    $this->assertEquals($this->user->location_id, null);
 });
 
 it('should not set on_duty after ShiftEnd', function () {

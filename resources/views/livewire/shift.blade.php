@@ -1,5 +1,5 @@
 <div>
-    @if (session('on_duty'))
+    @if(auth()->user()->isOnDuty())
         <div>
             <x-dialog wire:model="show">
                 <x-dialog.open>
@@ -48,7 +48,7 @@
                 </x-dialog.panel>
             </x-dialog>
         </div>
-    @elseif (auth()->user()->locations()->count())
+    @elseif(auth()->user()->locations()->count())
         <div>
             <x-dialog wire:model="show">
                 <x-dialog.open>

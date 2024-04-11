@@ -65,7 +65,6 @@ class Shift extends Component
 
         $shift_start = Carbon::createFromFormat('H:i', $this->shift_start);
         $this->getCurrentUser()->createTimeTracker($this->shift_location, ShiftStatus::ShiftStart, $shift_start);
-        session(['on_duty' => true, 'location_id' => $this->shift_location]);
         $this->reset('show');
         $this->dispatch('shift-changed');
     }
@@ -75,10 +74,9 @@ class Shift extends Component
         $this->validate([
             'shift_end' => 'required|string',
         ]);
-        $locationId = session()->get('location_id');
+        $locationId = auth()->user()->location_id;
         $shift_end = Carbon::createFromFormat('H:i', $this->shift_end);
         $this->getCurrentUser()->createTimeTracker($locationId, ShiftStatus::ShiftEnd, $shift_end);
-        session()->forget(['on_duty', 'location_id']);
         $this->reset('show');
         $this->dispatch('shift-changed');
     }
