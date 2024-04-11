@@ -13,7 +13,7 @@
             </a>
         </div>
         <div class="flex lg:hidden">
-            <livewire:shift identifier="mobile"/>
+            <livewire:shift @shift-changed="$refresh" identifier="mobile"/>
             <!-- Hamburger Menu Button -->
             <button type="button" x-on:click="mobileMenu = !mobileMenu; settingsFlyout = false"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
@@ -26,35 +26,39 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Product</a>
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Features</a>
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Marketplace</a>
-            <div class="relative">
-                <button @click="settingsFlyout = !settingsFlyout" type="button"
-                        class="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
-                        aria-expanded="false">
-                    <span>{{ __('Settings') }}</span>
-                </button>
-                <div x-show="settingsFlyout"
-                     @click.away="settingsFlyout = false"
-                     class="absolute left-1/2 z-10 mt-5 flex w-screen max-w-min -translate-x-1/2 px-4"
-                     style="display: none;"
-                >
-                    <div
-                        class="w-56 shrink rounded-xl bg-white dark:bg-gray-900 p-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 shadow-lg ring-1 ring-gray-900/5 dark:ring-gray-200/5">
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Analytics</a>
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Engagement</a>
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Security</a>
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Integrations</a>
-                        <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Automations</a>
-                        <a href="#" x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
-                           class="block p-2 text-gray-900 dark:text-gray-200">{{ __('Change Password') }}</a>
+            @if(session('on_duty')) {{-- don't show menu if not on duty --}}
+                <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Product</a>
+                <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Features</a>
+                <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Marketplace</a>
+                <div class="relative">
+                    <button @click="settingsFlyout = !settingsFlyout" type="button"
+                            class="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
+                            aria-expanded="false">
+                        <span>{{ __('Settings') }}</span>
+                    </button>
+                    <div x-show="settingsFlyout"
+                         @click.away="settingsFlyout = false"
+                         class="absolute left-1/2 z-10 mt-5 flex w-screen max-w-min -translate-x-1/2 px-4"
+                         style="display: none;"
+                    >
+                        <div
+                            class="w-56 shrink rounded-xl bg-white dark:bg-gray-900 p-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 shadow-lg ring-1 ring-gray-900/5 dark:ring-gray-200/5">
+                            <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Analytics</a>
+                            <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Engagement</a>
+                            <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Security</a>
+                            <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Integrations</a>
+                            <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Automations</a>
+                            <a href="#" x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
+                               class="block p-2 text-gray-900 dark:text-gray-200">{{ __('Change Password') }}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <a href="#" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</a>
+            @endif
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <livewire:shift identifier="desktop"/>
+            <livewire:shift @shift-changed="$refresh" identifier="desktop"/>
 
             <!--User menu-->
             <div class="relative ml-3" x-data="{ userMenu: false }" @click.away="userMenu = false">
@@ -113,8 +117,9 @@
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-gray-500/10">
                     <div class="space-y-2 py-6">
-                        <a href="#"
-                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Product</a>
+                        <a href="{{ route('journal') }}"
+                           wire:navigate
+                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Journal') }}</a>
                         <a href="#"
                            class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Features</a>
                         <a href="#"

@@ -9,7 +9,9 @@ namespace App\Livewire;
 use App\Enums\ShiftStatus;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use JetBrains\PhpStorm\NoReturn;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class Shift extends Component
 {
@@ -31,6 +33,12 @@ class Shift extends Component
         $this->locations = $this->getCurrentUser()->locations()->get();
         $this->shift_start = $this->getRoundedQuarterHour();
         $this->shift_end = $this->getRoundedQuarterHour();
+    }
+
+    #[On('start-shift')]
+    public function showStartShift(): void
+    {
+        $this->show = true;
     }
 
     private function getCurrentUser()
@@ -60,6 +68,7 @@ class Shift extends Component
         $this->getCurrentUser()->createTimeTracker($this->shift_location, ShiftStatus::ShiftStart, $shift_start);
         session(['on_duty' => true, 'location_id' => $this->shift_location]);
         $this->reset('show');
+        $this->dispatch('shift-changed');
     }
 
     public function endShift(): void
@@ -72,6 +81,7 @@ class Shift extends Component
         $this->getCurrentUser()->createTimeTracker($locationId, ShiftStatus::ShiftEnd, $shift_end);
         session()->forget(['on_duty', 'location_id']);
         $this->reset('show');
+        $this->dispatch('shift-changed');
     }
 
     public function render()
