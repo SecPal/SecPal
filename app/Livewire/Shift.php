@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
@@ -7,7 +6,9 @@
 namespace App\Livewire;
 
 use App\Enums\ShiftStatus;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -29,9 +30,9 @@ class Shift extends Component
     public function mount($identifier): void
     {
         $this->identifier = $identifier;
-        $this->locations = $this->getCurrentUser()->locations()->get();
-        $this->shift_start = $this->getRoundedQuarterHour();
-        $this->shift_end = $this->getRoundedQuarterHour();
+        $this->locations = $this->getAuthenticatedUser()->locations()->get();
+        $this->shift_start = $this->getInitialShiftStart();
+        $this->shift_end = $this->getInitialShiftEnd();
     }
 
     #[On('start-shift')]
@@ -40,11 +41,21 @@ class Shift extends Component
         $this->show = true;
     }
 
-    private function getCurrentUser()
+    private function getAuthenticatedUser(): User|Authenticatable|null
     {
         abort_if(! Auth::check(), 403);
 
-        return auth()->user();
+        return Auth::user();
+    }
+
+    private function getInitialShiftStart(): string
+    {
+        return $this->getRoundedQuarterHour();
+    }
+
+    private function getInitialShiftEnd(): string
+    {
+        return $this->getRoundedQuarterHour();
     }
 
     private function getRoundedQuarterHour(): string
@@ -64,7 +75,8 @@ class Shift extends Component
         abort_unless($this->locations->contains('id', $this->shift_location), 403);
 
         $shift_start = Carbon::createFromFormat('H:i', $this->shift_start);
-        $this->getCurrentUser()->createTimeTracker($this->shift_location, ShiftStatus::ShiftStart, $shift_start);
+        $this->getAuthenticatedUser()->createTimetrackerForUser($this->shift_location, ShiftStatus::ShiftStart,
+            $shift_start);
         $this->reset('show');
         $this->dispatch('shift-changed');
     }
@@ -74,9 +86,10 @@ class Shift extends Component
         $this->validate([
             'shift_end' => 'required|string',
         ]);
-        $locationId = auth()->user()->location_id;
+
+        $locationId = Auth::user()->getLocationId();
         $shift_end = Carbon::createFromFormat('H:i', $this->shift_end);
-        $this->getCurrentUser()->createTimeTracker($locationId, ShiftStatus::ShiftEnd, $shift_end);
+        $this->getAuthenticatedUser()->createTimetrackerForUser($locationId, ShiftStatus::ShiftEnd, $shift_end);
         $this->reset('show');
         $this->dispatch('shift-changed');
     }

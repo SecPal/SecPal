@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
@@ -29,9 +28,10 @@ class Login extends Component
 
     private function checkForRedirect(): void
     {
+        $previousUrl = str_replace(url('/'), '', url()->previous());
         // check if we want to redirect after successful login
-        if (str_replace(url('/'), '', url()->previous()) != '/') {
-            $this->redirectUrl = str_replace(url('/'), '', url()->previous());
+        if ($previousUrl != '/') {
+            $this->redirectUrl = $previousUrl;
         }
     }
 
@@ -50,7 +50,6 @@ class Login extends Component
     {
         if (Auth::attempt(['username' => $this->username, 'password' => $this->password])) {
             session()->regenerate();
-
             $this->handleSuccessfulLogin();
         } else {
             $this->handleFailedLogin();
@@ -61,7 +60,6 @@ class Login extends Component
     {
         $this->dispatch('show-spinner');
         $this->dispatch('removeLastAction');
-
         // redirect to previous url or to the dashboard
         if ($this->redirectUrl) {
             $this->redirect($this->redirectUrl, navigate: true);

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
  */
@@ -9,7 +8,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\ShiftStatus;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -81,7 +79,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->belongsToMany(Location::class);
     }
 
-    public function createTimeTracker($locationId, $event, $plan_time): void
+    public function createTimetrackerForUser($locationId, $event, $plan_time): void
     {
         $this->timeTrackers()->create([
             'location_id' => $locationId,
@@ -99,15 +97,9 @@ class User extends Authenticatable implements LaratrustUser
 
     public function isOnDuty(): bool
     {
-        $user = Auth::user();
-
-        if (! $user instanceof User) {
-            return false;
-        }
-
+        $user = $this->getUser();
         // Check if the user is on shift
         $shiftData = $this->getLocationIdIfOnShift($user);
-
         if ($shiftData['onDuty']) {
             return true;
         }
@@ -117,9 +109,6 @@ class User extends Authenticatable implements LaratrustUser
 
     /**
      * Get the location_id for the user as an attribute.
-     *
-     * @return int|null
-     * @throws Exception
      */
     public function getLocationIdAttribute(): ?int
     {
@@ -128,17 +117,22 @@ class User extends Authenticatable implements LaratrustUser
 
     public function getLocationId(): ?int
     {
-        $user = Auth::user();
-
-        if (! $user instanceof User) {
-            return null;
-        }
-
+        $user = $this->getUser();
         // get the LocationId, if the user is on shift
         $shiftData = $this->getLocationIdIfOnShift($user);
-
         if ($shiftData['locationId']) {
             return $shiftData['locationId'];
+        }
+
+        return null;
+    }
+
+    // Extracted method that retrieves the User entity
+    private function getUser(): ?User
+    {
+        $user = Auth::user();
+        if ($user instanceof User) {
+            return $user;
         }
 
         return null;
@@ -154,12 +148,10 @@ class User extends Authenticatable implements LaratrustUser
         $timeTracker = TimeTracker::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->first();
-
         // If there's no record, then the user isn't on a shift
         if (! $timeTracker) {
             return ['onDuty' => false, 'locationId' => null];
         }
-
         // If the last 'event' is 'ShiftEnd' or 'ShiftAbort', the user isn't on a shift
         if ($timeTracker->event === ShiftStatus::ShiftEnd || $timeTracker->event === ShiftStatus::ShiftAbort) {
             return ['onDuty' => false, 'locationId' => null];

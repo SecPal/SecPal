@@ -109,9 +109,9 @@ it('can logout an user', function () {
 
 it('gets location id when user is on shift and sets session variables after login', function () {
     // Start and end the user shift, then start again
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinutes(2));
-    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id, Carbon::now()->subMinute());
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id);
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinutes(2));
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftEnd, $this->location->id, Carbon::now()->subMinute());
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, $this->location->id);
 
     // Act: Attempt to login user
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
@@ -122,9 +122,9 @@ it('gets location id when user is on shift and sets session variables after logi
 });
 
 it('returns on_duty even if location_id is null', function () {
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null, Carbon::now()->subMinutes(2));
-    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, null, Carbon::now()->subMinute());
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, null);
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, null, Carbon::now()->subMinutes(2));
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftEnd, null, Carbon::now()->subMinute());
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, null);
 
     // Act: Attempt to login user
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
@@ -135,8 +135,8 @@ it('returns on_duty even if location_id is null', function () {
 });
 
 it('should not set on_duty after ShiftEnd', function () {
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
-    createTimeTracker($this->user->id, ShiftStatus::ShiftEnd, $this->location->id);
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftEnd, $this->location->id);
 
     // Act: Attempt to login user
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
@@ -147,8 +147,8 @@ it('should not set on_duty after ShiftEnd', function () {
 });
 
 it('should not set on_duty after ShiftAbort', function () {
-    createTimeTracker($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
-    createTimeTracker($this->user->id, ShiftStatus::ShiftAbort, $this->location->id);
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftStart, $this->location->id, Carbon::now()->subMinute());
+    createTimetrackerForUser($this->user->id, ShiftStatus::ShiftAbort, $this->location->id);
 
     // Act: Attempt to login user
     testLoginWithCredentials($this->user->username, KNOWN_PASSWORD);
@@ -167,7 +167,7 @@ function testLoginWithCredentials($username, $password)
         ->call('login');
 }
 
-function createTimeTracker($userId, $event, $locationId = null, $createdAt = null): void
+function createTimetrackerForUser($userId, $event, $locationId = null, $createdAt = null): void
 {
     TimeTracker::factory()->create([
         'user_id' => $userId,
