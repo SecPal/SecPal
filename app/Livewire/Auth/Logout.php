@@ -6,19 +6,19 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Logout extends Component
 {
-    // Update listeners to include 'idle-timeout' event
-    protected $listeners = ['logout', 'idle-timeout' => 'idle_logout'];
-
+    #[On('logout')]
     public function logout(): void
     {
         $this->dispatch('showLogoutModal');
         $this->performLogout();
         $this->invalidateSession();
-        $this->redirectHome();
+        session()->flash('user-logout', true);
+        $this->redirectToLogin();
     }
 
     private function performLogout(): void
@@ -32,12 +32,13 @@ class Logout extends Component
         session()->regenerateToken();
     }
 
-    private function redirectHome(): void
+    private function redirectToLogin(): void
     {
-        $this->redirect('/', navigate: false);
+        $this->redirect(route('login'), navigate: false);
     }
 
-    public function idle_logout(): void
+    #[On('idle-timeout')]
+    public function idleLogout(): void
     {
         $this->performLogout();
     }
