@@ -29,8 +29,8 @@ class Login extends Component
     private function checkForRedirect(): void
     {
         $previousUrl = str_replace(url('/'), '', url()->previous());
-        // check if we want to redirect after successful login
-        if ($previousUrl != '/') {
+        // check if we want to redirect after successful login and haven't logged out before
+        if ($previousUrl != '/' && ! session('user-logout')) {
             $this->redirectUrl = $previousUrl;
         }
     }

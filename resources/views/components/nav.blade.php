@@ -54,7 +54,7 @@
                     </div>
                 </div>
             @elseif(auth()->user()->locations()->count())
-                <a href="#" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</a>
+                <button type="button" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</button>
             @endif
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -146,9 +146,10 @@
                                 </div>
                             </div>
                         @elseif(auth()->user()->locations()->count())
-                        <a href="#"
-                           @click="$dispatch('start-shift')"
-                           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Please start your shift or log out!') }}</a>
+                            <button type="button"
+                               @click="$dispatch('start-shift')"
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Please start your shift or log out!') }}
+                            </button>
                         @endif
                     </div>
                     <div class="border-t border-gray-200 pt-4 pb-3">

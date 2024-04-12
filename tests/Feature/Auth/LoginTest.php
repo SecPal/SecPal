@@ -102,7 +102,7 @@ it('can logout an user', function () {
 
     Livewire::test(Logout::class)
         ->call('logout')
-        ->assertRedirect('/');
+        ->assertRedirect('/login');
 
     $this->assertGuest();
 });
