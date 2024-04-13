@@ -121,7 +121,7 @@ return [
         /**
          * Will be used only if the teams functionality is enabled.
          */
-        'team' => \App\Models\Team::class,
+        'team' => \App\Models\Location::class,
     ],
 
     /*
@@ -141,7 +141,7 @@ return [
         /**
          * Will be used only if the teams functionality is enabled.
          */
-        'teams' => 'teams',
+        'teams' => 'locations',
 
         'role_user' => 'role_user',
 
@@ -177,7 +177,7 @@ return [
         /**
          * Role foreign key on Laratrust's role_user and permission_user tables.
          */
-        'team' => 'team_id',
+        'team' => 'location_id',
     ],
 
     /*
