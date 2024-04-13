@@ -6,6 +6,7 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Dashboard;
+use App\Livewire\Journal;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,10 @@ Route::get('login', Login::class)
 
 Route::get('home', Dashboard::class)
     ->name('dashboard')
+    ->middleware('auth');
+
+Route::get('journal', Journal::class)
+    ->name('journal')
     ->middleware('auth');
 
 Route::get('/', function () {
