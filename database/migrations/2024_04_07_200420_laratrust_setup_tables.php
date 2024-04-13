@@ -30,27 +30,27 @@ return new class extends Migration
         });
 
         // Create table for storing teams
-        Schema::create('teams', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
-            $table->timestamps();
-        });
+//        Schema::create('teams', function (Blueprint $table) {
+//            $table->bigIncrements('id');
+//            $table->string('name')->unique();
+//            $table->string('display_name')->nullable();
+//            $table->string('description')->nullable();
+//            $table->timestamps();
+//        });
 
         // Create table for associating roles to users and teams (Many To Many Polymorphic)
         Schema::create('role_user', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('user_id');
             $table->string('user_type');
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('location_id')->nullable();
 
             $table->foreign('role_id')->references('id')->on('roles')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('team_id')->references('id')->on('teams')
+            $table->foreign('location_id')->references('id')->on('locations')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unique(['user_id', 'role_id', 'user_type', 'team_id']);
+            $table->unique(['user_id', 'role_id', 'user_type', 'location_id']);
         });
 
         // Create table for associating permissions to users (Many To Many Polymorphic)
@@ -58,14 +58,14 @@ return new class extends Migration
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('user_id');
             $table->string('user_type');
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('location_id')->nullable();
 
             $table->foreign('permission_id')->references('id')->on('permissions')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('team_id')->references('id')->on('teams')
+            $table->foreign('location_id')->references('id')->on('locations')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unique(['user_id', 'permission_id', 'user_type', 'team_id']);
+            $table->unique(['user_id', 'permission_id', 'user_type', 'location_id'], 'permission_user_id_permission_id_user_type_location_id_unique');
         });
 
         // Create table for associating permissions to roles (Many-to-Many)
@@ -92,6 +92,6 @@ return new class extends Migration
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('role_user');
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('teams');
+//        Schema::dropIfExists('teams');
     }
 };
