@@ -29,15 +29,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Create table for storing teams
-//        Schema::create('teams', function (Blueprint $table) {
-//            $table->bigIncrements('id');
-//            $table->string('name')->unique();
-//            $table->string('display_name')->nullable();
-//            $table->string('description')->nullable();
-//            $table->timestamps();
-//        });
-
         // Create table for associating roles to users and teams (Many To Many Polymorphic)
         Schema::create('role_user', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
