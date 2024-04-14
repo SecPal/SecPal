@@ -39,8 +39,8 @@ class PermissionSeeder extends Seeder
         // end user block
 
         $this->createPermission(
-            'need-no-shift',
-            'Need no Shift',
+            'work-without-shift',
+            'Can work without shift',
             'Needs no shift to work'
         );
 

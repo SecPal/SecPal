@@ -26,7 +26,7 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-            @if(auth()->user()->isOnDuty()) {{-- don't show menu if not on duty --}}
+            @can('work', \App\Models\User::class)
                 <a href="{{ route('journal') }}" wire:navigate class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">{{ __('Journal') }}</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Features</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Marketplace</a>
@@ -55,7 +55,7 @@
                 </div>
             @elseif(auth()->user()->locations()->count())
                 <button type="button" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</button>
-            @endif
+            @endcan
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             <livewire:shift @shift-changed="$refresh" identifier="desktop"/>
@@ -117,7 +117,7 @@
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-gray-500/10">
                     <div class="space-y-2 py-6">
-                        @if(auth()->user()->isOnDuty()) {{-- don't show menu if not on duty --}}
+                        @can('work', \App\Models\User::class)
                             <a href="{{ route('journal') }}"
                                wire:navigate
                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Journal') }}</a>
@@ -151,7 +151,7 @@
                                @click="$dispatch('start-shift')"
                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Please start your shift or log out!') }}
                             </button>
-                        @endif
+                        @endcan
                     </div>
                     <div class="border-t border-gray-200 pt-4 pb-3">
                         <div class="flex items-center px-4">
