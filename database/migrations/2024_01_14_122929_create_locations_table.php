@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Customer::class)->constrained();
             $table->string('name');
-            $table->string('location');
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }
