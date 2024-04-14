@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Create table for associating roles to users and teams (Many To Many Polymorphic)
+        // Create table for associating roles to users (Many To Many Polymorphic)
         Schema::create('role_user', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('user_id');
@@ -83,6 +83,5 @@ return new class extends Migration
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('role_user');
         Schema::dropIfExists('roles');
-//        Schema::dropIfExists('teams');
     }
 };
