@@ -16,11 +16,34 @@ class LocationPolicy
 
     public function viewAny(User $user): bool
     {
-        //
+        return $user->hasPermission(
+            [
+                'see-recent-journal-overview',
+                'see-full-journal-overview',
+            ]
+        );
     }
 
-    public function view(User $user, Location $location): bool
+    public function viewRecent(User $user, Location $location): bool
     {
+        if ($user->isAbleTo('see-recent-journal-overview')) {
+            return true;
+        }
+
+        if ($user->isOnDuty() && $user->getLocationId() == $location->id) {
+            return true;
+        }
+
+        return $user->isAbleTo('see-recent-journal-overview', $location);
+    }
+
+    public function viewFull(User $user, Location $location): bool
+    {
+        if ($user->isAbleTo('see-full-journal-overview')) {
+            return true;
+        }
+
+        return $user->isAbleTo('see-full-journal-overview', $location);
     }
 
     public function create(User $user): bool

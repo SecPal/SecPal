@@ -76,9 +76,15 @@ class PermissionSeeder extends Seeder
         );
 
         $this->createPermission(
-            'journal-overview',
-            'See journal overview',
-            'Can see a journal overview'
+            'see-recent-journal-overview',
+            'See recent journal overview',
+            'Can see the recent journal overview'
+        );
+
+        $this->createPermission(
+            'see-full-journal-overview',
+            'See full journal overview',
+            'Can see the full journal overview'
         );
         // end journal block
 

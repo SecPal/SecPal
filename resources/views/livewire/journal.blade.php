@@ -4,7 +4,21 @@
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-                <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">Journal</h1>
+                <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
+                    Journal -
+                    <div class="inline-block">
+                        <select wire:model="location" class="w-64 bg-white dark:bg-gray-800 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
+                            <option value="">{{ __('Select your location') }}</option>
+                            @foreach($locations as $loc)
+                                @canany(['viewRecent', 'viewFull'], $loc)
+                                    <option value="{{ $loc->id }}">
+                                        {{ $loc->name }} - {{ $loc->location }}
+                                    </option>
+                                @endcanany
+                            @endforeach
+                        </select>
+                    </div>
+                </h1>
                 <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">A (placeholder) list of all incidents</p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
