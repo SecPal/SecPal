@@ -28,12 +28,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->name;
+        $name = explode(' ', fake()->name);
 
         return [
             'personal-number' => fake()->numberBetween(100, 1000),
-            'username' => strtolower(str_replace(' ', '.', $name)),
-            'fullname' => $name,
+            'username' => strtolower($name[0] . '.' . $name[1]),
+            'lastname' => $name[1],
+            'firstname' => $name[0],
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'active' => $this->faker->boolean(),
