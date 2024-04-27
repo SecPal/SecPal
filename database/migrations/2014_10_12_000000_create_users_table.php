@@ -19,7 +19,8 @@ return new class extends Migration
             $table->id();
             $table->string('personal-number');
             $table->string('username');
-            $table->string('fullname');
+            $table->string('lastname');
+            $table->string('firstname');
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active');
