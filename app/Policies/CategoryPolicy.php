@@ -10,6 +10,14 @@ class CategoryPolicy
 {
     use HandlesAuthorization;
 
+    public function involve(User $user, Category $category)
+    {
+        ray($category);
+        ray()->charles();
+
+        return true;
+    }
+
     public function viewAny(User $user): bool
     {
 

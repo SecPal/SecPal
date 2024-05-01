@@ -32,7 +32,7 @@ class UserFactory extends Factory
 
         return [
             'personal-number' => fake()->numberBetween(100, 1000),
-            'username' => strtolower($name[0] . '.' . $name[1]),
+            'username' => strtolower($name[0].'.'.$name[1]),
             'lastname' => $name[1],
             'firstname' => $name[0],
             'email' => fake()->unique()->safeEmail(),

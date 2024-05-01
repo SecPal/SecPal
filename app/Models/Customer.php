@@ -22,6 +22,7 @@ class Customer extends Model
     {
         return $this->hasMany(Category::class);
     }
+
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
