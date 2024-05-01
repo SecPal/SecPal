@@ -11,14 +11,18 @@ return new class extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
-            $table->text('text');
-            $table->text('actions')->nullable();
-            $table->tinyInteger('involved');
+            $table->foreignId('location_id');
+            $table->foreignId('category_id');
+            $table->text('description');
+            $table->text('measures')->nullable();
+            $table->tinyText('area');
+            $table->unsignedSmallInteger('involved');
+            $table->boolean('rescue_involved');
+            $table->boolean('fire_involved');
+            $table->boolean('police_involved');
             $table->foreignIdFor(User::class, 'reported_by');
             $table->foreignIdFor(User::class, 'entry_by');
-            $table->boolean('review_required');
             $table->foreignIdFor(User::class, 'reviewed_by')->nullable();
-            $table->tinyText('reference')->nullable();
             $table->dateTime('incident_time');
             $table->softDeletes();
             $table->timestamps();
