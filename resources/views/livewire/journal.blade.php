@@ -1,13 +1,12 @@
 <div class="dark:bg-gray-800">
     <x-nav/>
-
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
                 <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
                     Journal -
                     <div class="inline-block">
-                        <select wire:model.live="actual_location" class="w-64 bg-white dark:bg-gray-800 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
+                        <select wire:model.live="actual_location" class="w-64 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
                             <option value="">{{ __('Select your location') }}</option>
                             @foreach($locations as $location)
                                 @canany(['viewRecent', 'viewFull'], $location)
@@ -62,32 +61,27 @@
                         <td class="hidden px-3 py-4 text-sm text-gray-900 dark:text-gray-400 lg:table-cell">{{ $journal->reportedBy->lastname }}, {{ $journal->reportedBy->firstname }}</td>
                         <td class="py-4 pl-3 pr-0 text-right text-sm font-medium">
                             @if($journal->reviewed_by)
-                                <button type="button">
+                                <button type="button" class="hover:bg-gray-200 dark:hover:bg-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                          stroke="grey"
                                          class="h-6 w-6 dark:stroke-white">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
                                 </button>
                             @else
-                                <button type="button">
+                                <button type="button" class="hover:bg-gray-200 dark:hover:bg-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                          stroke="grey"
                                          class="h-6 w-6 dark:stroke-white">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                                     </svg>
                                 </button>
                             @endif
                         </td>
                         <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <button type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                     stroke="grey"
-                                     class="h-6 w-6 dark:stroke-white">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                            <button type="button" class="hover:bg-gray-200 dark:hover:bg-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="grey" class="h-6 w-6 dark:stroke-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                 </svg>
                             </button>
                         </td>
