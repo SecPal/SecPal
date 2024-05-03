@@ -93,7 +93,7 @@
     </div>
 </div>
 
-@livewireScripts
 <livewire:auth.logout/>
+@livewireScripts
 </body>
 </html>
