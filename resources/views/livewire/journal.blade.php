@@ -21,9 +21,9 @@
                 <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">A (placeholder) list of all incidents</p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                @if($actual_location)
-                    <livewire:add-incident :$location_data :key="$actual_location" @added="$refresh" />
-                @endif
+                @can('create-journal', $location_data)
+                    <livewire:add-incident :$location_data :key="$location_data->id" @added="$refresh" />
+                @endcan
             </div>
         </div>
         <div class="mt-8 -mx-4 sm:-mx-0">

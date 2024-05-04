@@ -7,6 +7,7 @@ use App\Models\Journal;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class AddIncident extends Component
@@ -27,27 +28,32 @@ class AddIncident extends Component
 
     public bool $police_involved = false;
 
-    public string $area = '';
+    public string $incidentArea = '';
 
-    public int $involved = 1;
+    public int $peopleInvolved = 1;
 
-    public string $description = '';
+    public string $incidentDescription = '';
 
     public string $measures = '';
 
-    public $date;
+    public $incidentDate;
 
-    public $time;
+    public $incidentTime;
 
-    public int $reported_by;
+    public int $reportedById;
 
     public function mount(): void
     {
-        $this->reported_by = Auth::user()->id;
-        $this->date = Carbon::now()->format('Y-m-d');
-        $this->time = Carbon::now()->format('H:i');
-
+        abort_unless(Gate::allows('work', Auth::user()), 403);
+        $this->reportedById = Auth::user()->id;
+        $this->setDateTimeNow();
         $this->categories = $this->getCategories();
+    }
+
+    private function setDateTimeNow(): void
+    {
+        $this->incidentDate = Carbon::now()->format('Y-m-d');
+        $this->incidentTime = Carbon::now()->format('H:i');
     }
 
     public function getCategories(): Collection
@@ -68,25 +74,24 @@ class AddIncident extends Component
 
     public function save(): void
     {
-        //  $this->validate();
-
-        $dateTime = Carbon::parse($this->date.' '.$this->time.':00')->toDateTimeString();
-
+        abort_unless(Auth::user()->can('create-journal', $this->location_data), 403);
+        $dateTime = Carbon::parse($this->incidentDate.' '.$this->incidentTime.':00')->toDateTimeString();
         Journal::create([
             'location_id' => $this->location_data->id,
-            'category_id' => $this->categoryId,
-            'description' => $this->description,
-            'measures' => $this->measures,
-            'reported_by' => $this->reported_by,
+            'category_id' => $this->pull('categoryId'),
+            'description' => $this->pull('incidentDescription'),
+            'measures' => $this->pull('measures'),
+            'reported_by' => $this->pull('reportedById'),
             'entry_by' => Auth::user()->id,
-            'area' => $this->area,
-            'involved' => $this->involved,
-            'rescue_involved' => $this->rescue_involved,
-            'fire_involved' => $this->fire_involved,
-            'police_involved' => $this->police_involved,
+            'area' => $this->pull('incidentArea'),
+            'involved' => $this->pull('peopleInvolved'),
+            'rescue_involved' => $this->pull('rescue_involved'),
+            'fire_involved' => $this->pull('fire_involved'),
+            'police_involved' => $this->pull('police_involved'),
             'incident_time' => $dateTime,
         ]);
 
+        $this->reset('category');
         $this->reset('show');
         $this->dispatch('added');
     }
@@ -94,6 +99,6 @@ class AddIncident extends Component
     public function updatedCategoryId(): void
     {
         $this->category = Category::find($this->categoryId);
-        $this->involved = $this->category->usually_involved;
+        $this->peopleInvolved = $this->category->usually_involved;
     }
 }

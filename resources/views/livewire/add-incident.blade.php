@@ -11,9 +11,9 @@
                         <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">This information will be displayed publicly so be careful what you share.</p>
                         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div class="sm:col-span-5">
-                                <label for="reported_by" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('reported by') }}</label>
+                                <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('reported by') }}</label>
                                 <div class="mt-2">
-                                    <select wire:model="reported_by" id="reported_by" name="reported_by" autocomplete="reported_by" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                    <select wire:model="reportedById" id="reportedById" name="reportedById" autocomplete="reportedById" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                                         <option disabled>{{ __('Select User') }}</option>
                                         @foreach($location_data->users as $user)
                                             <option value="{{ $user->id }}">{{ $user->lastname }}, {{ $user->firstname }}</option>
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-4 items-center">
-                                <label for="involved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Involved') }}</label>
+                                <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Involved') }}</label>
                                 <div class="mt-2 items-center space-x-2">
                                     @if(!$category || !$category->rescue_possible && !$category->fire_possible && !$category->police_possible)
                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
@@ -62,50 +62,50 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-3">
-                                <label for="date" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date') }}</label>
+                                <label for="incidentDate" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date') }}</label>
                                 <div class="mt-2">
                                     <input
-                                        wire:model="date"
+                                        wire:model="incidentDate"
                                         type="date"
-                                        name="date"
-                                        id="date"
+                                        name="incidentDate"
+                                        id="incidentDate"
                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     >
                                 </div>
                             </div>
                             <div class="sm:col-span-3">
                                 <label
-                                    for="time"
+                                    for="incidentTime"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                 >
                                     {{ __('Time') }}
                                 </label>
                                 <div class="mt-2">
                                     <input
-                                        wire:model="time"
+                                        wire:model="incidentTime"
                                         type="time"
-                                        name="time"
-                                        id="time"
+                                        name="incidentTime"
+                                        id="incidentTime"
                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     >
                                 </div>
                             </div>
                             <div class="sm:col-span-4">
-                                <label for="area" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Area / Location') }}</label>
+                                <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Area / Location') }}</label>
                                 <div class="mt-2">
-                                    <input wire:model="area" type="text" name="area" id="area" autocomplete="area" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                    <input wire:model="incidentArea" type="text" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
-                                <label for="involved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Persons involved') }}</label>
+                                <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Persons involved') }}</label>
                                 <div class="mt-2">
-                                    <input wire:model.blur="involved" type="text" name="involved" id="involved" autocomplete="involved" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                    <input wire:model.blur="peopleInvolved" type="text" name="peopleInvolved" id="peopleInvolved" autocomplete="peopleInvolved" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                 </div>
                             </div>
                             <div class="col-span-full">
-                                <label for="description" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Incident Description') }}</label>
+                                <label for="incidentDescription" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Incident Description') }}</label>
                                 <div class="mt-2">
-                                    <textarea wire:model="description" id="description" name="description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                    <textarea wire:model="incidentDescription" id="incidentDescription" name="incidentDescription" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                                 </div>
                                 <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ __('The report about the Incident and what happened.') }}</p>
                             </div>
