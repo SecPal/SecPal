@@ -79,7 +79,7 @@ class User extends Authenticatable implements LaratrustUser
         return $this->belongsToMany(Location::class);
     }
 
-    public function createTimetrackerForUser($locationId, $event, $plan_time): void
+    public function createTimeTrackerForUser($locationId, $event, $plan_time): void
     {
         $this->timeTrackers()->create([
             'location_id' => $locationId,
@@ -97,9 +97,7 @@ class User extends Authenticatable implements LaratrustUser
 
     public function isOnDuty(): bool
     {
-        $user = $this->getUser();
-        // Check if the user is on shift
-        $shiftData = $this->getLocationIdIfOnShift($user);
+        $shiftData = $this->getShiftData();
         if ($shiftData['onDuty']) {
             return true;
         }
@@ -117,9 +115,7 @@ class User extends Authenticatable implements LaratrustUser
 
     public function getLocationId(): ?int
     {
-        $user = $this->getUser();
-        // get the LocationId, if the user is on shift
-        $shiftData = $this->getLocationIdIfOnShift($user);
+        $shiftData = $this->getShiftData();
         if ($shiftData['locationId']) {
             return $shiftData['locationId'];
         }
@@ -127,7 +123,20 @@ class User extends Authenticatable implements LaratrustUser
         return null;
     }
 
-    // Extracted method that retrieves the User entity
+    /**
+     * Retrieve the shift data
+     */
+    private function getShiftData(): array
+    {
+        // Get the logged-in user
+        $user = $this->getUser();
+        if ($user) {
+            return $this->getLocationIdIfOnShift($user);
+        }
+
+        return ['onDuty' => false, 'locationId' => null];
+    }
+
     private function getUser(): ?User
     {
         $user = Auth::user();

@@ -10,11 +10,14 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Shift extends Component
 {
+    public $canWork = false;
+
     public $show = false;
 
     public $identifier;
@@ -33,6 +36,7 @@ class Shift extends Component
         $this->locations = $this->getAuthenticatedUser()->locations()->get();
         $this->shift_start = $this->getInitialShiftStart();
         $this->shift_end = $this->getInitialShiftEnd();
+        $this->canWork = Gate::allows('work', $this->getAuthenticatedUser());
     }
 
     #[On('start-shift')]
@@ -75,10 +79,11 @@ class Shift extends Component
         abort_unless($this->locations->contains('id', $this->shift_location), 403);
 
         $shift_start = Carbon::createFromFormat('H:i', $this->shift_start);
-        $this->getAuthenticatedUser()->createTimetrackerForUser($this->shift_location, ShiftStatus::ShiftStart,
+        $this->getAuthenticatedUser()->createTimeTrackerForUser($this->shift_location, ShiftStatus::ShiftStart,
             $shift_start);
         $this->reset('show');
-        $this->dispatch('shift-changed');
+
+        $this->checkWorkStatus();
     }
 
     public function endShift(): void
@@ -89,9 +94,21 @@ class Shift extends Component
 
         $locationId = Auth::user()->getLocationId();
         $shift_end = Carbon::createFromFormat('H:i', $this->shift_end);
-        $this->getAuthenticatedUser()->createTimetrackerForUser($locationId, ShiftStatus::ShiftEnd, $shift_end);
+        $this->getAuthenticatedUser()->createTimeTrackerForUser($locationId, ShiftStatus::ShiftEnd, $shift_end);
         $this->reset('show');
-        $this->dispatch('shift-changed');
+
+        $this->checkWorkStatus();
+    }
+
+    public function checkWorkStatus(): void
+    {
+        $newCanWorkStatus = Gate::allows('work', $this->getAuthenticatedUser());
+        if ($newCanWorkStatus !== $this->canWork) {
+            $this->canWork = $newCanWorkStatus;
+            $this->js('location.reload()'); // reload whole page
+        } else {
+            $this->dispatch('shift-changed'); // only refresh shift component
+        }
     }
 
     public function render()

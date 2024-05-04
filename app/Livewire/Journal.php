@@ -27,9 +27,10 @@ class Journal extends Component
         $this->setLocationData($this->actual_location);
     }
 
+
     public function render()
     {
-        $this->checkUserAuthorization();
+        $this->checkUserShift();
 
         $journals = JournalModel::where('location_id', $this->actual_location)
             ->with('category')
@@ -68,7 +69,7 @@ class Journal extends Component
             ? Location::all() : $this->user->locations;
     }
 
-    private function checkUserAuthorization(): void
+    private function checkUserShift(): void
     {
         if (! Gate::allows('work', $this->user)) {
             view('livewire.no-shift');
