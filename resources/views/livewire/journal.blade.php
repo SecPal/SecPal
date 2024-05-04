@@ -9,7 +9,7 @@
                         <select wire:model.live="actual_location" class="w-64 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
                             <option value="">{{ __('Select your location') }}</option>
                             @foreach($locations as $location)
-                                @canany(['viewRecent', 'viewFull'], $location)
+                                @canany(['viewRecentJournal', 'viewFullJournal'], $location)
                                     <option value="{{ $location->id }}">
                                         {{ $location->name }} - {{ $location->location }}
                                     </option>

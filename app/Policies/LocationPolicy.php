@@ -46,23 +46,23 @@ class LocationPolicy
         return $user->isAbleTo('see-full-journal-overview', $location);
     }
 
-    public function create(User $user): bool
-    {
-    }
-
-    public function update(User $user, Location $location): bool
-    {
-    }
-
-    public function delete(User $user, Location $location): bool
-    {
-    }
-
-    public function restore(User $user, Location $location): bool
-    {
-    }
-
-    public function forceDelete(User $user, Location $location): bool
-    {
-    }
+    //    public function create(User $user): bool
+    //    {
+    //    }
+    //
+    //    public function update(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function delete(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function restore(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function forceDelete(User $user, Location $location): bool
+    //    {
+    //    }
 }

@@ -81,4 +81,12 @@ class Journal extends Component
     {
         return Auth::user();
     }
+
+    #[On('shift-changed')]
+    public function shiftChanged(): void
+    {
+        if (! $this->actual_location || ! $this->user->canAny(['viewRecentJournal', 'viewFullJournal'], $this->location_data)) {
+            $this->js('location.reload()');
+        }
+    }
 }
