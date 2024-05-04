@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Journal extends Component
@@ -26,7 +27,6 @@ class Journal extends Component
         $this->actual_location = $this->user->getLocationId();
         $this->setLocationData($this->actual_location);
     }
-
 
     public function render()
     {
@@ -65,7 +65,7 @@ class Journal extends Component
 
     private function loadLocations(): void
     {
-        $this->locations = $this->user->can('viewAny', Location::class)
+        $this->locations = $this->user->can('viewAnyJournal', Location::class)
             ? Location::all() : $this->user->locations;
     }
 
