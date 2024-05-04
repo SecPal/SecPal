@@ -46,6 +46,19 @@ class LocationPolicy
         return $user->isAbleTo('see-full-journal-overview', $location);
     }
 
+    public function createJournal(User $user, Location $location): bool
+    {
+        if ($user->isAbleTo('create-journal')) {
+            return true;
+        }
+
+        if ($user->isOnDuty() && $user->getLocationId() == $location->id) {
+            return true;
+        }
+
+        return $user->isAbleTo('create-journal', $location);
+    }
+
     //    public function create(User $user): bool
     //    {
     //    }
