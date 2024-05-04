@@ -14,7 +14,7 @@ class LocationPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool
+    public function viewAnyJournal(User $user): bool
     {
         return $user->hasPermission(
             [
@@ -24,7 +24,7 @@ class LocationPolicy
         );
     }
 
-    public function viewRecent(User $user, Location $location): bool
+    public function viewRecentJournal(User $user, Location $location): bool
     {
         if ($user->isAbleTo('see-recent-journal-overview')) {
             return true;
@@ -37,7 +37,7 @@ class LocationPolicy
         return $user->isAbleTo('see-recent-journal-overview', $location);
     }
 
-    public function viewFull(User $user, Location $location): bool
+    public function viewFullJournal(User $user, Location $location): bool
     {
         if ($user->isAbleTo('see-full-journal-overview')) {
             return true;
@@ -46,23 +46,23 @@ class LocationPolicy
         return $user->isAbleTo('see-full-journal-overview', $location);
     }
 
-    public function create(User $user): bool
-    {
-    }
-
-    public function update(User $user, Location $location): bool
-    {
-    }
-
-    public function delete(User $user, Location $location): bool
-    {
-    }
-
-    public function restore(User $user, Location $location): bool
-    {
-    }
-
-    public function forceDelete(User $user, Location $location): bool
-    {
-    }
+    //    public function create(User $user): bool
+    //    {
+    //    }
+    //
+    //    public function update(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function delete(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function restore(User $user, Location $location): bool
+    //    {
+    //    }
+    //
+    //    public function forceDelete(User $user, Location $location): bool
+    //    {
+    //    }
 }
