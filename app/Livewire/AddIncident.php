@@ -118,7 +118,9 @@ class AddIncident extends Component
                     'lastname' => $lastname,
                     'firstname' => $firstname,
                     'date_of_birth' => $date_of_birth,
-                ])->toArray();
+                ])->load('trespasses')->toArray();
+
+                ray($this->participants[$participantIndex]);
 
                 if (empty($this->participants[$participantIndex]['ban_until']) ||
                     $this->participants[$participantIndex]['ban_until'] < now()->addYears(2)

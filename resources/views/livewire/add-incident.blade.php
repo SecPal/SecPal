@@ -153,11 +153,18 @@
                                             </div>
                                         </div>
                                         <div class="sm:col-span-4 items-center">
+                                            @ray($participants[$loop->index]['trespasses'])
                                             <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('further information') }}</label>
                                             <div class="mt-2 items-center space-x-2">
-                                                <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                    {{ __('No further information found.') }}
-                                                </p>
+                                                @if(isset($participants[$loop->index]['id']))
+                                                    <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                        {{ __('house ban since') }} {{ \Carbon\Carbon::parse($participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($participants[$loop->index]['trespasses']) }}x {{ __('trespasses') }}
+                                                    </p>
+                                                @else
+                                                    <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                        {{ __('No further information found.') }}
+                                                    </p>
+                                                @endif
                                             </div>
                                         </div>
 
