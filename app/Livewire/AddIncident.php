@@ -108,9 +108,8 @@ class AddIncident extends Component
             // set the new dateOfBirth
             $this->participants[$participantIndex]['dateOfBirth'] = $dob->format('Y-m-d');
 
-            if (empty($this->participants[$participantIndex]['banUntil'])) {
-                $this->participants[$participantIndex]['banUntil'] = $this->calculateBanUntil($dob, $age);
-            }
+            // recalculate the banUntil date
+            $this->participants[$participantIndex]['banUntil'] = $this->calculateBanUntil($dob, $age);
 
             if ($this->canAddNewParticipantRow($participantIndex)) {
                 $this->addNewParticipantRow();
@@ -143,6 +142,11 @@ class AddIncident extends Component
 
     private function processBanUntil($participantIndex, $newValue): void
     {
+        // prevent error if empty
+        if (! $newValue) {
+            $newValue = now()->format('Y-m-d');
+        }
+
         // Parse the date
         $date = Carbon::createFromFormat('Y-m-d', $newValue);
 
