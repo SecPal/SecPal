@@ -123,68 +123,71 @@
                         <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ __('Personal details for issuing a house ban or trespassing notice. (optional)') }}</p>
 
                         @foreach($participants as $participant)
-                            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                <div class="sm:col-span-2">
-                                    <label for="lastname-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Lastname') }}</label>
-                                    <div class="mt-2">
-                                        <input wire:model.blur="participants.{{ $loop->index }}.lastname" type="text" name="lastname-{{ $loop->index }}" id="lastname-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                    </div>
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <label for="firstname-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Firstname') }}</label>
-                                    <div class="mt-2">
-                                        <input wire:model.blur="participants.{{ $loop->index }}.firstname" type="text" name="firstname-{{ $loop->index }}" id="firstname-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                    </div>
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <label for="dateOfBirth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date of Birth') }}</label>
-                                    <div class="mt-2">
-                                        <input wire:model.blur="participants.{{ $loop->index }}.dateOfBirth" type="date" name="participants.{{ $loop->index }}.dateOfBirth" id="dateOfBirth-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                    </div>
-                                </div>
-
-                                @if($participants[$loop->index]['lastname'] && $participants[$loop->index]['firstname'] && $participants[$loop->index]['dateOfBirth'])
+                            <div wire:key="participant-{{ $loop->index }}"
+                                 class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-200 dark:bg-gray-800' : ''}}">
+                                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div class="sm:col-span-2">
-                                        <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('house ban until') }}</label>
+                                        <label for="lastname-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Lastname') }}</label>
                                         <div class="mt-2">
-                                            <input wire:model.blur="participants.{{ $loop->index }}.banUntil" type="date" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                        </div>
-                                    </div>
-                                    <div class="sm:col-span-4 items-center">
-                                        <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('further information') }}</label>
-                                        <div class="mt-2 items-center space-x-2">
-                                            <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                {{ __('No further information found.') }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-4">
-                                        <label for="participants.{{ $loop->index }}.street" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Street') }}</label>
-                                        <div class="mt-2">
-                                            <input wire:model="participants.{{ $loop->index }}.street" type="text" name="participants.{{ $loop->index }}.street" id="participants.{{ $loop->index }}.street" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            <input wire:model.blur="participants.{{ $loop->index }}.lastname" type="text" name="lastname-{{ $loop->index }}" id="lastname-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                     </div>
                                     <div class="sm:col-span-2">
-                                        <label for="participants.{{ $loop->index }}.number" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('House Number') }}</label>
+                                        <label for="firstname-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Firstname') }}</label>
                                         <div class="mt-2">
-                                            <input wire:model.blur="participants.{{ $loop->index }}.number" type="text" name="participants.{{ $loop->index }}.number" id="participants.{{ $loop->index }}.number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            <input wire:model.blur="participants.{{ $loop->index }}.firstname" type="text" name="firstname-{{ $loop->index }}" id="firstname-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label for="dateOfBirth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date of Birth') }}</label>
+                                        <div class="mt-2">
+                                            <input wire:model.blur="participants.{{ $loop->index }}.dateOfBirth" type="date" name="participants.{{ $loop->index }}.dateOfBirth" id="dateOfBirth-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                     </div>
 
-                                    <div class="sm:col-span-2">
-                                        <label for="participants.{{ $loop->index }}.zipcode" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('zipcode') }}</label>
-                                        <div class="mt-2">
-                                            <input wire:model="participants.{{ $loop->index }}.zipcode" type="text" name="participants.{{ $loop->index }}.zipcode" id="participants.{{ $loop->index }}.zipcode" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                    @if($participants[$loop->index]['lastname'] && $participants[$loop->index]['firstname'] && $participants[$loop->index]['dateOfBirth'])
+                                        <div class="sm:col-span-2">
+                                            <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('house ban until') }}</label>
+                                            <div class="mt-2">
+                                                <input wire:model.blur="participants.{{ $loop->index }}.banUntil" type="date" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="sm:col-span-4">
-                                        <label for="participants.{{ $loop->index }}.city" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('city') }}</label>
-                                        <div class="mt-2">
-                                            <input wire:model.blur="participants.{{ $loop->index }}.city" type="text" name="participants.{{ $loop->index }}.city" id="participants.{{ $loop->index }}.city" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <div class="sm:col-span-4 items-center">
+                                            <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('further information') }}</label>
+                                            <div class="mt-2 items-center space-x-2">
+                                                <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                                    {{ __('No further information found.') }}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
+
+                                        <div class="sm:col-span-4">
+                                            <label for="participants.{{ $loop->index }}.street" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Street') }}</label>
+                                            <div class="mt-2">
+                                                <input wire:model="participants.{{ $loop->index }}.street" type="text" name="participants.{{ $loop->index }}.street" id="participants.{{ $loop->index }}.street" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            </div>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label for="participants.{{ $loop->index }}.number" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('House Number') }}</label>
+                                            <div class="mt-2">
+                                                <input wire:model.blur="participants.{{ $loop->index }}.number" type="text" name="participants.{{ $loop->index }}.number" id="participants.{{ $loop->index }}.number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            </div>
+                                        </div>
+
+                                        <div class="sm:col-span-2">
+                                            <label for="participants.{{ $loop->index }}.zipcode" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('zipcode') }}</label>
+                                            <div class="mt-2">
+                                                <input wire:model="participants.{{ $loop->index }}.zipcode" type="text" name="participants.{{ $loop->index }}.zipcode" id="participants.{{ $loop->index }}.zipcode" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            </div>
+                                        </div>
+                                        <div class="sm:col-span-4">
+                                            <label for="participants.{{ $loop->index }}.city" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('city') }}</label>
+                                            <div class="mt-2">
+                                                <input wire:model.blur="participants.{{ $loop->index }}.city" type="text" name="participants.{{ $loop->index }}.city" id="participants.{{ $loop->index }}.city" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         @endforeach
                     </div>
