@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Category;
 use App\Models\Journal;
+use App\Models\Participant;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -50,10 +51,11 @@ class AddIncident extends Component
         $this->reportedById = Auth::user()->id;
         $this->setDateTimeNow();
         $this->categories = $this->getCategories();
-        $this->participants[0]['lastname'] = '';
-        $this->participants[0]['firstname'] = '';
-        $this->participants[0]['dateOfBirth'] = '';
-        $this->participants[0]['banUntil'] = '';
+        //        $this->participants[0]['lastname'] = '';
+        //        $this->participants[0]['firstname'] = '';
+        //        $this->participants[0]['date_of_birth'] = '';
+        //        $this->participants[0]['ban_until'] = '';
+        $this->addNewParticipantRow();
     }
 
     private function setDateTimeNow(): void
@@ -83,10 +85,10 @@ class AddIncident extends Component
         $splitField = explode('.', $field);
         if (count($splitField) === 3) {
             $participantIndex = $splitField[1];
-            if ($splitField[2] === 'dateOfBirth') {
+            if ($splitField[2] === 'date_of_birth') {
                 $this->processDateOfBirth($participantIndex, $newValue);
             }
-            if ($splitField[2] === 'banUntil') {
+            if ($splitField[2] === 'ban_until') {
                 $this->processBanUntil($participantIndex, $newValue);
             }
             if ($splitField[2] === 'lastname') {
@@ -100,16 +102,31 @@ class AddIncident extends Component
         $dob = $this->validateAndCorrectDateOfBirth($newValue);
 
         if ($dob === null) {
-            $this->participants[$participantIndex]['dateOfBirth'] = '';
-            $this->participants[$participantIndex]['banUntil'] = '';
+            $this->participants[$participantIndex]['date_of_birth'] = '';
+            $this->participants[$participantIndex]['ban_until'] = '';
         } else {
             $age = $dob->diffInYears(now());
 
             // set the new dateOfBirth
-            $this->participants[$participantIndex]['dateOfBirth'] = $dob->format('Y-m-d');
+            $this->participants[$participantIndex]['date_of_birth'] = $dob->format('Y-m-d');
 
-            // recalculate the banUntil date
-            $this->participants[$participantIndex]['banUntil'] = $this->calculateBanUntil($dob, $age);
+            if ($this->participants[$participantIndex]['lastname'] && $this->participants[$participantIndex]['firstname']) {
+                $lastname = $this->participants[$participantIndex]['lastname'];
+                $firstname = $this->participants[$participantIndex]['firstname'];
+                $date_of_birth = $this->participants[$participantIndex]['date_of_birth'];
+                $this->participants[$participantIndex] = Participant::firstOrNew([
+                    'lastname' => $lastname,
+                    'firstname' => $firstname,
+                    'date_of_birth' => $date_of_birth,
+                ])->toArray();
+
+                if (empty($this->participants[$participantIndex]['ban_until']) ||
+                    $this->participants[$participantIndex]['ban_until'] < now()->addYears(2)
+                ) {
+                    // recalculate the banUntil date
+                    $this->participants[$participantIndex]['ban_until'] = $this->calculateBanUntil($dob, $age);
+                }
+            }
 
             if ($this->canAddNewParticipantRow($participantIndex)) {
                 $this->addNewParticipantRow();
@@ -157,13 +174,13 @@ class AddIncident extends Component
 
         // Now the checks, and if the date is less than 6 months in the future, recalculate it
         if ($date->lt(Carbon::now()) || $date->lt(Carbon::now()->addMonths(6))) {
-            $dob = Carbon::parse($this->participants[$participantIndex]['dateOfBirth']);
+            $dob = Carbon::parse($this->participants[$participantIndex]['date_of_birth']);
             $age = $dob->diffInYears(now());
             $date = Carbon::parse($this->calculateBanUntil($dob, $age));
         }
 
         // Set the new banUntil
-        $this->participants[$participantIndex]['banUntil'] = $date->format('Y-m-d');
+        $this->participants[$participantIndex]['ban_until'] = $date->format('Y-m-d');
     }
 
     private function processLastName($participantIndex, $newValue): void
@@ -189,13 +206,13 @@ class AddIncident extends Component
         return count($this->participants) < $this->peopleInvolved &&
             $this->participants[$lastKey]['lastname'] !== '' &&
             $this->participants[$lastKey]['firstname'] !== '' &&
-            $this->participants[$lastKey]['dateOfBirth'] !== '';
+            $this->participants[$lastKey]['date_of_birth'] !== '';
     }
 
     private function addNewParticipantRow(): void
     {
         $this->participants[] = [
-            'lastname' => '', 'firstname' => '', 'dateOfBirth' => '', 'banUntil' => '',
+            'lastname' => '', 'firstname' => '', 'date_of_birth' => '', 'ban_until' => '',
         ];
     }
 

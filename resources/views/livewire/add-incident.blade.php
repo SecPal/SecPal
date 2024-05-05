@@ -139,17 +139,17 @@
                                         </div>
                                     </div>
                                     <div class="sm:col-span-2">
-                                        <label for="dateOfBirth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date of Birth') }}</label>
+                                        <label for="date_of_birth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date of Birth') }}</label>
                                         <div class="mt-2">
-                                            <input wire:model.blur="participants.{{ $loop->index }}.dateOfBirth" type="date" name="participants.{{ $loop->index }}.dateOfBirth" id="dateOfBirth-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            <input wire:model.blur="participants.{{ $loop->index }}.date_of_birth" type="date" name="participants.{{ $loop->index }}.date_of_birth" id="date_of_birth-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         </div>
                                     </div>
 
-                                    @if($participants[$loop->index]['lastname'] && $participants[$loop->index]['firstname'] && $participants[$loop->index]['dateOfBirth'])
+                                    @if($participants[$loop->index]['lastname'] && $participants[$loop->index]['firstname'] && $participants[$loop->index]['date_of_birth'])
                                         <div class="sm:col-span-2">
                                             <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('house ban until') }}</label>
                                             <div class="mt-2">
-                                                <input wire:model.blur="participants.{{ $loop->index }}.banUntil" type="date" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                                <input wire:model.blur="participants.{{ $loop->index }}.ban_until" type="date" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                             </div>
                                         </div>
                                         <div class="sm:col-span-4 items-center">
