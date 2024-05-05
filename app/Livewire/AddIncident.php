@@ -42,12 +42,18 @@ class AddIncident extends Component
 
     public int $reportedById;
 
+    public array $participants;
+
     public function mount(): void
     {
         abort_unless(Gate::allows('work', Auth::user()), 403);
         $this->reportedById = Auth::user()->id;
         $this->setDateTimeNow();
         $this->categories = $this->getCategories();
+        $this->participants[0]['lastname'] = '';
+        $this->participants[0]['firstname'] = '';
+        $this->participants[0]['dateOfBirth'] = '';
+        $this->participants[0]['banUntil'] = '';
     }
 
     private function setDateTimeNow(): void
@@ -70,6 +76,134 @@ class AddIncident extends Component
     public function render()
     {
         return view('livewire.add-incident');
+    }
+
+    public function updated($field, $newValue): void
+    {
+        $splitField = explode('.', $field);
+        if (count($splitField) === 3) {
+            $participantIndex = $splitField[1];
+            if ($splitField[2] === 'dateOfBirth') {
+                $this->processDateOfBirth($participantIndex, $newValue);
+            }
+            if ($splitField[2] === 'banUntil') {
+                $this->processBanUntil($participantIndex, $newValue);
+            }
+            if ($splitField[2] === 'lastname') {
+                $this->processLastName($participantIndex, $newValue);
+            }
+        }
+    }
+
+    private function processDateOfBirth($participantIndex, $newValue): void
+    {
+        $dob = $this->validateAndCorrectDateOfBirth($newValue);
+
+        if ($dob === null) {
+            $this->participants[$participantIndex]['dateOfBirth'] = '';
+            $this->participants[$participantIndex]['banUntil'] = '';
+        } else {
+            $age = $dob->diffInYears(now());
+
+            // set the new dateOfBirth
+            $this->participants[$participantIndex]['dateOfBirth'] = $dob->format('Y-m-d');
+
+            if (empty($this->participants[$participantIndex]['banUntil'])) {
+                $this->participants[$participantIndex]['banUntil'] = $this->calculateBanUntil($dob, $age);
+            }
+
+            if ($this->canAddNewParticipantRow($participantIndex)) {
+                $this->addNewParticipantRow();
+            }
+        }
+    }
+
+    private function validateAndCorrectDateOfBirth($dobInput): ?Carbon
+    {
+        $dob = Carbon::parse($dobInput);
+
+        if ($dob->year < 100) {
+            $now = Carbon::now();
+            $currentYearLastTwoDigits = $now->year % 100;
+
+            if ($dob->year <= $currentYearLastTwoDigits) {
+                $dob->year += 2000;
+            } else {
+                $dob->year += 1900;
+            }
+        }
+
+        $centuryAgo = Carbon::now()->subYears(100);
+        if ($dob->isFuture() || $dob->lte($centuryAgo)) {
+            return null;
+        }
+
+        return $dob;
+    }
+
+    private function processBanUntil($participantIndex, $newValue): void
+    {
+        // Parse the date
+        $date = Carbon::createFromFormat('Y-m-d', $newValue);
+
+        // Fix 2 digit year to 4
+        if ($date->year < 100) {
+            $date->addYears(2000);
+        }
+
+        // Now the checks, and if the date is less than 6 months in the future, recalculate it
+        if ($date->lt(Carbon::now()) || $date->lt(Carbon::now()->addMonths(6))) {
+            $dob = Carbon::parse($this->participants[$participantIndex]['dateOfBirth']);
+            $age = $dob->diffInYears(now());
+            $date = Carbon::parse($this->calculateBanUntil($dob, $age));
+        }
+
+        // Set the new banUntil
+        $this->participants[$participantIndex]['banUntil'] = $date->format('Y-m-d');
+    }
+
+    private function processLastName($participantIndex, $newValue): void
+    {
+        if ($newValue === '' && count($this->participants) > 1) {
+            $this->removeParticipantRow($participantIndex);
+        }
+    }
+
+    private function calculateBanUntil($dob, $age): string
+    {
+        if ($age < 16) {
+            return $dob->addYears(18)->subDay()->format('Y-m-d');
+        } else {
+            return now()->addYears(2)->subDay()->format('Y-m-d');
+        }
+    }
+
+    private function canAddNewParticipantRow(): bool
+    {
+        $lastKey = array_key_last($this->participants);
+
+        return count($this->participants) < $this->peopleInvolved &&
+            $this->participants[$lastKey]['lastname'] !== '' &&
+            $this->participants[$lastKey]['firstname'] !== '' &&
+            $this->participants[$lastKey]['dateOfBirth'] !== '';
+    }
+
+    private function addNewParticipantRow(): void
+    {
+        $this->participants[] = [
+            'lastname' => '', 'firstname' => '', 'dateOfBirth' => '', 'banUntil' => '',
+        ];
+    }
+
+    private function removeParticipantRow($participantIndex): void
+    {
+        unset($this->participants[$participantIndex]);
+        $this->participants = array_values($this->participants);
+
+        // add a last Row again, if now missing
+        if ($this->canAddNewParticipantRow()) {
+            $this->addNewParticipantRow();
+        }
     }
 
     public function save(): void
