@@ -114,11 +114,24 @@ class AddIncident extends Component
                 $lastname = $this->participants[$participantIndex]['lastname'];
                 $firstname = $this->participants[$participantIndex]['firstname'];
                 $date_of_birth = $this->participants[$participantIndex]['date_of_birth'];
-                $this->participants[$participantIndex] = Participant::firstOrNew([
-                    'lastname' => $lastname,
-                    'firstname' => $firstname,
-                    'date_of_birth' => $date_of_birth,
-                ])->load('trespasses')->toArray();
+
+                ray()->showQueries();
+
+                $this->participants[$participantIndex] = Participant::where(function ($query) {
+                    $query->where('customer_id', $this->location_data->customer_id)
+                        ->orWhere('location_id', $this->location_data->id);
+                })
+                    ->where('lastname', $lastname)
+                    ->where('firstname', $firstname)
+                    ->where('date_of_birth', $date_of_birth)
+                    ->where('ban_until', '>=', Carbon::now()->toDateString())
+                    ->firstOrNew([
+                        'lastname' => $lastname,
+                        'firstname' => $firstname,
+                        'date_of_birth' => $date_of_birth,
+                    ]
+                    )->load('trespasses')
+                    ->toArray();
 
                 ray($this->participants[$participantIndex]);
 

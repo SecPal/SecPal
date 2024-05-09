@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('ban_since');
             $table->date('ban_until');
             $table->foreignId('journal_id');
+            $table->foreignId('customer_id')->nullable();
+            $table->foreignId('location_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
