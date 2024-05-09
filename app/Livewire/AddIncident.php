@@ -51,10 +51,6 @@ class AddIncident extends Component
         $this->reportedById = Auth::user()->id;
         $this->setDateTimeNow();
         $this->categories = $this->getCategories();
-        //        $this->participants[0]['lastname'] = '';
-        //        $this->participants[0]['firstname'] = '';
-        //        $this->participants[0]['date_of_birth'] = '';
-        //        $this->participants[0]['ban_until'] = '';
         $this->addNewParticipantRow();
     }
 
@@ -85,68 +81,110 @@ class AddIncident extends Component
         $splitField = explode('.', $field);
         if (count($splitField) === 3) {
             $participantIndex = $splitField[1];
-            if ($splitField[2] === 'date_of_birth') {
+            $this->handleParticipantInformationUpdate($splitField, $participantIndex, $newValue);
+        }
+    }
+
+    private function handleParticipantInformationUpdate($splitField, $participantIndex, $newValue): void
+    {
+        switch ($splitField[2]) {
+            case 'date_of_birth':
                 $this->processDateOfBirth($participantIndex, $newValue);
-            }
-            if ($splitField[2] === 'ban_until') {
+                break;
+            case 'ban_until':
                 $this->processBanUntil($participantIndex, $newValue);
-            }
-            if ($splitField[2] === 'lastname') {
+                break;
+            case 'lastname':
                 $this->processLastName($participantIndex, $newValue);
-            }
         }
     }
 
     private function processDateOfBirth($participantIndex, $newValue): void
     {
         $dob = $this->validateAndCorrectDateOfBirth($newValue);
+        $this->processDOBNullOrEmpty($participantIndex, $dob);
 
+        if ($dob !== null) {
+            $this->handleDOBProcessing($participantIndex, $dob);
+        }
+    }
+
+    private function processDOBNullOrEmpty($participantIndex, $dob): void
+    {
         if ($dob === null) {
             $this->participants[$participantIndex]['date_of_birth'] = '';
             $this->participants[$participantIndex]['ban_until'] = '';
-        } else {
-            $age = $dob->diffInYears(now());
+        }
+    }
 
-            // set the new dateOfBirth
-            $this->participants[$participantIndex]['date_of_birth'] = $dob->format('Y-m-d');
+    private function handleDOBProcessing($participantIndex, $dob): void
+    {
+        $dob = $this->setNewDOB($participantIndex, $dob);
 
-            if ($this->participants[$participantIndex]['lastname'] && $this->participants[$participantIndex]['firstname']) {
-                $lastname = $this->participants[$participantIndex]['lastname'];
-                $firstname = $this->participants[$participantIndex]['firstname'];
-                $date_of_birth = $this->participants[$participantIndex]['date_of_birth'];
+        $age = $dob->diffInYears(now());
 
-                ray()->showQueries();
+        if ($this->isParticipantIdentitySet($participantIndex)) {
+            $this->updateParticipantInfo($participantIndex);
 
-                $this->participants[$participantIndex] = Participant::where(function ($query) {
-                    $query->where('customer_id', $this->location_data->customer_id)
-                        ->orWhere('location_id', $this->location_data->id);
-                })
-                    ->where('lastname', $lastname)
-                    ->where('firstname', $firstname)
-                    ->where('date_of_birth', $date_of_birth)
-                    ->where('ban_until', '>=', Carbon::now()->toDateString())
-                    ->firstOrNew([
-                        'lastname' => $lastname,
-                        'firstname' => $firstname,
-                        'date_of_birth' => $date_of_birth,
-                    ]
-                    )->load('trespasses')
-                    ->toArray();
-
-                ray($this->participants[$participantIndex]);
-
-                if (empty($this->participants[$participantIndex]['ban_until']) ||
-                    $this->participants[$participantIndex]['ban_until'] < now()->addYears(2)
-                ) {
-                    // recalculate the banUntil date
-                    $this->participants[$participantIndex]['ban_until'] = $this->calculateBanUntil($dob, $age);
-                }
-            }
-
-            if ($this->canAddNewParticipantRow($participantIndex)) {
-                $this->addNewParticipantRow();
+            if ($this->shouldRecalculateBanDate($participantIndex)) {
+                $this->recalculateBanDate($participantIndex, $dob, $age);
             }
         }
+
+        if ($this->canAddNewParticipantRow()) {
+            $this->addNewParticipantRow();
+        }
+    }
+
+    private function setNewDOB($participantIndex, $dob): Carbon
+    {
+        $this->participants[$participantIndex]['date_of_birth'] = $dob->format('Y-m-d');
+        return Carbon::parse($this->participants[$participantIndex]['date_of_birth']);
+    }
+
+    private function isParticipantIdentitySet($participantIndex): bool
+    {
+        return $this->participants[$participantIndex]['lastname'] && $this->participants[$participantIndex]['firstname'];
+    }
+
+    private function updateParticipantInfo($participantIndex): void
+    {
+        $lastname = $this->participants[$participantIndex]['lastname'];
+        $firstname = $this->participants[$participantIndex]['firstname'];
+        $date_of_birth = $this->participants[$participantIndex]['date_of_birth'];
+
+        $this->participants[$participantIndex] = $this->findOrCreateParticipant($lastname,
+            $firstname, $date_of_birth);
+    }
+
+    private function findOrCreateParticipant($lastname, $firstname, $date_of_birth): array
+    {
+        return Participant::where(function ($query) {
+            $query->where('customer_id', $this->location_data->customer_id)
+                ->orWhere('location_id', $this->location_data->id);
+        })
+            ->where('lastname', $lastname)
+            ->where('firstname', $firstname)
+            ->where('date_of_birth', $date_of_birth)
+            ->where('ban_until', '>=', today())
+            ->firstOrNew([
+                'lastname' => $lastname,
+                'firstname' => $firstname,
+                'date_of_birth' => $date_of_birth,
+            ]
+            )->load('trespasses')
+            ->toArray();
+    }
+
+    private function shouldRecalculateBanDate($participantIndex): bool
+    {
+        return empty($this->participants[$participantIndex]['ban_until']) ||
+            $this->participants[$participantIndex]['ban_until'] < now()->addYears(2);
+    }
+
+    private function recalculateBanDate($participantIndex, $dob, $age): void
+    {
+        $this->participants[$participantIndex]['ban_until'] = $this->calculateBanUntil($dob, $age);
     }
 
     private function validateAndCorrectDateOfBirth($dobInput): ?Carbon
