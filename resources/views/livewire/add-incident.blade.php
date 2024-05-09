@@ -153,7 +153,6 @@
                                             </div>
                                         </div>
                                         <div class="sm:col-span-4 items-center">
-                                            @ray($participants[$loop->index]['trespasses'])
                                             <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('further information') }}</label>
                                             <div class="mt-2 items-center space-x-2">
                                                 @if(isset($participants[$loop->index]['id']))

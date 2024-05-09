@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\Journal;
 use App\Models\Participant;
+use App\Models\Trespass;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -121,7 +122,7 @@ class AddIncident extends Component
     {
         $dob = $this->setNewDOB($participantIndex, $dob);
 
-        $age = $dob->diffInYears(now());
+        $age = $dob->diffInYears($this->incidentDate);
 
         if ($this->isParticipantIdentitySet($participantIndex)) {
             $this->updateParticipantInfo($participantIndex);
@@ -139,6 +140,7 @@ class AddIncident extends Component
     private function setNewDOB($participantIndex, $dob): Carbon
     {
         $this->participants[$participantIndex]['date_of_birth'] = $dob->format('Y-m-d');
+
         return Carbon::parse($this->participants[$participantIndex]['date_of_birth']);
     }
 
@@ -166,12 +168,22 @@ class AddIncident extends Component
             ->where('lastname', $lastname)
             ->where('firstname', $firstname)
             ->where('date_of_birth', $date_of_birth)
-            ->where('ban_until', '>=', today())
-            ->firstOrNew([
-                'lastname' => $lastname,
-                'firstname' => $firstname,
-                'date_of_birth' => $date_of_birth,
-            ]
+            ->where('ban_until', '>=', $this->incidentDate)
+            ->firstOrNew(
+                [
+                    'lastname' => $lastname,
+                    'firstname' => $firstname,
+                    'date_of_birth' => $date_of_birth,
+                ],
+                [
+                    'lastname' => $lastname,
+                    'firstname' => $firstname,
+                    'date_of_birth' => $date_of_birth,
+                    'street' => '',
+                    'number' => '',
+                    'zipcode' => '',
+                    'city' => '',
+                ]
             )->load('trespasses')
             ->toArray();
     }
@@ -179,7 +191,7 @@ class AddIncident extends Component
     private function shouldRecalculateBanDate($participantIndex): bool
     {
         return empty($this->participants[$participantIndex]['ban_until']) ||
-            $this->participants[$participantIndex]['ban_until'] < now()->addYears(2);
+            $this->participants[$participantIndex]['ban_until'] < Carbon::parse($this->incidentDate)->addYears(2);
     }
 
     private function recalculateBanDate($participantIndex, $dob, $age): void
@@ -192,8 +204,7 @@ class AddIncident extends Component
         $dob = Carbon::parse($dobInput);
 
         if ($dob->year < 100) {
-            $now = Carbon::now();
-            $currentYearLastTwoDigits = $now->year % 100;
+            $currentYearLastTwoDigits = Carbon::parse($this->incidentDate)->year % 100;
 
             if ($dob->year <= $currentYearLastTwoDigits) {
                 $dob->year += 2000;
@@ -202,7 +213,7 @@ class AddIncident extends Component
             }
         }
 
-        $centuryAgo = Carbon::now()->subYears(100);
+        $centuryAgo = Carbon::parse($this->incidentDate)->subYears(100);
         if ($dob->isFuture() || $dob->lte($centuryAgo)) {
             return null;
         }
@@ -214,7 +225,7 @@ class AddIncident extends Component
     {
         // prevent error if empty
         if (! $newValue) {
-            $newValue = now()->format('Y-m-d');
+            $newValue = $this->incidentDate;
         }
 
         // Parse the date
@@ -226,9 +237,9 @@ class AddIncident extends Component
         }
 
         // Now the checks, and if the date is less than 6 months in the future, recalculate it
-        if ($date->lt(Carbon::now()) || $date->lt(Carbon::now()->addMonths(6))) {
+        if ($date->lt($this->incidentDate) || $date->lt(Carbon::parse($this->incidentDate)->addMonths(6))) {
             $dob = Carbon::parse($this->participants[$participantIndex]['date_of_birth']);
-            $age = $dob->diffInYears(now());
+            $age = $dob->diffInYears($this->incidentDate);
             $date = Carbon::parse($this->calculateBanUntil($dob, $age));
         }
 
@@ -248,7 +259,7 @@ class AddIncident extends Component
         if ($age < 16) {
             return $dob->addYears(18)->subDay()->format('Y-m-d');
         } else {
-            return now()->addYears(2)->subDay()->format('Y-m-d');
+            return Carbon::parse($this->incidentDate)->addYears(2)->subDay()->format('Y-m-d');
         }
     }
 
@@ -284,12 +295,12 @@ class AddIncident extends Component
     {
         abort_unless(Auth::user()->can('create-journal', $this->location_data), 403);
         $dateTime = Carbon::parse($this->incidentDate.' '.$this->incidentTime.':00')->toDateTimeString();
-        Journal::create([
+        $journal = Journal::create([
             'location_id' => $this->location_data->id,
             'category_id' => $this->pull('categoryId'),
             'description' => $this->pull('incidentDescription'),
             'measures' => $this->pull('measures'),
-            'reported_by' => $this->pull('reportedById'),
+            'reported_by' => $this->reportedById,
             'entry_by' => Auth::user()->id,
             'area' => $this->pull('incidentArea'),
             'involved' => $this->pull('peopleInvolved'),
@@ -298,6 +309,66 @@ class AddIncident extends Component
             'police_involved' => $this->pull('police_involved'),
             'incident_time' => $dateTime,
         ]);
+
+        foreach ($this->participants as $participant) {
+            if ($participant['lastname'] == '') {
+                continue;
+            }
+
+            if (empty($participant['journal_id'])) {
+                $participant['ban_since'] = $this->incidentDate;
+                $participant['journal_id'] = $journal->id;
+                $participant['location_id'] = $this->location_data->id;
+
+                // TODO check if a customer wide ban is possible / wanted
+                $participant['customer_id'] = $this->location_data->customer->id;
+
+            }
+
+            $part = Participant::where('lastname', $participant['lastname'])
+                ->where('firstname', $participant['firstname'])
+                ->where('date_of_birth', $participant['date_of_birth'])
+                ->where('ban_since', $participant['ban_since'])
+                ->where(function ($query) use ($participant) {
+                    $query->where('customer_id', $participant['customer_id'])
+                        ->orWhere('location_id', $participant['location_id']);
+                })
+                ->first();
+
+            if ($part === null) {
+                // Record not found via above conditions, so create a new record.
+                $part = Participant::create(
+                    [
+                        'lastname' => $participant['lastname'],
+                        'firstname' => $participant['firstname'],
+                        'date_of_birth' => $participant['date_of_birth'],
+                        'street' => $participant['street'],
+                        'number' => $participant['number'],
+                        'zipcode' => $participant['zipcode'],
+                        'city' => $participant['city'],
+                        'ban_since' => $participant['ban_since'],
+                        'ban_until' => $participant['ban_until'],
+                        'journal_id' => $participant['journal_id'],
+                        'customer_id' => $participant['customer_id'],
+                        'location_id' => $participant['location_id'],
+                    ]
+                );
+            } else {
+                // Record found, update it
+                $part->update($participant);
+
+                // create a trespass
+                Trespass::create([
+                    'journal_id' => $journal->id,
+                    'participant_id' => $participant['id'],
+                ]);
+            }
+        }
+
+        ray($this->participants);
+
+        $this->participants = [];
+        $this->addNewParticipantRow();
 
         $this->reset('category');
         $this->reset('show');
