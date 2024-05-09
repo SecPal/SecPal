@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('trespasses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('journal_id');
-            $table->foreignId('participant_id');
+            $table->foreignId('journal_id')->constrained()->onDelete('cascade');
+            $table->foreignId('participant_id')->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class, 'charge_filed_by')->nullable();
             $table->softDeletes();
             $table->timestamps();

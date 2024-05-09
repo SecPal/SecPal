@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->date('ban_since');
             $table->date('ban_until');
-            $table->foreignId('journal_id');
+            $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->foreignId('customer_id')->nullable();
             $table->foreignId('location_id')->nullable();
             $table->softDeletes();

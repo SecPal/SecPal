@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('location_id');
+            $table->foreignId('location_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id');
             $table->text('description');
             $table->text('measures')->nullable();

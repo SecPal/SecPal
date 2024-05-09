@@ -320,24 +320,28 @@ class AddIncident extends Component
                 $participant['journal_id'] = $journal->id;
                 $participant['location_id'] = $this->location_data->id;
 
-                // TODO check if a customer wide ban is possible / wanted
-                $participant['customer_id'] = $this->location_data->customer->id;
-
+                if ($this->location_data->customer->customer_wide_ban) {
+                    $participant['customer_id'] = $this->location_data->customer->id;
+                } else {
+                    $participant['customer_id'] = null;
+                }
             }
 
             $part = Participant::where('lastname', $participant['lastname'])
                 ->where('firstname', $participant['firstname'])
                 ->where('date_of_birth', $participant['date_of_birth'])
                 ->where('ban_since', $participant['ban_since'])
-                ->where(function ($query) use ($participant) {
-                    $query->where('customer_id', $participant['customer_id'])
-                        ->orWhere('location_id', $participant['location_id']);
+                ->when($participant['customer_id'] !== null, function ($query) use ($participant) {
+                    return $query->where('customer_id', $participant['customer_id']);
+                })
+                ->when($participant['location_id'] !== null, function ($query) use ($participant) {
+                    return $query->where('location_id', $participant['location_id']);
                 })
                 ->first();
 
             if ($part === null) {
                 // Record not found via above conditions, so create a new record.
-                $part = Participant::create(
+                Participant::create(
                     [
                         'lastname' => $participant['lastname'],
                         'firstname' => $participant['firstname'],
@@ -360,7 +364,7 @@ class AddIncident extends Component
                 // create a trespass
                 Trespass::create([
                     'journal_id' => $journal->id,
-                    'participant_id' => $participant['id'],
+                    'participant_id' => $part->id,
                 ]);
             }
         }
