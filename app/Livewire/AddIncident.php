@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class AddIncident extends Component
@@ -22,26 +23,46 @@ class AddIncident extends Component
 
     public Category $category;
 
+    #[Validate('required', message: 'Please select a category.')]
+    #[Validate('numeric', message: 'Please select a category.')]
     public $categoryId = '';
 
+    #[Validate('boolean')]
     public bool $rescue_involved = false;
 
+    #[Validate('boolean')]
     public bool $fire_involved = false;
 
+    #[Validate('boolean')]
     public bool $police_involved = false;
 
+    #[Validate('required', message: 'An Area is needed.')]
+    #[Validate('string', message: 'Don\'t mess around!')]
     public string $incidentArea = '';
 
-    public int $peopleInvolved = 1;
+    #[Validate('required', message: 'The number of persons involved is required.')]
+    #[Validate('numeric', message: 'The number must be given in figures.')]
+    public $peopleInvolved = 1;
 
+    #[Validate('required', message: 'A meaningful incident description is required.')]
+    #[Validate('min:20', message: 'A meaningful incident description should be longer than 20 characters.')]
     public string $incidentDescription = '';
 
+    #[Validate('required', message: 'A meaningful description of the measures taken is also required.')]
+    #[Validate('min:20', message: 'A meaningful description of the measures taken should also be longer than 20 characters.')]
     public string $measures = '';
 
+    #[Validate('required', message: 'The correct date of the incident is required.')]
+    #[Validate('before_or_equal:today', message: 'Share your time machine or correct the date. ;-)')]
+    #[Validate('date', message: 'Don\'t mess around!')]
     public $incidentDate;
 
+    #[Validate('required', message: 'The correct time of the incident is required.')]
+    #[Validate('date_format:H:i', message: 'Don\'t mess around!')]
     public $incidentTime;
 
+    #[Validate('required', message: 'Don\'t mess around!')]
+    #[Validate('numeric', message: 'Don\'t mess around!')]
     public int $reportedById;
 
     public array $participants;
@@ -84,6 +105,35 @@ class AddIncident extends Component
             $participantIndex = $splitField[1];
             $this->handleParticipantInformationUpdate($splitField, $participantIndex, $newValue);
         }
+
+        $this->validateOnly($field);
+    }
+
+    public function updatedCategoryId(): void
+    {
+        if (is_numeric($this->categoryId)) {
+            $this->category = Category::find($this->categoryId);
+            $this->peopleInvolved = $this->category->usually_involved;
+        } else {
+            $this->reset('category');
+            $this->reset('rescue_involved');
+            $this->reset('fire_involved');
+            $this->reset('police_involved');
+        }
+    }
+
+    public function updatedParticipants($propertyName): void
+    {
+        $this->validateOnly($propertyName, [
+            'participants.*.lastname' => 'nullable|string|max:255',
+            'participants.*.firstname' => 'nullable|string|max:255',
+            'participants.*.date_of_birth' => 'nullable|date|before:today',
+            'participants.*.ban_until' => 'nullable|date|after:today',
+            'participants.*.street' => 'nullable|string',
+            'participants.*.number' => 'nullable|string',
+            'participants.*.zipcode' => 'nullable|numeric',
+            'participants.*.city' => 'nullable|string',
+        ]);
     }
 
     private function handleParticipantInformationUpdate($splitField, $participantIndex, $newValue): void
@@ -294,6 +344,7 @@ class AddIncident extends Component
     public function save(): void
     {
         abort_unless(Auth::user()->can('create-journal', $this->location_data), 403);
+        $this->validate();
         $dateTime = Carbon::parse($this->incidentDate.' '.$this->incidentTime.':00')->toDateTimeString();
         $journal = Journal::create([
             'location_id' => $this->location_data->id,
@@ -311,7 +362,7 @@ class AddIncident extends Component
         ]);
 
         foreach ($this->participants as $participant) {
-            if ($participant['lastname'] == '') {
+            if ($participant['lastname'] == '' || $this->peopleInvolved == 0) {
                 continue;
             }
 
@@ -377,11 +428,5 @@ class AddIncident extends Component
         $this->reset('category');
         $this->reset('show');
         $this->dispatch('added');
-    }
-
-    public function updatedCategoryId(): void
-    {
-        $this->category = Category::find($this->categoryId);
-        $this->peopleInvolved = $this->category->usually_involved;
     }
 }
