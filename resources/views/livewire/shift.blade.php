@@ -17,13 +17,13 @@
 
                 <x-dialog.panel>
                     <form wire:submit="endShift" class="flex flex-col gap-4">
-                        <h2 class="text-2xl font-bold mb-1">{{ __('End your shift!') }}</h2>
+                        <h2 class="text-2xl font-bold mb-1">{{ t('End your shift!') }}</h2>
 
                         <hr class="w-[75%]">
 
                         <div class="relative">
                             <label for="shift_end-{{ $identifier }}"
-                                   class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900 dark:text-white dark:bg-gray-900">{{ __('shift end') }}</label>
+                                   class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900 dark:text-white dark:bg-gray-900">{{ t('shift end') }}</label>
                             <input wire:model="shift_end" type="text" name="shift_end"
                                    id="shift_end-{{ $identifier }}"
                                    required
@@ -66,13 +66,13 @@
 
                 <x-dialog.panel>
                     <form wire:submit="startShift" class="flex flex-col gap-4">
-                        <h2 class="text-2xl font-bold mb-1">{{ __('Start your shift!') }}</h2>
+                        <h2 class="text-2xl font-bold mb-1">{{ t('Start your shift!') }}</h2>
 
                         <hr class="w-[75%]">
 
                         <div class="relative">
                             <label for="shift_start-{{ $identifier }}"
-                                   class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900 dark:text-white dark:bg-gray-900">{{ __('shift start') }}</label>
+                                   class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900 dark:text-white dark:bg-gray-900">{{ t('shift start') }}</label>
                             <input wire:model="shift_start" type="text" name="shift_start"
                                    id="shift_start-{{ $identifier }}"
                                    required
@@ -82,11 +82,11 @@
 
                         <div>
                             <label for="location-{{ $identifier }}"
-                                   class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('shift location') }}</label>
+                                   class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ t('shift location') }}</label>
                             <select wire:model="shift_location" id="location-{{ $identifier }}" name="location"
                                     required
                                     class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-blue-600 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:text-white">
-                                <option value="">{{ __('Select your location') }}</option>
+                                <option value="">{{ t('Select your location') }}</option>
                                 @foreach($locations as $location)
                                     <option value="{{ $location->id }}">{{ $location->name }}</option>
                                 @endforeach

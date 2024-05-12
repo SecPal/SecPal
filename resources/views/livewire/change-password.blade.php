@@ -3,7 +3,7 @@
     <div class="px-4 sm:px-6">
         <div class="flex items-start justify-between">
             <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200"
-                id="slide-over-title">{{ __('Change Password') }}</h2>
+                id="slide-over-title">{{ t('Change Password') }}</h2>
             <div class="ml-3 flex h-7 items-center">
                 <button type="button"
                         x-on:click="slideOver = false"
@@ -26,28 +26,28 @@
                     <div
                         class="pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-inset ring-gray-300 dark:ring-gray-700"></div>
                     <div>
-                        <label for="current_password" class="sr-only">{{ __('Your current Password') }}</label>
+                        <label for="current_password" class="sr-only">{{ t('Your current Password') }}</label>
                         <input wire:model.blur="current_password" id="current_password" name="current_password"
                                type="password" autocomplete="password"
                                autofocus
                                required
                                class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 ring-1 ring-inset ring-gray-100 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-300 sm:text-sm sm:leading-6"
-                               placeholder="{{ __('Current Password') }}">
+                               placeholder="{{ t('Current Password') }}">
                     </div>
                     <div>
-                        <label for="password" class="sr-only">{{ __('New Password') }}</label>
+                        <label for="password" class="sr-only">{{ t('New Password') }}</label>
                         <input wire:model.blur="password" id="password" name="password" type="password"
                                required
                                class="relative block w-full border-0 py-1.5 text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 ring-1 ring-inset ring-gray-100 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-300 sm:text-sm sm:leading-6"
-                               placeholder="{{ __('New Password') }}">
+                               placeholder="{{ t('New Password') }}">
                     </div>
                     <div>
-                        <label for="password_confirmation" class="sr-only">{{ __('Repeat Password') }}</label>
+                        <label for="password_confirmation" class="sr-only">{{ t('Repeat Password') }}</label>
                         <input wire:model.blur="password_confirmation" id="password_confirmation"
                                name="password_confirmation" type="password"
                                required
                                class="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-800 ring-1 ring-inset ring-gray-100 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder-gray-500 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-blue-600 dark:focus:ring-blue-300 sm:text-sm sm:leading-6"
-                               placeholder="{{ __('Repeat Password') }}">
+                               placeholder="{{ t('Repeat Password') }}">
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@
                 <div class="flex">
                     <button type="submit"
                             class="relative w-full justify-center rounded-md bg-blue-600 dark:bg-blue-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white dark:text-white hover:bg-blue-500 dark:hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-700 disabled:cursor-not-allowed disabled:opacity-75">
-                        {{ __('Change Password') }}
+                        {{ t('Change Password') }}
 
                         <div wire:loading.flex wire:target="changePassword"
                              class="flex absolute top-0 right-0 bottom-0 items-center pr-4">
