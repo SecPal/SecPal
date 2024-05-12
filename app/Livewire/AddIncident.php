@@ -273,7 +273,6 @@ class AddIncident extends Component
 
     private function processBanUntil($participantIndex, $newValue): void
     {
-        // prevent error if empty
         if (! $newValue) {
             $newValue = $this->incidentDate;
         }
@@ -286,7 +285,15 @@ class AddIncident extends Component
             $date->addYears(2000);
         }
 
-        // Now the checks, and if the date is less than 6 months in the future, recalculate it
+        // Fetch the participant's existing ban_until date if it exists and is later than the new date
+        if (isset($this->participants[$participantIndex]['id'])) {
+            $existingParticipant = Participant::find($this->participants[$participantIndex]['id']);
+            if (Carbon::parse($existingParticipant->ban_until)->greaterThan($date)) {
+                $date = Carbon::parse($existingParticipant->ban_until);
+            }
+        }
+
+        // If the date is less than 6 months in the future, recalculate it
         if ($date->lt($this->incidentDate) || $date->lt(Carbon::parse($this->incidentDate)->addMonths(6))) {
             $dob = Carbon::parse($this->participants[$participantIndex]['date_of_birth']);
             $age = $dob->diffInYears($this->incidentDate);
