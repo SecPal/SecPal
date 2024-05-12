@@ -4,7 +4,7 @@
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
                 <h1 class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
-                    Journal -
+                    {{ t('Journal') }} -
                     <div class="inline-block">
                         <select wire:model.live="actual_location" class="w-64 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
                             <option value="">{{ t('Select your location') }}</option>
@@ -18,7 +18,7 @@
                         </select>
                     </div>
                 </h1>
-                <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">A (placeholder) list of all incidents</p>
+                <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">{{ t('A list of all incidents.') }}</p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                 @can('create-journal', $location_data)

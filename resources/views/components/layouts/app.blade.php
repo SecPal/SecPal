@@ -80,7 +80,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 sm:p-10 mx-2 sm:mx-0 sm:w-1/3">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ t('Are you still there?') }}</h2>
         <p class="text-gray-900 dark:text-gray-300 mb-5"
-           x-text="(countDownValue - (timePassed - timeoutValue)) + ' {{ t('second(s) remain to auto logout. Move your mouse or press any key to cancel.') }}'"></p>
+           x-text="(countDownValue - (timePassed - timeoutValue)) + ' {{ t('seconds remain to auto logout. Move your mouse or press any key to cancel.') }}'"></p>
     </div>
 </div>
 

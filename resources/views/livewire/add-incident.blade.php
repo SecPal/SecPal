@@ -1,14 +1,14 @@
 <div>
     <x-dialog wire:model="show">
         <x-dialog.open>
-            <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline dark:focus-visible:ring-2 dark:focus-visible:ring-offset-2 dark:focus-visible:ring-indigo-500">Add incident</button>
+            <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline dark:focus-visible:ring-2 dark:focus-visible:ring-offset-2 dark:focus-visible:ring-indigo-500">{{ t('Add incident') }}</button>
         </x-dialog.open>
         <x-dialog.panel>
             <form wire:submit="save">
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-800/10 pb-12">
                         <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">{{ t('Incident Report') }} - {{ $location_data->name }} - {{ $location_data->location }}</h2>
-                        <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">This information will be displayed publicly so be careful what you share.</p>
+                        <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ t('This report will be read by superiors and customers. Make sure it\'s complete and worded correctly.') }}</p>
                         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div class="sm:col-span-5">
                                 <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('reported by') }}</label>
@@ -281,7 +281,7 @@
                                                 <div class="mt-2 items-center space-x-2">
                                                     @if(isset($participants[$loop->index]['id']))
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                            {{ t('house ban since') }} {{ \Carbon\Carbon::parse($participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($participants[$loop->index]['trespasses']) }}x {{ t('trespasses') }}
+                                                            {{ t('house ban since') }} {{ \Carbon\Carbon::parse($participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($participants[$loop->index]['trespasses']) }} {{ np('Trespasses', 'Trespass', 'Trespasses', count($participants[$loop->index]['trespasses'])) }}
                                                         </p>
                                                     @else
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
