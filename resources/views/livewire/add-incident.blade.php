@@ -21,7 +21,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="sm:col-span-2 relative">
+                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-2 relative">
                                 <label
                                     for="category"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
@@ -44,7 +44,7 @@
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="sm:col-span-4 items-center">
+                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-4 items-center">
                                 <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Involved') }}</label>
                                 <div class="mt-2 items-center space-x-2">
                                     @if(!$category || !$category->rescue_possible && !$category->fire_possible && !$category->police_possible)
@@ -230,7 +230,7 @@
                             </p>
 
                             @foreach($participants as $participant)
-                                <div wire:key="participant-{{ $loop->index }}"
+                                <div wire:key="participant-{{ $loop->index }}" wire:loading.class="opacity-50" wire:target="participants.{{ $loop->index }}.date_of_birth"
                                      class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-200 dark:bg-gray-800' : ''}}"
                                 >
                                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -322,6 +322,16 @@
                             @endforeach
                         </div>
                     @endif
+
+                    @if ($errors->any())
+                        <div class="sm:col-span-4 text-center">
+                            <p class="text-sm text-red-600">{{ __('The form isn\'t filled correctly!') }}</p>
+                        </div>
+                    @endif
+
+                    <div wire:loading.flex wire:target="save" class="flex justify-center items-center">
+                        <x-icon.spinner size="6" class="text-gray-500 dark:text-gray-800" />
+                    </div>
                 </div>
                 <x-dialog.footer>
                     <x-dialog.close>
@@ -331,7 +341,7 @@
                         </button>
                     </x-dialog.close>
                     <button type="submit"
-                            class="text-center rounded-xl bg-blue-500 dark:bg-blue-400 text-white px-6 py-2 font-semibold disabled:cursor-not-allowed disabled:opacity-50">
+                            class="text-center rounded-xl bg-blue-600 dark:bg-blue-800 text-white px-6 py-2 font-semibold hover:bg-blue-500 dark:hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
                         Save
                     </button>
                 </x-dialog.footer>

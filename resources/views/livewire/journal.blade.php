@@ -26,7 +26,7 @@
                 @endcan
             </div>
         </div>
-        <div class="mt-8 -mx-4 sm:-mx-0">
+        <div class="relative mt-8 -mx-4 sm:-mx-0">
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead>
                 <tr>
@@ -89,6 +89,15 @@
                 @endforeach
                 </tbody>
             </table>
+
+            {{-- Table loading spinners... --}}
+            <div wire:loading class="absolute inset-0 bg-white opacity-50">
+                {{-- --}}
+            </div>
+
+            <div wire:loading.flex class="flex justify-center items-center fixed inset-0">
+                <x-icon.spinner size="10" class="text-gray-500 dark:text-gray-800" />
+            </div>
         </div>
     </div>
 </div>
