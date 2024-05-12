@@ -7,14 +7,14 @@
             <form wire:submit="save">
                 <div class="space-y-12">
                     <div class="border-b border-gray-900/10 dark:border-gray-800/10 pb-12">
-                        <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">{{ __('Incident Report') }} - {{ $location_data->name }} - {{ $location_data->location }}</h2>
+                        <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">{{ t('Incident Report') }} - {{ $location_data->name }} - {{ $location_data->location }}</h2>
                         <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">This information will be displayed publicly so be careful what you share.</p>
                         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div class="sm:col-span-5">
-                                <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('reported by') }}</label>
+                                <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('reported by') }}</label>
                                 <div class="mt-2">
                                     <select wire:model="reportedById" id="reportedById" name="reportedById" autocomplete="reportedById" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                        <option disabled>{{ __('Select User') }}</option>
+                                        <option disabled>{{ t('Select User') }}</option>
                                         @foreach($location_data->users as $user)
                                             <option value="{{ $user->id }}">{{ $user->lastname }}, {{ $user->firstname }}</option>
                                         @endforeach
@@ -25,7 +25,7 @@
                                 <label
                                     for="category"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
-                                    {{ __('Category') }}
+                                    {{ t('Category') }}
                                 </label>
                                 <div class="mt-2">
                                     <select
@@ -34,7 +34,7 @@
                                         autocomplete="category"
                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 @error('categoryId') text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 focus:outline-none border-red-300 @enderror"
                                     >
-                                        <option>{{ __('Select Category') }}</option>
+                                        <option>{{ t('Select Category') }}</option>
                                         @foreach($categories as $cat)
                                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                         @endforeach
@@ -45,11 +45,11 @@
                                 @enderror
                             </div>
                             <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-4 items-center">
-                                <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Involved') }}</label>
+                                <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('Involved') }}</label>
                                 <div class="mt-2 items-center space-x-2">
                                     @if(!$category || !$category->rescue_possible && !$category->fire_possible && !$category->police_possible)
                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                            {{ __('No involvement of the emergency services.') }}
+                                            {{ t('No involvement of the emergency services.') }}
                                         </p>
                                     @endif
                                     @if($category && $category->rescue_possible)
@@ -60,7 +60,7 @@
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400"
                                         >
                                         <label for="rescue_involved" class="dark:text-gray-50">
-                                            {{ __('Rescue') }}
+                                            {{ t('Rescue') }}
                                         </label>
                                     @endif
                                     @if($category && $category->fire_possible)
@@ -70,7 +70,7 @@
                                             type="checkbox"
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400">
                                         <label for="fire_involved" class="dark:text-gray-50">
-                                            {{ __('Fire') }}
+                                            {{ t('Fire') }}
                                         </label>
                                     @endif
                                     @if($category && $category->police_possible)
@@ -80,14 +80,14 @@
                                             type="checkbox"
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400">
                                         <label for="police_involved" class="dark:text-gray-50">
-                                            {{ __('Police') }}
+                                            {{ t('Police') }}
                                         </label>
                                     @endif
                                 </div>
                             </div>
                             <div class="sm:col-span-3 relative">
                                 <label for="incidentDate" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
-                                    {{ __('Date') }}
+                                    {{ t('Date') }}
                                 </label>
                                 <div class="mt-2">
                                     <input
@@ -107,7 +107,7 @@
                                     for="incidentTime"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                 >
-                                    {{ __('Time') }}
+                                    {{ t('Time') }}
                                 </label>
                                 <div class="mt-2">
                                     <input
@@ -124,7 +124,7 @@
                             </div>
                             <div class="sm:col-span-4 relative">
                                 <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
-                                    {{ __('Area / Location') }}
+                                    {{ t('Area / Location') }}
                                 </label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <input
@@ -145,7 +145,7 @@
                             </div>
                             <div class="sm:col-span-2 relative">
                                 <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
-                                    {{ __('Persons involved') }}
+                                    {{ t('Persons involved') }}
                                 </label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <input
@@ -172,7 +172,7 @@
                                     for="incidentDescription"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                 >
-                                    {{ __('Incident Description') }}
+                                    {{ t('Incident Description') }}
                                 </label>
                                 <div class="mt-2">
                                     <textarea
@@ -190,7 +190,7 @@
                                 @else
                                     <div class="mt-3">
                                         <p class="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                            {{ __('The report about the Incident and what happened.') }}
+                                            {{ t('The report about the Incident and what happened.') }}
                                         </p>
                                     </div>
                                 @enderror
@@ -200,7 +200,7 @@
                                     for="measures"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                 >
-                                    {{ __('Measures taken') }}
+                                    {{ t('Measures taken') }}
                                 </label>
                                 <div class="mt-2">
                                     <textarea wire:model.lazy="measures"
@@ -214,7 +214,7 @@
                                     </div>
                                 @else
                                     <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                        {{ __('List of measures taken.') }}
+                                        {{ t('List of measures taken.') }}
                                     </p>
                                 @enderror
                             </div>
@@ -223,10 +223,10 @@
                     @if(is_numeric($peopleInvolved) && $peopleInvolved >= 1)
                         <div class="border-b border-gray-900/10 pb-12">
                             <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">
-                                {{ __('Details of the house ban') }}
+                                {{ t('Details of the house ban') }}
                             </h2>
                             <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                {{ __('Personal details for issuing a house ban or trespassing notice. (optional)') }}
+                                {{ t('Personal details for issuing a house ban or trespassing notice. (optional)') }}
                             </p>
 
                             @foreach($participants as $participant)
@@ -239,7 +239,7 @@
                                                 for="lastname-{{ $loop->index }}"
                                                 class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                             >
-                                                {{ __('Lastname') }}
+                                                {{ t('Lastname') }}
                                             </label>
                                             <div class="mt-2">
                                                 <input
@@ -256,14 +256,14 @@
                                                 for="firstname-{{ $loop->index }}"
                                                 class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                                             >
-                                                {{ __('Firstname') }}
+                                                {{ t('Firstname') }}
                                             </label>
                                             <div class="mt-2">
                                                 <input wire:model.blur="participants.{{ $loop->index }}.firstname" type="text" name="firstname-{{ $loop->index }}" id="firstname-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                             </div>
                                         </div>
                                         <div class="sm:col-span-2">
-                                            <label for="date_of_birth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Date of Birth') }}</label>
+                                            <label for="date_of_birth-{{ $loop->index }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('Date of Birth') }}</label>
                                             <div class="mt-2">
                                                 <input wire:model.blur="participants.{{ $loop->index }}.date_of_birth" type="date" name="participants.{{ $loop->index }}.date_of_birth" id="date_of_birth-{{ $loop->index }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                             </div>
@@ -271,47 +271,47 @@
 
                                         @if($participants[$loop->index]['lastname'] && $participants[$loop->index]['firstname'] && $participants[$loop->index]['date_of_birth'])
                                             <div class="sm:col-span-2">
-                                                <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('house ban until') }}</label>
+                                                <label for="incidentArea" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('house ban until') }}</label>
                                                 <div class="mt-2">
                                                     <input wire:model.blur="participants.{{ $loop->index }}.ban_until" type="date" name="incidentArea" id="incidentArea" autocomplete="incidentArea" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </div>
                                             </div>
                                             <div class="sm:col-span-4 items-center">
-                                                <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('further information') }}</label>
+                                                <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('further information') }}</label>
                                                 <div class="mt-2 items-center space-x-2">
                                                     @if(isset($participants[$loop->index]['id']))
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                            {{ __('house ban since') }} {{ \Carbon\Carbon::parse($participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($participants[$loop->index]['trespasses']) }}x {{ __('trespasses') }}
+                                                            {{ t('house ban since') }} {{ \Carbon\Carbon::parse($participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($participants[$loop->index]['trespasses']) }}x {{ t('trespasses') }}
                                                         </p>
                                                     @else
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                            {{ __('No further information found.') }}
+                                                            {{ t('No further information found.') }}
                                                         </p>
                                                     @endif
                                                 </div>
                                             </div>
 
                                             <div class="sm:col-span-4">
-                                                <label for="participants.{{ $loop->index }}.street" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('Street') }}</label>
+                                                <label for="participants.{{ $loop->index }}.street" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('Street') }}</label>
                                                 <div class="mt-2">
                                                     <input wire:model="participants.{{ $loop->index }}.street" type="text" name="participants.{{ $loop->index }}.street" id="participants.{{ $loop->index }}.street" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </div>
                                             </div>
                                             <div class="sm:col-span-2">
-                                                <label for="participants.{{ $loop->index }}.number" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('House Number') }}</label>
+                                                <label for="participants.{{ $loop->index }}.number" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('House Number') }}</label>
                                                 <div class="mt-2">
                                                     <input wire:model.blur="participants.{{ $loop->index }}.number" type="text" name="participants.{{ $loop->index }}.number" id="participants.{{ $loop->index }}.number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </div>
                                             </div>
 
                                             <div class="sm:col-span-2">
-                                                <label for="participants.{{ $loop->index }}.zipcode" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('zipcode') }}</label>
+                                                <label for="participants.{{ $loop->index }}.zipcode" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('zipcode') }}</label>
                                                 <div class="mt-2">
                                                     <input wire:model="participants.{{ $loop->index }}.zipcode" type="text" name="participants.{{ $loop->index }}.zipcode" id="participants.{{ $loop->index }}.zipcode" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </div>
                                             </div>
                                             <div class="sm:col-span-4">
-                                                <label for="participants.{{ $loop->index }}.city" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ __('city') }}</label>
+                                                <label for="participants.{{ $loop->index }}.city" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('city') }}</label>
                                                 <div class="mt-2">
                                                     <input wire:model.blur="participants.{{ $loop->index }}.city" type="text" name="participants.{{ $loop->index }}.city" id="participants.{{ $loop->index }}.city" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </div>
@@ -325,7 +325,7 @@
 
                     @if ($errors->any())
                         <div class="sm:col-span-4 text-center">
-                            <p class="text-sm text-red-600">{{ __('The form isn\'t filled correctly!') }}</p>
+                            <p class="text-sm text-red-600">{{ t('The form isn\'t filled correctly!') }}</p>
                         </div>
                     @endif
 

@@ -27,14 +27,14 @@
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
             @can('work', \App\Models\User::class)
-                <a href="{{ route('journal') }}" wire:navigate class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">{{ __('Journal') }}</a>
+                <a href="{{ route('journal') }}" wire:navigate class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">{{ t('Journal') }}</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Features</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">Marketplace</a>
                 <div class="relative">
                     <button @click="settingsFlyout = !settingsFlyout" type="button"
                             class="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
                             aria-expanded="false">
-                        <span>{{ __('Settings') }}</span>
+                        <span>{{ t('Settings') }}</span>
                     </button>
                     <div x-show="settingsFlyout"
                          @click.away="settingsFlyout = false"
@@ -49,12 +49,12 @@
                             <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Integrations</a>
                             <a href="#" class="block p-2 text-gray-900 dark:text-gray-200">Automations</a>
                             <a href="#" x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
-                               class="block p-2 text-gray-900 dark:text-gray-200">{{ __('Change Password') }}</a>
+                               class="block p-2 text-gray-900 dark:text-gray-200">{{ t('Change Password') }}</a>
                         </div>
                     </div>
                 </div>
             @elseif(auth()->user()->locations()->count())
-                <button type="button" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ __('Please start your shift or log out!') }}</button>
+                <button type="button" @click="$dispatch('start-shift')" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 uppercase">{{ t('Please start your shift or log out!') }}</button>
             @endcan
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -79,14 +79,14 @@
                     <a href="#"
                        x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false, userMenu = false"
                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-                       role="menuitem" tabindex="-1" id="user-menu-item-0">{{ __('Change Password') }}</a>
+                       role="menuitem" tabindex="-1" id="user-menu-item-0">{{ t('Change Password') }}</a>
                     <a href="#"
                        class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                        role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                     <div role="menuitem" tabindex="-1" id="user-menu-item-2">
                         <button type="button" wire:click="$dispatchTo('auth.logout', 'logout')"
                                 class="w-full text-left px-4 py-2 text-sm font-semibold leading-6 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
-                            {{ __('Logout') }}
+                            {{ t('Logout') }}
                         </button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                         @can('work', \App\Models\User::class)
                             <a href="{{ route('journal') }}"
                                wire:navigate
-                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Journal') }}</a>
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ t('Journal') }}</a>
                             <a href="#"
                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Features</a>
                             <a href="#"
@@ -128,7 +128,7 @@
                             <div class="relative w-full">
                                 <button @click="settingsFlyout = !settingsFlyout" type="button"
                                         class="-mx-3 w-full block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 text-left">
-                                    <span>{{ __('Settings') }}</span>
+                                    <span>{{ t('Settings') }}</span>
                                 </button>
                                 <div x-show="settingsFlyout">
                                     <a href="#"
@@ -143,13 +143,13 @@
                                        class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Automations</a>
                                     <a href="#"
                                        x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false"
-                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
+                                       class="ml-6 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ t('Change Password') }}</a>
                                 </div>
                             </div>
                         @elseif(auth()->user()->locations()->count())
                             <button type="button"
                                @click="$dispatch('start-shift')"
-                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Please start your shift or log out!') }}
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ t('Please start your shift or log out!') }}
                             </button>
                         @endcan
                     </div>
@@ -168,11 +168,11 @@
                         <div class="mt-3 space-y-1">
                             <a href="#"
                                x-on:click.prevent="slideOver = true, mobileMenu = false, settingsFlyout = false, userMenu = false"
-                               class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Change Password') }}</a>
+                               class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ t('Change Password') }}</a>
                             <a href="#"
                                class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">Settings</a>
                             <button wire:click="$dispatchTo('auth.logout', 'logout')"
-                                    class="block w-full text-left px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ __('Logout') }}</button>
+                                    class="block w-full text-left px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">{{ t('Logout') }}</button>
                         </div>
                     </div>
                 </div>

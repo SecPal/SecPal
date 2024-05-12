@@ -33,7 +33,7 @@ class ChangePassword extends Component
         $user = Auth::user();
         if ($user->checkPassword($this->current_password)) {
             $user->changePassword($this->password);
-            $this->dispatch('password-changed', message: __('You have successfully changed your password.'));
+            $this->dispatch('password-changed', message: t('You have successfully changed your password.'));
             $this->reset();
         }
     }

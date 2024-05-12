@@ -7,7 +7,7 @@
                     Journal -
                     <div class="inline-block">
                         <select wire:model.live="actual_location" class="w-64 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 pl-1 pr-10 text-sm text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">
-                            <option value="">{{ __('Select your location') }}</option>
+                            <option value="">{{ t('Select your location') }}</option>
                             @foreach($locations as $location)
                                 @canany(['viewRecentJournal', 'viewFullJournal'], $location)
                                     <option value="{{ $location->id }}">
@@ -30,12 +30,12 @@
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead>
                 <tr>
-                    <th scope="col" class="py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ __('Incident') }}</th>
-                    <th scope="col" class="hidden py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 lg:table-cell">{{ __('Date') }}</th>
-                    <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ __('Category') }}</th>
-                    <th scope="col" class="flex-auto p-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ __('Description') }}</th>
-                    <th scope="col" class="hidden flex-auto p-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:table-cell">{{ __('Action') }}</th>
-                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200  lg:table-cell">{{ __('reported by') }}</th>
+                    <th scope="col" class="py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Incident') }}</th>
+                    <th scope="col" class="hidden py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 lg:table-cell">{{ t('Date') }}</th>
+                    <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Category') }}</th>
+                    <th scope="col" class="flex-auto p-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Description') }}</th>
+                    <th scope="col" class="hidden flex-auto p-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:table-cell">{{ t('Action') }}</th>
+                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200  lg:table-cell">{{ t('reported by') }}</th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0"><span class="sr-only">Edit</span></th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0"><span class="sr-only">Edit</span></th>
                 </tr>

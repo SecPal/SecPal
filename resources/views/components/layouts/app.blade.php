@@ -78,9 +78,9 @@
      style="display: none"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 sm:p-10 mx-2 sm:mx-0 sm:w-1/3">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ __('Are you still there?') }}</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ t('Are you still there?') }}</h2>
         <p class="text-gray-900 dark:text-gray-300 mb-5"
-           x-text="(countDownValue - (timePassed - timeoutValue)) + ' {{ __('second(s) remain to auto logout. Move your mouse or press any key to cancel.') }}'"></p>
+           x-text="(countDownValue - (timePassed - timeoutValue)) + ' {{ t('second(s) remain to auto logout. Move your mouse or press any key to cancel.') }}'"></p>
     </div>
 </div>
 
@@ -89,7 +89,7 @@
      style="display: none"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-95 dark:bg-gray-800 dark:bg-opacity-95">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 sm:p-10 mx-2 sm:mx-0 sm:w-1/3">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ __('You are going to be logged out!') }}</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">{{ t('You are going to be logged out!') }}</h2>
     </div>
 </div>
 
