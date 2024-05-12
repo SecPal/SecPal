@@ -230,7 +230,7 @@
                             </p>
 
                             @foreach($participants as $participant)
-                                <div wire:key="participant-{{ $loop->index }}" wire:loading.class="opacity-50" wire:target="participants.{{ $loop->index }}.date_of_birth"
+                                <div wire:key="participant-{{ $loop->index }}" wire:loading.class="opacity-50" wire:target="participants.{{ $loop->index }}.date_of_birth, participants.{{ $loop->index }}.ban_until"
                                      class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-200 dark:bg-gray-800' : ''}}"
                                 >
                                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
