@@ -36,7 +36,7 @@ class AddIncident extends Component
     #[Validate('boolean')]
     public bool $police_involved = false;
 
-    #[Validate('required', message: 'An Area is needed.')]
+    #[Validate('required', message: 'It\'s necessary to specify an area.')]
     #[Validate('string', message: 'Don\'t mess around!')]
     public string $incidentArea = '';
 
@@ -48,8 +48,8 @@ class AddIncident extends Component
     #[Validate('min:20', message: 'A meaningful incident description should be longer than 20 characters.')]
     public string $incidentDescription = '';
 
-    #[Validate('required', message: 'A meaningful description of the measures taken is also required.')]
-    #[Validate('min:20', message: 'A meaningful description of the measures taken should also be longer than 20 characters.')]
+    #[Validate('required', message: 'A meaningful description of the measures taken is required.')]
+    #[Validate('min:20', message: 'A meaningful description of the measures taken should be longer than 20 characters.')]
     public string $measures = '';
 
     #[Validate('required', message: 'The correct date of the incident is required.')]
@@ -299,7 +299,7 @@ class AddIncident extends Component
 
     private function processLastName($participantIndex, $newValue): void
     {
-        if ($newValue === '' && count($this->participants) > 1) {
+        if ($newValue === '') {
             $this->removeParticipantRow($participantIndex);
         }
     }
@@ -315,6 +315,10 @@ class AddIncident extends Component
 
     private function canAddNewParticipantRow(): bool
     {
+        if (count($this->participants) === 0) {
+            return true;
+        }
+
         $lastKey = array_key_last($this->participants);
 
         return count($this->participants) < $this->peopleInvolved &&
@@ -419,8 +423,6 @@ class AddIncident extends Component
                 ]);
             }
         }
-
-        ray($this->participants);
 
         $this->participants = [];
         $this->addNewParticipantRow();
