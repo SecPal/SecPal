@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22bd2fe361a6a13bc0ea49d0b6e1e649",
+    "content-hash": "1775a60854c409be2f399612fb95f8a2",
     "packages": [
         {
             "name": "brick/math",
@@ -1004,6 +1004,81 @@
                 }
             ],
             "time": "2023-11-12T22:16:48+00:00"
+        },
+        {
+            "name": "guava/sqids-for-laravel",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GuavaCZ/sqids-for-laravel.git",
+                "reference": "7f5f16e1a16e5909795fcd2fc0d6eaa125468d49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GuavaCZ/sqids-for-laravel/zipball/7f5f16e1a16e5909795fcd2fc0d6eaa125468d49",
+                "reference": "7f5f16e1a16e5909795fcd2fc0d6eaa125468d49",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0|^11.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.14.0",
+                "sqids/sqids": "^0.4.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.8",
+                "orchestra/testbench": "^8.8",
+                "pestphp/pest": "^2.0",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Guava\\Sqids\\SqidsServiceProvider"
+                    ],
+                    "aliases": {
+                        "Sqids": "Guava\\Sqids\\Facades\\Sqids"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Guava\\Sqids\\": "src/",
+                    "Guava\\Sqids\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lukas Frey",
+                    "email": "mail@lukasfrey.cz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This is a laravel wrapper for sqids.",
+            "homepage": "https://github.com/GuavaCZ/sqids-for-laravel",
+            "keywords": [
+                "Guava",
+                "laravel",
+                "sqids-for-laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/GuavaCZ/sqids-for-laravel/issues",
+                "source": "https://github.com/GuavaCZ/sqids-for-laravel/tree/1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GuavaCZ",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-04-03T07:31:52+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4621,6 +4696,61 @@
                 }
             ],
             "time": "2024-04-24T14:21:46+00:00"
+        },
+        {
+            "name": "sqids/sqids",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sqids/sqids-php.git",
+                "reference": "ff3d1214c0c2119ae4b676cc00f3abb22f61da42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sqids/sqids-php/zipball/ff3d1214c0c2119ae4b676cc00f3abb22f61da42",
+                "reference": "ff3d1214c0c2119ae4b676cc00f3abb22f61da42",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.3"
+            },
+            "suggest": {
+                "ext-bcmath": "Required to use BC Math arbitrary precision mathematics (*).",
+                "ext-gmp": "Required to use GNU multiple precision mathematics (*)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sqids\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generate short YouTube-looking IDs from numbers",
+            "homepage": "https://sqids.org/php",
+            "keywords": [
+                "decode",
+                "encode",
+                "generate",
+                "hashids",
+                "ids",
+                "sqids"
+            ],
+            "support": {
+                "issues": "https://github.com/sqids/sqids-php/issues",
+                "source": "https://github.com/sqids/sqids-php/tree/0.4.1"
+            },
+            "time": "2023-09-12T22:30:42+00:00"
         },
         {
             "name": "symfony/clock",

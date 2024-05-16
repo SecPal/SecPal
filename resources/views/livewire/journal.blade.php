@@ -43,7 +43,7 @@
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 @foreach($journals as $journal)
                     <tr>
-                        <td class="py-4 px-2 text-sm font-medium text-gray-900 dark:text-gray-400">{{ $journal->id }}</td>
+                        <td class="py-4 px-2 text-sm font-medium text-gray-900 dark:text-gray-400">{{ $journal->sqid }}</td>
                         <td class="hidden py-4 px-2 text-sm text-gray-900 dark:text-gray-400 lg:table-cell">{{ $journal->incident_time->format('d.m.Y H:i') }}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-400">
                             {{ $journal->category->name }}
