@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Guava\Sqids\Concerns\HasSqids;
+use Guava\Sqids\Sqids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +13,7 @@ use Overtrue\LaravelVersionable\Versionable;
 
 class Journal extends Model
 {
-    use HasFactory, SoftDeletes, Versionable;
+    use HasFactory, HasSqids, SoftDeletes, Versionable;
 
     protected $fillable = [
         'location_id',
@@ -42,6 +44,14 @@ class Journal extends Model
         'review_required',
         'incident_time',
     ];
+
+    protected function getSqids(): Sqids
+    {
+        return Sqids::make()
+            ->minLength(5)
+            ->alphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+            ->salt(); // This will use the model's class name as the salt, so every model generates different IDs
+    }
 
     public function reportedBy(): BelongsTo
     {
