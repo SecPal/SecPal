@@ -1,0 +1,14 @@
+{
+    "Please select a category.": "Bitte wählen Sie eine Kategorie aus.",
+    "It's necessary to specify an area.": "Es ist notwendig, einen Bereich anzugeben.",
+    "Don't mess around!": "Mach keinen Mist!",
+    "The number of persons involved is required.": "Die Anzahl der beteiligten Personen ist erforderlich.",
+    "The number must be given in figures.": "Die Zahl muss in Ziffern angegeben werden.",
+    "A meaningful incident description is required.": "Eine aussagekräftige Beschreibung des Vorfalls ist erforderlich.",
+    "A meaningful incident description should be longer than 20 characters.": "Eine aussagekräftige Ereignisbeschreibung sollte länger als 20 Zeichen sein.",
+    "A meaningful description of the measures taken is required.": "Eine aussagekräftige Beschreibung der getroffenen Maßnahmen ist erforderlich.",
+    "A meaningful description of the measures taken should be longer than 20 characters.": "Eine aussagekräftige Beschreibung der getroffenen Maßnahmen sollte länger als 20 Zeichen sein.",
+    "The correct date of the incident is required.": "Das korrekte Datum des Vorfalls ist erforderlich.",
+    "Share your time machine or correct the date. ;-)": "Teilen Sie Ihre Zeitmaschine oder korrigieren Sie das Datum. ;-)",
+    "The correct time of the incident is required.": "Die korrekte Uhrzeit des Vorfalls ist erforderlich."
+}
