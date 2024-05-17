@@ -3203,16 +3203,16 @@
         },
         {
             "name": "overtrue/laravel-versionable",
-            "version": "5.2.0",
+            "version": "5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/laravel-versionable.git",
-                "reference": "58cf86d51ceddcf4228857b21c2ec70928466fa9"
+                "reference": "7d51faeb590288bd186200aae4239be1447188cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/laravel-versionable/zipball/58cf86d51ceddcf4228857b21c2ec70928466fa9",
-                "reference": "58cf86d51ceddcf4228857b21c2ec70928466fa9",
+                "url": "https://api.github.com/repos/overtrue/laravel-versionable/zipball/7d51faeb590288bd186200aae4239be1447188cd",
+                "reference": "7d51faeb590288bd186200aae4239be1447188cd",
                 "shasum": ""
             },
             "require": {
@@ -3257,7 +3257,7 @@
             "description": "Make Laravel model versionable.",
             "support": {
                 "issues": "https://github.com/overtrue/laravel-versionable/issues",
-                "source": "https://github.com/overtrue/laravel-versionable/tree/5.2.0"
+                "source": "https://github.com/overtrue/laravel-versionable/tree/5.2.1"
             },
             "funding": [
                 {
@@ -3265,7 +3265,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-25T06:32:20+00:00"
+            "time": "2024-05-15T22:07:13+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -3344,16 +3344,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.67",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493"
+                "reference": "e524358f930e41a2b4cca1320e3b04fc26b39e0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/16ddbe776f10da6a95ebd25de7c1dbed397dc493",
-                "reference": "16ddbe776f10da6a95ebd25de7c1dbed397dc493",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e524358f930e41a2b4cca1320e3b04fc26b39e0b",
+                "reference": "e524358f930e41a2b4cca1320e3b04fc26b39e0b",
                 "shasum": ""
             },
             "require": {
@@ -3398,7 +3398,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-16T07:22:02+00:00"
+            "time": "2024-05-15T08:00:59+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -8277,16 +8277,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "1.6.11",
+            "version": "1.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d"
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/81a161d0b135df89951abd52296adf97deb0723d",
-                "reference": "81a161d0b135df89951abd52296adf97deb0723d",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/1f4efdd7d3beafe9807b08156dfcb176d18f1699",
+                "reference": "1f4efdd7d3beafe9807b08156dfcb176d18f1699",
                 "shasum": ""
             },
             "require": {
@@ -8356,7 +8356,7 @@
                 "security": "https://github.com/mockery/mockery/security/advisories",
                 "source": "https://github.com/mockery/mockery"
             },
-            "time": "2024-03-21T18:34:15+00:00"
+            "time": "2024-05-16T03:13:13+00:00"
         },
         {
             "name": "myclabs/deep-copy",
