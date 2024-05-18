@@ -799,16 +799,16 @@
         },
         {
             "name": "gettext/gettext",
-            "version": "v4.8.11",
+            "version": "v4.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-gettext/Gettext.git",
-                "reference": "b632aaf5e4579d0b2ae8bc61785e238bff4c5156"
+                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-gettext/Gettext/zipball/b632aaf5e4579d0b2ae8bc61785e238bff4c5156",
-                "reference": "b632aaf5e4579d0b2ae8bc61785e238bff4c5156",
+                "url": "https://api.github.com/repos/php-gettext/Gettext/zipball/11af89ee6c087db3cf09ce2111a150bca5c46e12",
+                "reference": "11af89ee6c087db3cf09ce2111a150bca5c46e12",
                 "shasum": ""
             },
             "require": {
@@ -860,7 +860,7 @@
             "support": {
                 "email": "oom@oscarotero.com",
                 "issues": "https://github.com/oscarotero/Gettext/issues",
-                "source": "https://github.com/php-gettext/Gettext/tree/v4.8.11"
+                "source": "https://github.com/php-gettext/Gettext/tree/v4.8.12"
             },
             "funding": [
                 {
@@ -876,7 +876,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-08-14T15:15:05+00:00"
+            "time": "2024-05-18T10:25:07+00:00"
         },
         {
             "name": "gettext/languages",
@@ -4220,21 +4220,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "73eb63e4f9011dba6b7c66c3262543014e352f34"
+                "reference": "556509e2dcf527369892b7d411379c4a02f31859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/73eb63e4f9011dba6b7c66c3262543014e352f34",
-                "reference": "73eb63e4f9011dba6b7c66c3262543014e352f34",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/556509e2dcf527369892b7d411379c4a02f31859",
+                "reference": "556509e2dcf527369892b7d411379c4a02f31859",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.57"
+                "phpstan/phpstan": "^1.11"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -4267,7 +4267,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.0.5"
+                "source": "https://github.com/rectorphp/rector/tree/1.1.0"
             },
             "funding": [
                 {
@@ -4275,7 +4275,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-10T05:31:15+00:00"
+            "time": "2024-05-18T09:40:27+00:00"
         },
         {
             "name": "santigarcor/laratrust",
