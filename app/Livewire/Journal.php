@@ -55,6 +55,7 @@ class Journal extends Component
         if ($location) {
             $this->location_data = Location::where('id', $location)
                 ->with('users')
+                ->with('users.company')
                 ->with('customer')
                 ->first();
         } else {

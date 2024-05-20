@@ -13,12 +13,72 @@
                             <div class="sm:col-span-5">
                                 <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('reported by') }}</label>
                                 <div class="mt-2">
-                                    <select wire:model="reportedById" id="reportedById" name="reportedById" autocomplete="reportedById" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                        <option disabled>{{ t('Select User') }}</option>
-                                        @foreach($location_data->users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->lastname }}, {{ $user->firstname }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div
+                                        x-data="
+                                        {
+                                           query: '',
+                                           users: [
+                                                @foreach($location_data->users as $user)
+                                                    {
+                                                        id: {{ $user->id }},
+                                                        name: '{{ $user->lastname }}, {{ $user->firstname }}{{ $user->company->subcontractor ? ' (' . $user->company->shortname . ')' : '' }}',
+                                                        disabled: false,
+                                                    },
+                                                @endforeach
+                                           ],
+                                           get filteredUsers() {
+                                               return this.query === ''
+                                                   ? this.users
+                                                   : this.users.filter((user) => {
+                                                       return user.name.toLowerCase().includes(this.query.toLowerCase())
+                                                   })
+                                           },
+                                           selected: null,
+                                           selectUser() {
+                                               this.$wire.reportedById = this.selected.id;
+                                           },
+                                        }"
+                                        x-init="selected = users.find(user => user.id === $wire.reportedById); $watch('selected', () => selectUser())"
+                                        class="max-w-xs w-full"
+                                    >
+                                        <div x-combobox x-model="selected">
+                                            <div class="relative mt-1 rounded-md shadow-sm">
+                                                <div class="relative w-full">
+                                                    <input
+                                                        wire:ignore
+                                                        x-combobox:input
+                                                        :display-value="user=>user.name"
+                                                        @change="query = $event.target.value;"
+                                                        @blur="query = ''"
+                                                        @keydown.escape="query = ''"
+                                                        class="block w-full rounded-md border-0 pr-10 py-1.5 dark:bg-gray-700 text-gray-900 dark:text-gray-50 placeholder:text-gray-400 dark:placeholder:text-gray-600 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm"
+                                                        placeholder="Select User..."
+                                                    />
+                                                    <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                                        <button x-combobox:button class="block h-10 w-10 text-gray-600 dark:text-gray-300 hover:text-gray-400 dark:hover:text-white focus:outline-none transition ease-in-out duration-200">
+                                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor"><path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div x-combobox:options x-cloak class="absolute left-0 w-full mt-1 rounded-md border-0 bg-white dark:bg-gray-700 rounded-b-md border-t-0 dark:border-gray-700 focus:outline-none z-10" x-transition.out.opacity>
+                                                    <ul class="divide-y divide-transparent dark:divide-gray-700">
+                                                        <template x-for="(user, idx) in filteredUsers" :key="user.id">
+                                                            <li
+                                                                x-combobox:option
+                                                                :value="user"
+                                                                :disabled="user.disabled"
+                                                                @click="selectUser()"
+                                                                :class="{ 'rounded-t-md': idx === 0, 'rounded-b-md': idx === (filteredUsers.length - 1) }"
+                                                                class="w-full py-1 text-sm hover:bg-gray-200 dark:bg-gray-700 select-none dark:hover:bg-gray-600">
+                                                                <span x-text="user.name" class="text-sm text-gray-900 dark:text-gray-50 pl-2"></span>
+                                                            </li>
+                                                        </template>
+                                                    </ul>
+                                                </div>
+                                                <p x-show="filteredUsers.length === 0 && query.length > 0" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 pl-2">No users match your query.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-2 relative">
