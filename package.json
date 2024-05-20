@@ -15,7 +15,9 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
-        "@alpinejs/ui": "^3.13.5-beta.0",
-        "@tailwindcss/forms": "^0.5.7"
+        "@alpinejs/focus": "^3.13.10",
+        "@alpinejs/ui": "^3.13.10-beta.0",
+        "@tailwindcss/forms": "^0.5.7",
+        "alpinejs": "^3.13.10"
     }
 }
