@@ -65,6 +65,10 @@ class AddIncident extends Component
     #[Validate('numeric', message: 'Don\'t mess around!')]
     public int $reportedById;
 
+    public $selectSearchData;
+
+    public $categorySearch;
+
     public array $participants;
 
     public function mount(): void
@@ -73,6 +77,8 @@ class AddIncident extends Component
         $this->reportedById = Auth::user()->id;
         $this->setDateTimeNow();
         $this->categories = $this->getCategories();
+        $this->categorySearch = $this->getCategorySearchData();
+        $this->selectSearchData = $this->getSelectSearchData();
         $this->addNewParticipantRow();
     }
 
@@ -134,6 +140,28 @@ class AddIncident extends Component
             'participants.*.zipcode' => 'nullable|numeric',
             'participants.*.city' => 'nullable|string',
         ]);
+    }
+
+    public function getSelectSearchData(): array
+    {
+        return collect($this->location_data->users)->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'label' => "{$user->lastname}, {$user->firstname}".($user->company->subcontractor ? " ({$user->company->shortname})" : ''),
+                'disabled' => false, // Assuming all users are not disabled by default.
+            ];
+        })->all();
+    }
+
+    public function getCategorySearchData(): array
+    {
+        return collect($this->categories)->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'label' => $category->name,
+                'disabled' => false, // Assuming all users are not disabled by default.
+            ];
+        })->all();
     }
 
     private function handleParticipantInformationUpdate($splitField, $participantIndex, $newValue): void
@@ -436,6 +464,8 @@ class AddIncident extends Component
 
         $this->reset('category');
         $this->reset('show');
+        $this->reportedById = Auth::user()->id;
         $this->dispatch('added');
+        $this->dispatch('reset-select-search');
     }
 }
