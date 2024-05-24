@@ -13,38 +13,33 @@
                             <div class="sm:col-span-5">
                                 <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('reported by') }}</label>
                                 <div class="mt-2">
-                                    <select wire:model="reportedById" id="reportedById" name="reportedById" autocomplete="reportedById" class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                        <option disabled>{{ t('Select User') }}</option>
-                                        @foreach($location_data->users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->lastname }}, {{ $user->firstname }}</option>
-                                        @endforeach
-                                    </select>
+                                    <x-select-search
+                                        :items="$selectSearchUser"
+                                        placeholderMessage="{{  t('Who reported the incident?') }}"
+                                        noMatchMessage="{{ t('Sorry, no user was found for your request.') }}"
+                                        itemIdKey="reportedById"
+                                    ></x-select-search>
                                 </div>
                             </div>
-                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-2 relative">
+                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-5 relative">
                                 <label
                                     for="category"
                                     class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">
                                     {{ t('Category') }}
                                 </label>
                                 <div class="mt-2">
-                                    <select
-                                        wire:model.change="categoryId"
-                                        id="category" name="category"
-                                        autocomplete="category"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 dark:bg-gray-700 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 @error('categoryId') text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 focus:outline-none border-red-300 @enderror"
-                                    >
-                                        <option>{{ t('Select Category') }}</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <x-select-search
+                                        :items="$selectSearchCategory"
+                                        placeholderMessage="{{ t('Which category does the incident fall into?') }}"
+                                        noMatchMessage="{{ t('No matching category found!') }}"
+                                        itemIdKey="categoryId"
+                                    ></x-select-search>
                                 </div>
                                 @error('categoryId')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-4 items-center">
+                            <div wire:loading.class="opacity-50" wire:target="categoryId" class="sm:col-span-5 items-center">
                                 <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('Involved') }}</label>
                                 <div class="mt-2 items-center space-x-2">
                                     @if(!$category || !$category->rescue_possible && !$category->fire_possible && !$category->police_possible)
