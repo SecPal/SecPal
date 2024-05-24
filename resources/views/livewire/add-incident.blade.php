@@ -14,7 +14,7 @@
                                 <label for="reportedById" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('reported by') }}</label>
                                 <div class="mt-2">
                                     <x-select-search
-                                        :items="$selectSearchData"
+                                        :items="$selectSearchUser"
                                         placeholderMessage="{{  t('Who reported the incident?') }}"
                                         noMatchMessage="{{ t('Sorry, no user was found for your request.') }}"
                                         itemIdKey="reportedById"
@@ -29,7 +29,7 @@
                                 </label>
                                 <div class="mt-2">
                                     <x-select-search
-                                        :items="$categorySearch"
+                                        :items="$selectSearchCategory"
                                         placeholderMessage="{{ t('Which category does the incident fall into?') }}"
                                         noMatchMessage="{{ t('No matching category found!') }}"
                                         itemIdKey="categoryId"

@@ -65,9 +65,9 @@ class AddIncident extends Component
     #[Validate('numeric', message: 'Don\'t mess around!')]
     public int $reportedById;
 
-    public $selectSearchData;
+    public $selectSearchUser;
 
-    public $categorySearch;
+    public $selectSearchCategory;
 
     public array $participants;
 
@@ -77,8 +77,8 @@ class AddIncident extends Component
         $this->reportedById = Auth::user()->id;
         $this->setDateTimeNow();
         $this->categories = $this->getCategories();
-        $this->categorySearch = $this->getCategorySearchData();
-        $this->selectSearchData = $this->getSelectSearchData();
+        $this->selectSearchCategory = $this->getSelectSearchCategory();
+        $this->selectSearchUser = $this->getSelectSearchUser();
         $this->addNewParticipantRow();
     }
 
@@ -142,7 +142,7 @@ class AddIncident extends Component
         ]);
     }
 
-    public function getSelectSearchData(): array
+    public function getSelectSearchUser(): array
     {
         return collect($this->location_data->users)->map(function ($user) {
             return [
@@ -153,7 +153,7 @@ class AddIncident extends Component
         })->all();
     }
 
-    public function getCategorySearchData(): array
+    public function getSelectSearchCategory(): array
     {
         return collect($this->categories)->map(function ($category) {
             return [

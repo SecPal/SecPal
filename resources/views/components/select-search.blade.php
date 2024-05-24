@@ -37,7 +37,7 @@
                         @change="query = $event.target.value"
                         @blur="query = ''"
                         @keydown.escape="query = ''"
-                        class="block w-full rounded-md border-0 pr-10 py-1.5 dark:bg-gray-700 text-gray-900 dark:text-gray-50 placeholder:text-gray-400 dark:placeholder:text-gray-600 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm"
+                        class="block w-full rounded-md border-0 pr-10 py-1.5 dark:bg-gray-700 text-gray-900 dark:text-gray-50 placeholder:text-gray-600 dark:placeholder:text-gray-400 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm"
                         :placeholder="placeholderMessage"
                         wire:blur="$refresh"
                     />
