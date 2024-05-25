@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 namespace App\Livewire;
 
 use App\Models\Category;
