@@ -8,3 +8,15 @@ if (! function_exists('checkUserShift')) {
         }
     }
 }
+
+if (! function_exists('limitAndCleanString')) {
+    function limitAndCleanString($string, $limit = 100): string
+    {
+        return strip_tags(
+            Str::of($string)
+                ->limit($limit)
+                ->replace('</li><li>', ', ')
+                ->replace("</p>\n\n<p>", ', ')
+        );
+    }
+}

@@ -58,10 +58,10 @@
                             </dl>
                         </td>
                         <td class="flex-auto px-3 py-4 text-sm text-gray-900 dark:text-gray-400">
-                            {{ strip_tags(Str::of($journal->description)->limit(100)) }}
+                            {{ limitAndCleanString($journal->description) }}
                         </td>
                         <td class="hidden flex-auto px-3 py-4 text-sm text-gray-900 dark:text-gray-400 sm:table-cell">
-                            {{ strip_tags(Str::of($journal->measures)->limit(100)->replace("\n", ', ')) }}
+                            {{  limitAndCleanString($journal->measures) }}
                         </td>
                         <td class="hidden px-3 py-4 text-sm text-gray-900 dark:text-gray-400 lg:table-cell">{{ $journal->reportedBy->lastname }}, {{ $journal->reportedBy->firstname }}</td>
                         <td class="py-4 pl-3 pr-0 text-right text-sm font-medium">
