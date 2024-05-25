@@ -83,13 +83,15 @@ class Journal extends Component
 
     public function getSelectSearchLocation(): array
     {
-        return collect($this->locations)->map(function ($location) {
+        return collect($this->locations)->filter(function ($location) {
+            return $this->user->canAny(['viewRecentJournal', 'viewFullJournal'], $location);
+        })->map(function ($location) {
             return [
                 'id' => $location->id,
                 'label' => $location->name.' - '.$location->location,
                 'disabled' => false, // Assuming all locations are not disabled by default.
             ];
-        })->all();
+        })->values()->all();
     }
 
     #[On('shift-changed')]
