@@ -10,7 +10,6 @@ use App\Models\Journal as JournalModel;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
