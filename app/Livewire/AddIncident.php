@@ -49,11 +49,11 @@ class AddIncident extends Component
     public $peopleInvolved = 1;
 
     #[Validate('required', message: 'A meaningful incident description is required.')]
-    #[Validate('min:20', message: 'A meaningful incident description should be longer than 20 characters.')]
+    #[Validate('min:27', message: 'A meaningful incident description should be longer than 20 characters.')]
     public string $incidentDescription = '';
 
     #[Validate('required', message: 'A meaningful description of the measures taken is required.')]
-    #[Validate('min:20', message: 'A meaningful description of the measures taken should be longer than 20 characters.')]
+    #[Validate('min:27', message: 'A meaningful description of the measures taken should be longer than 20 characters.')]
     public string $measures = '';
 
     #[Validate('required', message: 'The correct date of the incident is required.')]
@@ -471,5 +471,6 @@ class AddIncident extends Component
         $this->reportedById = Auth::user()->id;
         $this->dispatch('added');
         $this->dispatch('reset-select-search');
+        $this->dispatch('resetQuill');
     }
 }
