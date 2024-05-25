@@ -30,6 +30,8 @@ class Shift extends Component
 
     public $shift_location;
 
+    public $selectSearchLocation;
+
     public function mount($identifier): void
     {
         $this->identifier = $identifier;
@@ -37,6 +39,7 @@ class Shift extends Component
         $this->shift_start = $this->getInitialShiftStart();
         $this->shift_end = $this->getInitialShiftEnd();
         $this->canWork = Gate::allows('work', $this->getAuthenticatedUser());
+        $this->selectSearchLocation = $this->getSelectSearchLocation();
     }
 
     #[On('start-shift')]
@@ -68,6 +71,17 @@ class Shift extends Component
         $roundedTimeInMinutes = round($currentTimeInMinutes / 15) * 15;
 
         return date('H:i', $roundedTimeInMinutes * 60);
+    }
+
+    public function getSelectSearchLocation(): array
+    {
+        return collect($this->locations)->map(function ($location) {
+            return [
+                'id' => $location->id,
+                'label' => $location->name.' - '.$location->location,
+                'disabled' => false, // Assuming all locations are not disabled by default.
+            ];
+        })->all();
     }
 
     public function startShift(): void

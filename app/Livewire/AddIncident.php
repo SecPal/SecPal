@@ -163,7 +163,7 @@ class AddIncident extends Component
             return [
                 'id' => $category->id,
                 'label' => $category->name,
-                'disabled' => false, // Assuming all users are not disabled by default.
+                'disabled' => false, // Assuming all locations are not disabled by default.
             ];
         })->all();
     }

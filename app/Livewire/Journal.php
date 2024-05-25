@@ -24,12 +24,15 @@ class Journal extends Component
 
     public User $user;
 
+    public $selectSearchLocation;
+
     public function mount(): void
     {
         $this->user = $this->getAuthenticatedUser();
         $this->loadLocations();
         $this->actual_location = $this->user->getLocationId();
         $this->setLocationData($this->actual_location);
+        $this->selectSearchLocation = $this->getSelectSearchLocation();
     }
 
     public function render()
@@ -77,6 +80,17 @@ class Journal extends Component
     private function getAuthenticatedUser(): User
     {
         return Auth::user();
+    }
+
+    public function getSelectSearchLocation(): array
+    {
+        return collect($this->locations)->map(function ($location) {
+            return [
+                'id' => $location->id,
+                'label' => $location->name.' - '.$location->location,
+                'disabled' => false, // Assuming all locations are not disabled by default.
+            ];
+        })->all();
     }
 
     #[On('shift-changed')]
