@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 namespace App\Livewire;
 
 use App\Models\Journal as JournalModel;
@@ -30,7 +34,7 @@ class Journal extends Component
 
     public function render()
     {
-        $this->checkUserShift();
+        checkUserShift($this->user);
 
         $journals = JournalModel::where('location_id', $this->actual_location)
             ->with('category')
@@ -68,14 +72,6 @@ class Journal extends Component
     {
         $this->locations = $this->user->can('viewAnyJournal', Location::class)
             ? Location::all() : $this->user->locations;
-    }
-
-    private function checkUserShift(): void
-    {
-        if (! Gate::allows('work', $this->user)) {
-            view('livewire.no-shift');
-            exit;
-        }
     }
 
     private function getAuthenticatedUser(): User
