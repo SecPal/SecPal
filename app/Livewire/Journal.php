@@ -10,7 +10,6 @@ use App\Models\Journal as JournalModel;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -24,12 +23,15 @@ class Journal extends Component
 
     public User $user;
 
+    public $selectSearchLocation;
+
     public function mount(): void
     {
         $this->user = $this->getAuthenticatedUser();
         $this->loadLocations();
         $this->actual_location = $this->user->getLocationId();
         $this->setLocationData($this->actual_location);
+        $this->selectSearchLocation = $this->getSelectSearchLocation();
     }
 
     public function render()
@@ -77,6 +79,19 @@ class Journal extends Component
     private function getAuthenticatedUser(): User
     {
         return Auth::user();
+    }
+
+    public function getSelectSearchLocation(): array
+    {
+        return collect($this->locations)->filter(function ($location) {
+            return $this->user->canAny(['viewRecentJournal', 'viewFullJournal'], $location);
+        })->map(function ($location) {
+            return [
+                'id' => $location->id,
+                'label' => $location->name.' - '.$location->location,
+                'disabled' => false, // Assuming all locations are not disabled by default.
+            ];
+        })->values()->all();
     }
 
     #[On('shift-changed')]
