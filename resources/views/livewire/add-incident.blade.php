@@ -170,11 +170,7 @@
                                     {{ t('Incident Description') }}
                                 </label>
                                 <div class="mt-2">
-                                    <textarea
-                                        wire:model.lazy="incidentDescription"
-                                        id="incidentDescription" name="incidentDescription" rows="3"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('incidentDescription') text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 focus:outline-none border-red-300 @enderror">
-                                    </textarea>
+                                    <x-quill-editor model="incidentDescription" />
                                 </div>
                                 @error('incidentDescription')
                                     <div class="mt-3">
@@ -198,10 +194,7 @@
                                     {{ t('Measures taken') }}
                                 </label>
                                 <div class="mt-2">
-                                    <textarea wire:model.lazy="measures"
-                                              id="measures" name="measures" rows="3"
-                                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:bg-gray-700 dark:text-gray-50 shadow-sm ring-1 dark:ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:focus:ring-2 dark:focus:ring-inset dark:focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('measures') text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 focus:outline-none border-red-300 @enderror">
-                                    </textarea>
+                                    <x-quill-editor model="measures" />
                                 </div>
                                 @error('measures')
                                     <div class="mt-3">

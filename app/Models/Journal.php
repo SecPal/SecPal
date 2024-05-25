@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright (c) 2024 Holger Schmermbeck. Licensed under the EUPL-1.2 or later.
+ */
+
 namespace App\Models;
 
 use Guava\Sqids\Concerns\HasSqids;
@@ -9,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Mews\Purifier\Casts\CleanHtml;
 use Overtrue\LaravelVersionable\Versionable;
 
 class Journal extends Model
@@ -82,6 +87,8 @@ class Journal extends Model
     {
         return [
             'incident_time' => 'datetime',
+            'description' => CleanHtml::class,
+            'measures' => CleanHtml::class,
         ];
     }
 }
