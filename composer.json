@@ -23,6 +23,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.3",
+        "mews/purifier": "^3.4",
         "overtrue/laravel-versionable": "^5.1",
         "santigarcor/laratrust": "^8.2",
         "spatie/laravel-ray": "^1.35",
