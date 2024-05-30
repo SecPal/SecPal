@@ -83,12 +83,36 @@
                                 </button>
                             @endif
                         </td>
-                        <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <button type="button" class="hover:bg-gray-200 dark:hover:bg-gray-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="grey" class="h-6 w-6 dark:stroke-white">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                </svg>
-                            </button>
+                        <td class="whitespace-nowrap p-3 text-sm">
+                            <div class="flex items-center justify-end">
+                                <x-menu>
+                                    <x-menu.button class="rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+                                        <x-icon.ellipsis-horizontal />
+                                    </x-menu.button>
+
+                                    <x-menu.items>
+                                        <x-menu.close>
+                                            <x-menu.item
+                                                wire:click="edit({{ $journal->id }})"
+{{--                                                wire:confirm="Are you sure you want to refund this order?"--}}
+                                            >
+                                                {{ t('Edit') }}
+                                            </x-menu.item>
+                                        </x-menu.close>
+
+                                        @can('delete', $journal)
+                                            <x-menu.close>
+                                                <x-menu.item
+                                                    wire:click="delete({{ $journal->id }})"
+                                                    wire:confirm.prompt="{{ t('Are you sure you want to delete this incident?\n\nType the incident # to confirm:') }}|{{ $journal->sqid }}"
+                                                >
+                                                    {{ t('Delete') }}
+                                                </x-menu.item>
+                                            </x-menu.close>
+                                        @endcan
+                                    </x-menu.items>
+                                </x-menu>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

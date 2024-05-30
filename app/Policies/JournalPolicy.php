@@ -29,6 +29,11 @@ class JournalPolicy
 
     public function delete(User $user, Journal $journal): bool
     {
+        if ($user->isAbleTo('delete-journal')) {
+            return true;
+        }
+
+        return $user->isAbleTo('delete-journal', $journal->location_id);
     }
 
     public function restore(User $user, Journal $journal): bool

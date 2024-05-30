@@ -94,6 +94,14 @@ class Journal extends Component
         })->values()->all();
     }
 
+    public function delete($journalId): void
+    {
+        ray('lösche');
+        $journal = JournalModel::findOrFail($journalId);
+        $this->authorize('delete', $journal);
+        $journal->delete();
+    }
+
     #[On('shift-changed')]
     public function shiftChanged(): void
     {
