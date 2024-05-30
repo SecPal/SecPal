@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('number')->nullable();
             $table->string('zipcode')->nullable();
             $table->string('city')->nullable();
-            $table->date('ban_since');
-            $table->date('ban_until');
-            $table->foreignId('journal_id')->constrained()->onDelete('cascade');
             $table->foreignId('customer_id')->nullable();
             $table->foreignId('location_id')->nullable();
             $table->softDeletes();

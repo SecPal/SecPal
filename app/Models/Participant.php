@@ -20,11 +20,6 @@ class Participant extends Model
         'number',
         'zipcode',
         'city',
-        'ban_since',
-        'ban_until',
-        'journal_id',
-        'customer_id',
-        'location_id',
     ];
 
     public function journal(): BelongsTo
