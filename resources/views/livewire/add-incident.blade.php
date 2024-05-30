@@ -267,13 +267,13 @@
                                             <div class="sm:col-span-4 items-center">
                                                 <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('further information') }}</label>
                                                 <div class="mt-2 items-center space-x-2">
-                                                    @if(isset($this->form->participants[$loop->index]['id']))
+                                                    @if($this->form->participants[$loop->index]['longest_ban_date'])
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                            {{ t('house ban since') }} {{ \Carbon\Carbon::parse($this->form->participants[$loop->index]['ban_since'])->format('d.m.Y') }}, {{ count($this->form->participants[$loop->index]['trespasses']) }} {{ np('Trespasses', 'Trespass', 'Trespasses', count($this->form->participants[$loop->index]['trespasses'])) }}
+                                                            {{ t('existing house ban') }}, {{ count($this->form->participants[$loop->index]['trespasses']) }} {{ np('trespasses', 'previous trespass', 'previous trespassing', count($this->form->participants[$loop->index]['trespasses'])) }}
                                                         </p>
                                                     @else
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                                            {{ t('No further information found.') }}
+                                                            {{ t('No current house ban found.') }}
                                                         </p>
                                                     @endif
                                                 </div>

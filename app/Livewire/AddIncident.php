@@ -8,7 +8,6 @@ namespace App\Livewire;
 
 use App\Livewire\Forms\IncidentForm;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class AddIncident extends Component
