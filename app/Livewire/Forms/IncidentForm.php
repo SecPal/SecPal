@@ -7,6 +7,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Category;
+use App\Models\HouseBan;
 use App\Models\Journal;
 use App\Models\Participant;
 use App\Models\Trespass;
@@ -236,14 +237,10 @@ class IncidentForm extends Form
 
     private function findOrCreateParticipant($lastname, $firstname, $date_of_birth): array
     {
-        return Participant::where(function ($query) {
-            $query->where('customer_id', $this->location_data->customer_id)
-                ->orWhere('location_id', $this->location_data->id);
-        })
-            ->where('lastname', $lastname)
+        // First, we find or create the participant.
+        $participant = Participant::where('lastname', $lastname)
             ->where('firstname', $firstname)
             ->where('date_of_birth', $date_of_birth)
-            ->where('ban_until', '>=', $this->incidentDate)
             ->firstOrNew(
                 [
                     'lastname' => $lastname,
@@ -259,8 +256,28 @@ class IncidentForm extends Form
                     'zipcode' => '',
                     'city' => '',
                 ]
-            )->load('trespasses')
-            ->toArray();
+            );
+
+        // Now, check if a ban exists for this participant that is not expired yet.
+        $banEndDates = HouseBan::where('participant_id', $participant->id)
+            ->where(function ($query) {
+                $query->where('customer_id', $this->location_data->customer_id)
+                    ->orWhere('location_id', $this->location_data->id);
+            })
+            ->where('ban_end', '>=', $this->incidentDate)
+            ->pluck('ban_end');
+
+        $longestBanDate = null;
+        if ($banEndDates->max() != null) {
+            $longestBanDate = $banEndDates->max()->format('Y-m-d');
+        }
+
+        // If a ban exists, we add this information to the participant array.
+        $participantData = $participant->load('trespasses')->toArray();
+        $participantData['longest_ban_date'] = $longestBanDate;
+
+        // Finally, return the participant data.
+        return $participantData;
     }
 
     private function shouldRecalculateBanDate($participantIndex): bool
@@ -271,7 +288,7 @@ class IncidentForm extends Form
 
     private function recalculateBanDate($participantIndex, $dob, $age): void
     {
-        $this->participants[$participantIndex]['ban_until'] = $this->calculateBanUntil($dob, $age);
+        $this->processBanUntil($participantIndex, $this->calculateBanUntil($dob, $age));
     }
 
     private function validateAndCorrectDateOfBirth($dobInput): ?Carbon
@@ -310,11 +327,9 @@ class IncidentForm extends Form
             $date->addYears(2000);
         }
 
-        // Fetch the participant's existing ban_until date if it exists and is later than the new date
-        if (isset($this->participants[$participantIndex]['id'])) {
-            $existingParticipant = Participant::find($this->participants[$participantIndex]['id']);
-            if (Carbon::parse($existingParticipant->ban_until)->greaterThan($date)) {
-                $date = Carbon::parse($existingParticipant->ban_until);
+        if ($this->participants[$participantIndex]['longest_ban_date']) {
+            if (Carbon::parse($this->participants[$participantIndex]['longest_ban_date'])->greaterThan($date)) {
+                $date = Carbon::parse($this->participants[$participantIndex]['longest_ban_date']);
             }
         }
 
@@ -411,61 +426,35 @@ class IncidentForm extends Form
             'police_involved'
         );
 
-        foreach ($this->participants as $participant) {
-            if ($participant['lastname'] == '' || $this->involved == 0) {
+        foreach ($this->participants as $participantData) {
+            if ($participantData['lastname'] == '' || $this->involved == 0) {
                 continue;
             }
 
-            if (empty($participant['journal_id'])) {
-                $participant['ban_since'] = $this->incidentDate;
-                $participant['journal_id'] = $journal->id;
-                $participant['location_id'] = $this->location_data->id;
+            // Create or update a participant
+            $participant = Participant::createOrUpdate($participantData);
 
-                if ($this->location_data->customer->customer_wide_ban) {
-                    $participant['customer_id'] = $this->location_data->customer->id;
-                } else {
-                    $participant['customer_id'] = null;
-                }
+            if ($this->location_data->customer->customer_wide_ban) {
+                $participant['customer_id'] = $this->location_data->customer->id;
+            } else {
+                $participant['customer_id'] = null;
             }
 
-            $part = Participant::where('lastname', $participant['lastname'])
-                ->where('firstname', $participant['firstname'])
-                ->where('date_of_birth', $participant['date_of_birth'])
-                ->where('ban_since', $participant['ban_since'])
-                ->when($participant['customer_id'] !== null, function ($query) use ($participant) {
-                    return $query->where('customer_id', $participant['customer_id']);
-                })
-                ->when($participant['location_id'] !== null, function ($query) use ($participant) {
-                    return $query->where('location_id', $participant['location_id']);
-                })
-                ->first();
+            // create a new HouseBan
+            $houseBan = HouseBan::create([
+                'journal_id' => $journal->id,
+                'participant_id' => $participant->id,
+                'customer_id' => $participant->customer_id,
+                'location_id' => $this->location_data->id,
+                'ban_start' => $this->incidentDate,
+                'ban_end' => $participantData['ban_until'],
+            ]);
 
-            if ($part === null) {
-                // Record not found via above conditions, so create a new record.
-                Participant::create(
-                    [
-                        'lastname' => $participant['lastname'],
-                        'firstname' => $participant['firstname'],
-                        'date_of_birth' => $participant['date_of_birth'],
-                        'street' => $participant['street'],
-                        'number' => $participant['number'],
-                        'zipcode' => $participant['zipcode'],
-                        'city' => $participant['city'],
-                        'ban_since' => $participant['ban_since'],
-                        'ban_until' => $participant['ban_until'],
-                        'journal_id' => $participant['journal_id'],
-                        'customer_id' => $participant['customer_id'],
-                        'location_id' => $participant['location_id'],
-                    ]
-                );
-            } else {
-                // Record found, update it
-                $part->update($participant);
-
-                // create a trespass
+            // Check longest_ban_date and then create Trespass.
+            if ($participantData['longest_ban_date']) {
                 Trespass::create([
                     'journal_id' => $journal->id,
-                    'participant_id' => $part->id,
+                    'participant_id' => $participant->id,
                 ]);
             }
         }

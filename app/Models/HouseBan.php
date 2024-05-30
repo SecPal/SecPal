@@ -36,8 +36,8 @@ class HouseBan extends Model
     protected function casts(): array
     {
         return [
-            'ban_start' => 'date',
-            'ban_end' => 'date',
+            'ban_start' => 'datetime:Y-m-d',
+            'ban_end' => 'datetime:Y-m-d',
         ];
     }
 }
