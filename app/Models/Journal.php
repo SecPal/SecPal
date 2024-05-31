@@ -11,7 +11,7 @@ use Guava\Sqids\Sqids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mews\Purifier\Casts\CleanHtml;
 use Overtrue\LaravelVersionable\Versionable;
@@ -78,9 +78,9 @@ class Journal extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function participants(): HasMany
+    public function participants(): HasManyThrough
     {
-        return $this->hasMany(Participant::class, 'participant_id');
+        return $this->hasManyThrough(Participant::class, Trespass::class, 'journal_id', 'id', 'id', 'participant_id');
     }
 
     protected function casts(): array

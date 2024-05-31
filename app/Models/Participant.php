@@ -20,11 +20,6 @@ class Participant extends Model
         'number',
         'zipcode',
         'city',
-        'ban_since',
-        'ban_until',
-        'journal_id',
-        'customer_id',
-        'location_id',
     ];
 
     public function journal(): BelongsTo
@@ -41,8 +36,18 @@ class Participant extends Model
     {
         return [
             'date_of_birth' => 'datetime:Y-m-d',
-            'ban_since' => 'datetime:Y-m-d',
-            'ban_until' => 'datetime:Y-m-d',
         ];
+    }
+
+    public static function createOrUpdate(array $data): Participant
+    {
+        return self::updateOrCreate(
+            [
+                'lastname' => $data['lastname'],
+                'firstname' => $data['firstname'],
+                'date_of_birth' => $data['date_of_birth'],
+            ],
+            $data
+        );
     }
 }

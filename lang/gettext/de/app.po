@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-28T08:14:44+02:00\n"
-"PO-Revision-Date: 2024-05-28 08:14+0200\n"
+"POT-Creation-Date: 2024-05-31T00:29:23+02:00\n"
+"PO-Revision-Date: 2024-05-31 00:29+0200\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
@@ -186,19 +186,19 @@ msgid "further information"
 msgstr "weitere Informationen"
 
 #: resources/views/livewire/add-incident.blade.php:382
-msgid "house ban since"
-msgstr "Hausverbot seit"
+msgid "existing house ban"
+msgstr "bestehendes Hausverbot"
 
 #: resources/views/livewire/add-incident.blade.php:382
-msgctxt "Trespasses"
-msgid "Trespass"
-msgid_plural "Trespasses"
-msgstr[0] "Hausfriedensbruch"
-msgstr[1] "Hausfriedensbrüche"
+msgctxt "trespasses"
+msgid "previous trespass"
+msgid_plural "previous trespassing"
+msgstr[0] "vorheriger Hausfriedensbruch"
+msgstr[1] "vorherige Hausfriedensbrüche"
 
 #: resources/views/livewire/add-incident.blade.php:387
-msgid "No further information found."
-msgstr "Keine weiteren Informationen gefunden."
+msgid "No current house ban found."
+msgstr "Kein aktuelles Hausverbot gefunden."
 
 #: resources/views/livewire/add-incident.blade.php:395
 msgid "Street"
