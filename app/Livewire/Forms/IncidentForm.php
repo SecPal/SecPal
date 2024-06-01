@@ -72,6 +72,10 @@ class IncidentForm extends Form
     #[Validate(['nullable', 'integer'])]
     public $reviewed_by = '';
 
+    public bool $edit = false;
+
+    public ?Journal $journal;
+
     public function setEnvironmentData($location_data): void
     {
         $this->location_data = $location_data;
@@ -80,6 +84,64 @@ class IncidentForm extends Form
         $this->addNewParticipantRow();
 
         $this->categories = $this->getCategories();
+    }
+
+    public function setJournalData($journal): void
+    {
+        // abort unless user can update $journal
+        abort_unless(Auth::user()->can('update', $journal), 403);
+
+        $this->journal = $journal;
+
+        $houseBanParticipants = $journal->houseBanParticipants()
+            ->with('houseBans')
+            ->with('trespasses')
+            ->with(['latestActiveHouseBan' => function ($query) use ($journal) {
+                $incidentDate = $journal->incident_time->format('Y-m-d'); // Convert DateTime to date
+                $query->where('ban_start', '<=', $incidentDate)
+                    ->where('ban_end', '>', $incidentDate)
+                    ->latest('ban_end');
+            }])
+            ->get();
+
+        $this->participants = $houseBanParticipants->map(function ($participant) use ($journal) {
+
+            $latestActiveHouseBan = $participant->latestActiveHouseBan($journal->id, $journal->incident_time)->first();
+
+            $activeHouseBan = (bool) $latestActiveHouseBan;
+
+            $dateOfBirth = isset($participant->date_of_birth) ? $participant->date_of_birth->format('Y-m-d') : null;
+            $banUntil = isset($participant->houseBans[0]) ? $participant->houseBans[0]->ban_end->format('Y-m-d') : null;
+
+            return [
+                'lastname' => $participant->lastname ?? '',
+                'firstname' => $participant->firstname ?? '',
+                'date_of_birth' => $dateOfBirth ?? null,
+                'ban_until' => $banUntil ?? null,
+                'street' => $participant->street ?? '',
+                'number' => $participant->number ?? '',
+                'zipcode' => $participant->zipcode ?? '',
+                'city' => $participant->city ?? '',
+                'active_house_ban' => $activeHouseBan,
+                'trespasses' => $participant->trespasses,
+            ];
+        })->toArray();
+
+        $this->reported_by = $journal->reported_by;
+        $this->category_id = $journal->category_id;
+
+        $this->updatedCategoryId();
+
+        $this->area = $journal->area;
+        $this->police_involved = $journal->police_involved;
+        $this->rescue_involved = $journal->rescue_involved;
+        $this->fire_involved = $journal->fire_involved;
+        $this->involved = $journal->involved;
+        $this->incidentDate = $journal->incident_time->format('Y-m-d');
+        $this->incidentTime = $journal->incident_time->format('H:i');
+        $this->description = $journal->description;
+        $this->measures = $journal->measures;
+        $this->edit = true;
     }
 
     private function setDateTimeNow(): void
@@ -150,16 +212,16 @@ class IncidentForm extends Form
     //    public function updatedParticipants($propertyName): void
     //    {
     //        ray($propertyName);
-    //        $this->validateOnly($propertyName, [
-    //            'participants.*.lastname' => 'nullable|string|max:255',
-    //            'participants.*.firstname' => 'nullable|string|max:255',
-    //            'participants.*.date_of_birth' => 'nullable|date|before:today',
-    //            'participants.*.ban_until' => 'nullable|date|after:today',
-    //            'participants.*.street' => 'nullable|string',
-    //            'participants.*.number' => 'nullable|string',
-    //            'participants.*.zipcode' => 'nullable|numeric',
-    //            'participants.*.city' => 'nullable|string',
-    //        ]);
+    //            $this->validateOnly($propertyName, [
+    //                'participants.*.lastname' => 'nullable|string|max:255',
+    //                'participants.*.firstname' => 'nullable|string|max:255',
+    //                'participants.*.date_of_birth' => 'nullable|date|before:today',
+    //                'participants.*.ban_until' => 'nullable|date|after:today',
+    //                'participants.*.street' => 'nullable|string',
+    //                'participants.*.number' => 'nullable|string',
+    //                'participants.*.zipcode' => 'nullable|numeric',
+    //                'participants.*.city' => 'nullable|string',
+    //            ]);
     //    }
 
     private function handleParticipantInformationUpdate($splitField, $participantIndex, $newValue): void
@@ -258,23 +320,13 @@ class IncidentForm extends Form
                 ]
             );
 
-        // Now, check if a ban exists for this participant that is not expired yet.
-        $banEndDates = HouseBan::where('participant_id', $participant->id)
-            ->where(function ($query) {
-                $query->where('customer_id', $this->location_data->customer_id)
-                    ->orWhere('location_id', $this->location_data->id);
-            })
-            ->where('ban_end', '>=', $this->incidentDate)
-            ->pluck('ban_end');
+        $participantData = $participant->load(['latestActiveHouseBan' => function ($query) {
+            $query->where('ban_start', '<=', $this->incidentDate)
+                ->where('ban_end', '>', $this->incidentDate)
+                ->latest('ban_end');
+        }])->load('trespasses')->toArray();
 
-        $longestBanDate = null;
-        if ($banEndDates->max() != null) {
-            $longestBanDate = $banEndDates->max()->format('Y-m-d');
-        }
-
-        // If a ban exists, we add this information to the participant array.
-        $participantData = $participant->load('trespasses')->toArray();
-        $participantData['longest_ban_date'] = $longestBanDate;
+        $participantData['active_house_ban'] = (bool) $participantData['latest_active_house_ban'];
 
         // Finally, return the participant data.
         return $participantData;
@@ -327,9 +379,9 @@ class IncidentForm extends Form
             $date->addYears(2000);
         }
 
-        if ($this->participants[$participantIndex]['longest_ban_date']) {
-            if (Carbon::parse($this->participants[$participantIndex]['longest_ban_date'])->greaterThan($date)) {
-                $date = Carbon::parse($this->participants[$participantIndex]['longest_ban_date']);
+        if ($this->participants[$participantIndex]['active_house_ban']) {
+            if (Carbon::parse($this->participants[$participantIndex]['latest_active_house_ban']['ban_end'])->greaterThan($date)) {
+                $date = Carbon::parse($this->participants[$participantIndex]['latest_active_house_ban']['ban_end']);
             }
         }
 
@@ -397,33 +449,27 @@ class IncidentForm extends Form
         $this->validate();
         $dateTime = Carbon::parse($this->incidentDate.' '.$this->incidentTime.':00')->toDateTimeString();
 
-        // TODO check why $this->pull() is an undefined method
-        $journal = Journal::create([
-            'location_id' => $this->location_data->id,
-            'category_id' => $this->category_id,
-            'description' => $this->description,
-            'measures' => $this->measures,
-            'reported_by' => $this->reported_by,
-            'entry_by' => Auth::user()->id,
-            'area' => $this->area,
-            'involved' => $this->involved,
-            'rescue_involved' => $this->rescue_involved,
-            'fire_involved' => $this->fire_involved,
-            'police_involved' => $this->police_involved,
-            'incident_time' => $dateTime,
-        ]);
+        $id = $this->journal->id ?? null;
 
-        $this->reset(
-            'category_id',
-            'category',
-            'description',
-            'measures',
-            'reported_by',
-            'area',
-            'involved',
-            'rescue_involved',
-            'fire_involved',
-            'police_involved'
+        // TODO check why $this->pull() is an undefined method
+        $journal = Journal::updateOrCreate(
+            [
+                'id' => $id,
+            ],
+            [
+                'location_id' => $this->location_data->id,
+                'category_id' => $this->category_id,
+                'description' => $this->description,
+                'measures' => $this->measures,
+                'reported_by' => $this->reported_by,
+                'entry_by' => Auth::user()->id,
+                'area' => $this->area,
+                'involved' => $this->involved,
+                'rescue_involved' => $this->rescue_involved,
+                'fire_involved' => $this->fire_involved,
+                'police_involved' => $this->police_involved,
+                'incident_time' => $dateTime,
+            ]
         );
 
         foreach ($this->participants as $participantData) {
@@ -440,28 +486,49 @@ class IncidentForm extends Form
                 $participant['customer_id'] = null;
             }
 
-            // create a new HouseBan
-            $houseBan = HouseBan::create([
-                'journal_id' => $journal->id,
-                'participant_id' => $participant->id,
-                'customer_id' => $participant->customer_id,
-                'location_id' => $this->location_data->id,
-                'ban_start' => $this->incidentDate,
-                'ban_end' => $participantData['ban_until'],
-            ]);
-
-            // Check longest_ban_date and then create Trespass.
-            if ($participantData['longest_ban_date']) {
-                Trespass::create([
+            // update or create a new HouseBan
+            HouseBan::updateOrCreate(
+                [
                     'journal_id' => $journal->id,
                     'participant_id' => $participant->id,
-                ]);
+                ],
+                [
+                    'customer_id' => $participant->customer_id,
+                    'location_id' => $this->location_data->id,
+                    'ban_start' => $this->incidentDate,
+                    'ban_end' => $participantData['ban_until'],
+                ]
+            );
+
+            // Check active_house_ban and then create Trespass.
+            if ($participantData['active_house_ban']) {
+                Trespass::updateOrCreate(
+                    [
+                        'journal_id' => $journal->id,
+                        'participant_id' => $participant->id,
+                    ]
+                );
             }
         }
 
-        $this->participants = [];
-        $this->addNewParticipantRow();
+        if (! $this->edit) {
+            $this->reset(
+                'category_id',
+                'category',
+                'description',
+                'measures',
+                'reported_by',
+                'area',
+                'involved',
+                'rescue_involved',
+                'fire_involved',
+                'police_involved',
+            );
 
-        $this->reported_by = Auth::user()->id;
+            $this->participants = [];
+            $this->addNewParticipantRow();
+
+            $this->reported_by = Auth::user()->id;
+        }
     }
 }

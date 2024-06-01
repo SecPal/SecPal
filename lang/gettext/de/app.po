@@ -259,6 +259,14 @@ msgstr "Beschreibung"
 msgid "Action"
 msgstr "Aktion"
 
+#: resources/views/livewire/journal.blade.php:111
+msgid "Are you sure you want to delete this incident?\\n\\nType the incident # to confirm:"
+msgstr "Sind Sie sicher, dass Sie diesen Vorfall löschen möchten?\\n\\nGeben Sie zur Bestätigung die Vorgangsnummer ein:"
+
+#: resources/views/livewire/journal.blade.php:113
+msgid "Delete"
+msgstr "Löschen"
+
 #: resources/views/livewire/shift.blade.php:20
 msgid "End your shift!"
 msgstr "Beenden Sie Ihre Schicht!"

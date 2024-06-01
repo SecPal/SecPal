@@ -41,7 +41,7 @@ class Journal extends Component
         $journals = JournalModel::where('location_id', $this->actual_location)
             ->with('category')
             ->with('reportedBy')
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('incident_time', 'DESC')
             ->get();
 
         return view('livewire.journal',
@@ -92,6 +92,13 @@ class Journal extends Component
                 'disabled' => false, // Assuming all locations are not disabled by default.
             ];
         })->values()->all();
+    }
+
+    public function delete($journalId): void
+    {
+        $journal = JournalModel::findOrFail($journalId);
+        $this->authorize('delete', $journal);
+        $journal->delete();
     }
 
     #[On('shift-changed')]
