@@ -27,7 +27,7 @@
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                 @can('create-journal', $location_data)
-                    <livewire:add-incident :$location_data :key="$location_data->id" @added="$refresh" />
+                    <livewire:incident-modal :$location_data :key="$location_data->id" @added="$refresh" />
                 @endcan
             </div>
         </div>

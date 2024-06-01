@@ -10,7 +10,7 @@ use App\Livewire\Forms\IncidentForm;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class AddIncident extends Component
+class IncidentModal extends Component
 {
     public IncidentForm $form;
 
@@ -32,7 +32,7 @@ class AddIncident extends Component
 
     public function render()
     {
-        return view('livewire.add-incident');
+        return view('livewire.incident-modal');
     }
 
     public function updated($field, $newValue): void

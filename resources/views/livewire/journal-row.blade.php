@@ -52,7 +52,7 @@
 
 
                     @can('update', $journal)
-                        <livewire:add-incident :$location_data :key="$journal->id" :$journal @added="$refresh" />
+                        <livewire:incident-modal :$location_data :key="$journal->id" :$journal @added="$refresh" />
                     @endcan
 
                     @can('delete', $journal)
