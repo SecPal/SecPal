@@ -49,9 +49,13 @@
 {{--                            {{ t('Edit') }}--}}
 {{--                        </x-menu.item>--}}
 {{--                    </x-menu.close>--}}
-                    <livewire:add-incident :$location_data :key="$location_data->id" :$journal @added="$refresh" />
 
-                @can('delete', $journal)
+
+                    @can('update', $journal)
+                        <livewire:add-incident :$location_data :key="$journal->id" :$journal @added="$refresh" />
+                    @endcan
+
+                    @can('delete', $journal)
                         <x-menu.close>
                             <x-menu.item
                                 wire:click="$dispatch('deleted')"

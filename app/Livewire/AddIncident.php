@@ -27,7 +27,6 @@ class AddIncident extends Component
 
         if ($this->journal) {
             $this->form->setJournalData($this->journal);
-
         }
     }
 
@@ -48,16 +47,23 @@ class AddIncident extends Component
 
     public function save(): void
     {
-        $this->authorize('create-journal', $this->location_data);
         if ($this->form->edit) {
-            dd('edit');
+            $this->authorize('update', $this->form->journal);
         } else {
-            $this->form->save();
+            $this->authorize('create-journal', $this->location_data);
+        }
+
+        $this->form->save();
+
+        if ($this->form->edit) {
+            $this->journal->refresh();
+        } else {
+            $this->dispatch('resetQuill');
+
         }
 
         $this->reset('show');
         $this->dispatch('added');
         $this->dispatch('reset-select-search');
-        $this->dispatch('resetQuill');
     }
 }

@@ -74,6 +74,8 @@ class IncidentForm extends Form
 
     public bool $edit = false;
 
+    public ?Journal $journal;
+
     public function setEnvironmentData($location_data): void
     {
         $this->location_data = $location_data;
@@ -86,6 +88,11 @@ class IncidentForm extends Form
 
     public function setJournalData($journal): void
     {
+        // abort unless user can update $journal
+        abort_unless(Auth::user()->can('update', $journal), 403);
+
+        $this->journal = $journal;
+
         $houseBanParticipants = $journal->houseBanParticipants()
             ->with('houseBans')
             ->with('trespasses')
@@ -130,6 +137,8 @@ class IncidentForm extends Form
         $this->rescue_involved = $journal->rescue_involved;
         $this->fire_involved = $journal->fire_involved;
         $this->involved = $journal->involved;
+        $this->incidentDate = $journal->incident_time->format('Y-m-d');
+        $this->incidentTime = $journal->incident_time->format('H:i');
         $this->description = $journal->description;
         $this->measures = $journal->measures;
         $this->edit = true;
@@ -440,34 +449,27 @@ class IncidentForm extends Form
         $this->validate();
         $dateTime = Carbon::parse($this->incidentDate.' '.$this->incidentTime.':00')->toDateTimeString();
 
-        // TODO check why $this->pull() is an undefined method
-        $journal = Journal::create([
-            'location_id' => $this->location_data->id,
-            'category_id' => $this->category_id,
-            'description' => $this->description,
-            'measures' => $this->measures,
-            'reported_by' => $this->reported_by,
-            'entry_by' => Auth::user()->id,
-            'area' => $this->area,
-            'involved' => $this->involved,
-            'rescue_involved' => $this->rescue_involved,
-            'fire_involved' => $this->fire_involved,
-            'police_involved' => $this->police_involved,
-            'incident_time' => $dateTime,
-        ]);
+        $id = $this->journal->id ?? null;
 
-        $this->reset(
-            'category_id',
-            'category',
-            'description',
-            'measures',
-            'reported_by',
-            'area',
-            'involved',
-            'rescue_involved',
-            'fire_involved',
-            'police_involved',
-            'edit'
+        // TODO check why $this->pull() is an undefined method
+        $journal = Journal::updateOrCreate(
+            [
+                'id' => $id,
+            ],
+            [
+                'location_id' => $this->location_data->id,
+                'category_id' => $this->category_id,
+                'description' => $this->description,
+                'measures' => $this->measures,
+                'reported_by' => $this->reported_by,
+                'entry_by' => Auth::user()->id,
+                'area' => $this->area,
+                'involved' => $this->involved,
+                'rescue_involved' => $this->rescue_involved,
+                'fire_involved' => $this->fire_involved,
+                'police_involved' => $this->police_involved,
+                'incident_time' => $dateTime,
+            ]
         );
 
         foreach ($this->participants as $participantData) {
@@ -484,28 +486,49 @@ class IncidentForm extends Form
                 $participant['customer_id'] = null;
             }
 
-            // create a new HouseBan
-            $houseBan = HouseBan::create([
-                'journal_id' => $journal->id,
-                'participant_id' => $participant->id,
-                'customer_id' => $participant->customer_id,
-                'location_id' => $this->location_data->id,
-                'ban_start' => $this->incidentDate,
-                'ban_end' => $participantData['ban_until'],
-            ]);
+            // update or create a new HouseBan
+            HouseBan::updateOrCreate(
+                [
+                    'journal_id' => $journal->id,
+                    'participant_id' => $participant->id,
+                ],
+                [
+                    'customer_id' => $participant->customer_id,
+                    'location_id' => $this->location_data->id,
+                    'ban_start' => $this->incidentDate,
+                    'ban_end' => $participantData['ban_until'],
+                ]
+            );
 
             // Check active_house_ban and then create Trespass.
             if ($participantData['active_house_ban']) {
-                Trespass::create([
-                    'journal_id' => $journal->id,
-                    'participant_id' => $participant->id,
-                ]);
+                Trespass::updateOrCreate(
+                    [
+                        'journal_id' => $journal->id,
+                        'participant_id' => $participant->id,
+                    ]
+                );
             }
         }
 
-        $this->participants = [];
-        $this->addNewParticipantRow();
+        if (! $this->edit) {
+            $this->reset(
+                'category_id',
+                'category',
+                'description',
+                'measures',
+                'reported_by',
+                'area',
+                'involved',
+                'rescue_involved',
+                'fire_involved',
+                'police_involved',
+            );
 
-        $this->reported_by = Auth::user()->id;
+            $this->participants = [];
+            $this->addNewParticipantRow();
+
+            $this->reported_by = Auth::user()->id;
+        }
     }
 }

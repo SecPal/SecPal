@@ -25,6 +25,15 @@ class JournalPolicy
 
     public function update(User $user, Journal $journal): bool
     {
+        if ($user->isAbleTo('edit-journal')) {
+            return true;
+        }
+
+        if ($journal->entry_by == $user->id) {
+            return true;
+        }
+
+        return $user->isAbleTo('edit-journal', $journal->location_id);
     }
 
     public function delete(User $user, Journal $journal): bool

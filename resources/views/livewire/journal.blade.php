@@ -35,7 +35,7 @@
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead>
                 <tr>
-                    <th scope="col" class="py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Incident') }}</th>
+                    <th scope="col" class="py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('AddIncident') }}</th>
                     <th scope="col" class="hidden py-3.5 px-2 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 lg:table-cell">{{ t('Date') }}</th>
                     <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Category') }}</th>
                     <th scope="col" class="flex-auto p-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">{{ t('Description') }}</th>
