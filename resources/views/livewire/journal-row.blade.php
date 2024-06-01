@@ -42,15 +42,6 @@
                 </x-menu.button>
 
                 <x-menu.items>
-{{--                    <x-menu.close>--}}
-{{--                        <x-menu.item--}}
-{{--                            wire:click="edit({{ $journal->id }})"--}}
-{{--                        >--}}
-{{--                            {{ t('Edit') }}--}}
-{{--                        </x-menu.item>--}}
-{{--                    </x-menu.close>--}}
-
-
                     @can('update', $journal)
                         <livewire:incident-modal :$location_data :key="$journal->id" :$journal @added="$refresh" />
                     @endcan

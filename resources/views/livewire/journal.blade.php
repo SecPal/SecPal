@@ -13,16 +13,6 @@
                         noMatchMessage="{{ t('Sorry, no location was found for your request.') }}"
                         itemIdKey="actual_location"
                     ></x-select-search>
-{{--                    <select wire:model.live="actual_location" class="text-base w-64 bg-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 py-2 pl-1 pr-10 text-gray-900 dark:text-white border-0 ring-0 rounded-md text-left">--}}
-{{--                        <option value="">{{ t('Select your location') }}</option>--}}
-{{--                        @foreach($locations as $location)--}}
-{{--                            @canany(['viewRecentJournal', 'viewFullJournal'], $location)--}}
-{{--                                <option value="{{ $location->id }}">--}}
-{{--                                    {{ $location->name }} - {{ $location->location }}--}}
-{{--                                </option>--}}
-{{--                            @endcanany--}}
-{{--                        @endforeach--}}
-{{--                    </select>--}}
                 </div>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
