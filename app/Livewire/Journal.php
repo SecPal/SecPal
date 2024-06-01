@@ -41,7 +41,7 @@ class Journal extends Component
         $journals = JournalModel::where('location_id', $this->actual_location)
             ->with('category')
             ->with('reportedBy')
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('incident_time', 'DESC')
             ->get();
 
         return view('livewire.journal',
@@ -96,7 +96,6 @@ class Journal extends Component
 
     public function delete($journalId): void
     {
-        ray('lösche');
         $journal = JournalModel::findOrFail($journalId);
         $this->authorize('delete', $journal);
         $journal->delete();

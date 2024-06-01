@@ -1,8 +1,21 @@
 <div>
     <x-dialog wire:model="show">
-        <x-dialog.open>
-            <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline dark:focus-visible:ring-2 dark:focus-visible:ring-offset-2 dark:focus-visible:ring-indigo-500">{{ t('Add incident') }}</button>
-        </x-dialog.open>
+        @if(isset($journal))
+            <x-menu.close>
+                <x-dialog.open>
+                    <x-menu.item
+{{--                        wire:click="edit({{ $journal->id }})"--}}
+                    >
+                        {{ t('Edit') }}
+                    </x-menu.item>
+                </x-dialog.open>
+            </x-menu.close>
+        @else
+            <x-dialog.open>
+                <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline dark:focus-visible:ring-2 dark:focus-visible:ring-offset-2 dark:focus-visible:ring-indigo-500">{{ t('Add incident') }}</button>
+            </x-dialog.open>
+        @endif
+
         <x-dialog.panel>
             <form wire:submit="save">
                 <div class="space-y-12">
@@ -267,7 +280,7 @@
                                             <div class="sm:col-span-4 items-center">
                                                 <label for="peopleInvolved" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50">{{ t('further information') }}</label>
                                                 <div class="mt-2 items-center space-x-2">
-                                                    @if($this->form->participants[$loop->index]['longest_ban_date'])
+                                                    @if($this->form->participants[$loop->index]['active_house_ban'])
                                                         <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
                                                             {{ t('existing house ban') }}, {{ count($this->form->participants[$loop->index]['trespasses']) }} {{ np('trespasses', 'previous trespass', 'previous trespassing', count($this->form->participants[$loop->index]['trespasses'])) }}
                                                         </p>

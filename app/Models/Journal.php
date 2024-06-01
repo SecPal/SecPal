@@ -78,9 +78,37 @@ class Journal extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function participants(): HasManyThrough
+    public function houseBanParticipants(): HasManyThrough
     {
-        return $this->hasManyThrough(Participant::class, Trespass::class, 'journal_id', 'id', 'id', 'participant_id');
+        return $this->hasManyThrough(
+            Participant::class,
+            HouseBan::class,
+            'journal_id', // Foreign key on HouseBan model...
+            'id', // Foreign key on Participant model...
+            'id', // Local key on Journal model...
+            'participant_id' // Local key on HouseBan model...
+        );
+    }
+
+    public function trespassParticipants(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Participant::class,
+            Trespass::class,
+            'journal_id', // Foreign key on Trespass model...
+            'id', // Foreign key on Participant model...
+            'id', // Local key on Journal model...
+            'participant_id' // Local key on Trespass model...
+        );
+    }
+
+    // Function to get all unique Participants related to a Journal through both HouseBan and Trespass
+    public function participants()
+    {
+        $houseBanParticipants = $this->houseBanParticipants()->get()->keyBy('id');
+        $trespassParticipants = $this->trespassParticipants()->get()->keyBy('id');
+
+        return $houseBanParticipants->concat($trespassParticipants)->unique('id');
     }
 
     protected function casts(): array

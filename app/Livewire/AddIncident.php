@@ -18,10 +18,17 @@ class AddIncident extends Component
 
     public $location_data;
 
+    public $journal;
+
     public function mount(): void
     {
         $this->authorize('work', Auth::user());
         $this->form->setEnvironmentData($this->location_data);
+
+        if ($this->journal) {
+            $this->form->setJournalData($this->journal);
+
+        }
     }
 
     public function render()
@@ -42,7 +49,11 @@ class AddIncident extends Component
     public function save(): void
     {
         $this->authorize('create-journal', $this->location_data);
-        $this->form->save();
+        if ($this->form->edit) {
+            dd('edit');
+        } else {
+            $this->form->save();
+        }
 
         $this->reset('show');
         $this->dispatch('added');
