@@ -49,7 +49,7 @@
                                     @endif
                                     @if($this->form->category && $this->form->category->rescue_possible)
                                         <input
-                                            wire:model="rescue_involved"
+                                            wire:model="form.rescue_involved"
                                             id="rescue_involved" name="rescue_involved"
                                             type="checkbox"
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400"
@@ -60,7 +60,7 @@
                                     @endif
                                     @if($this->form->category && $this->form->category->fire_possible)
                                         <input
-                                            wire:model="fire_involved"
+                                            wire:model="form.fire_involved"
                                             id="fire_involved" name="fire_involved"
                                             type="checkbox"
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400">
@@ -70,7 +70,7 @@
                                     @endif
                                     @if($this->form->category && $this->form->category->police_possible)
                                         <input
-                                            wire:model="police_involved"
+                                            wire:model="form.police_involved"
                                             id="police_involved" name="police_involved"
                                             type="checkbox"
                                             class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 dark:bg-gray-700 focus:ring-indigo-600 dark:focus:ring-indigo-400">
