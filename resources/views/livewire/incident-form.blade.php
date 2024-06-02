@@ -1,7 +1,7 @@
 <form wire:submit="save">
     <div class="space-y-12">
         <div class="border-b border-gray-900/10 dark:border-gray-800/10 pb-12">
-            <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">{{ t('AddIncident Report') }} - {{ $location_data->name }} - {{ $location_data->location }}</h2>
+            <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">{{ t('Incident Report') }} - {{ $location_data->name }} - {{ $location_data->location }}</h2>
             <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">{{ t('This report will be read by superiors and customers. Make sure it\'s complete and worded correctly.') }}</p>
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div class="sm:col-span-5">
@@ -161,7 +161,7 @@
                         for="description"
                         class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
                     >
-                        {{ t('AddIncident Description') }}
+                        {{ t('Incident Description') }}
                     </label>
                     <div class="mt-2">
                         <x-quill-editor model="form.description" />
@@ -175,7 +175,7 @@
                     @else
                         <div class="mt-3">
                             <p class="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                                {{ t('The report about the AddIncident and what happened.') }}
+                                {{ t('The report about the Incident and what happened.') }}
                             </p>
                         </div>
                     @enderror
