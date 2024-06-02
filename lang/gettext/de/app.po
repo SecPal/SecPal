@@ -7,8 +7,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-31T00:29:23+02:00\n"
-"PO-Revision-Date: 2024-05-31 00:29+0200\n"
+"POT-Creation-Date: 2024-06-02T08:59:05+02:00\n"
+"PO-Revision-Date: 2024-06-02 08:59+0200\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
@@ -66,160 +66,6 @@ msgstr "Eintrag auswählen"
 msgid "No items match your query."
 msgstr "Kein Eintrag entspricht Ihrer Anfrage."
 
-#: resources/views/livewire/add-incident.blade.php:4
-msgid "Add incident"
-msgstr "Vorfall hinzufügen"
-
-#: resources/views/livewire/add-incident.blade.php:10
-msgid "Incident Report"
-msgstr "Bericht über einen Vorfall"
-
-#: resources/views/livewire/add-incident.blade.php:11
-msgid "This report will be read by superiors and customers. Make sure it's complete and worded correctly."
-msgstr "Dieser Bericht wird von Vorgesetzten und Kunden gelesen. Achten Sie darauf, dass er vollständig und korrekt formuliert ist."
-
-#: resources/views/livewire/add-incident.blade.php:14
-#: resources/views/livewire/journal.blade.php:44
-msgid "reported by"
-msgstr "gemeldet von"
-
-#: resources/views/livewire/add-incident.blade.php:18
-msgid "Who reported the incident?"
-msgstr "Wer hat den Vorfall gemeldet?"
-
-#: resources/views/livewire/add-incident.blade.php:19
-msgid "Sorry, no user was found for your request."
-msgstr "Es wurde leider kein Benutzer für Ihre Anfrage gefunden."
-
-#: resources/views/livewire/add-incident.blade.php:28
-#: resources/views/livewire/journal.blade.php:41
-msgid "Category"
-msgstr "Kategorie"
-
-#: resources/views/livewire/add-incident.blade.php:34
-msgid "Which category does the incident fall into?"
-msgstr "In welche Kategorie fällt der Vorfall?"
-
-#: resources/views/livewire/add-incident.blade.php:35
-msgid "No matching category found!"
-msgstr "Keine passende Kategorie gefunden!"
-
-#: resources/views/livewire/add-incident.blade.php:51
-msgid "Involved"
-msgstr "Beteiligt"
-
-#: resources/views/livewire/add-incident.blade.php:55
-msgid "No involvement of the emergency services."
-msgstr "Keine Beteiligung der Notdienste."
-
-#: resources/views/livewire/add-incident.blade.php:67
-msgid "Rescue"
-msgstr "Rettungsdienst"
-
-#: resources/views/livewire/add-incident.blade.php:78
-msgid "Fire"
-msgstr "Feuerwehr"
-
-#: resources/views/livewire/add-incident.blade.php:89
-msgid "Police"
-msgstr "Polizei"
-
-#: resources/views/livewire/add-incident.blade.php:97
-#: resources/views/livewire/journal.blade.php:40
-msgid "Date"
-msgstr "Datum"
-
-#: resources/views/livewire/add-incident.blade.php:132
-msgid "Time"
-msgstr "Zeit"
-
-#: resources/views/livewire/add-incident.blade.php:164
-msgid "Area / Location"
-msgstr "Bereich / Standort"
-
-#: resources/views/livewire/add-incident.blade.php:207
-msgid "Persons involved"
-msgstr "Beteiligte Personen"
-
-#: resources/views/livewire/add-incident.blade.php:257
-msgid "Incident Description"
-msgstr "Beschreibung des Vorfalls"
-
-#: resources/views/livewire/add-incident.blade.php:277
-msgid "The report about the Incident and what happened."
-msgstr "Der Bericht über den Vorfall und die Geschehnisse."
-
-#: resources/views/livewire/add-incident.blade.php:291
-msgid "Measures taken"
-msgstr "Getroffene Maßnahmen"
-
-#: resources/views/livewire/add-incident.blade.php:307
-msgid "List of measures taken."
-msgstr "Liste der getroffenen Maßnahmen."
-
-#: resources/views/livewire/add-incident.blade.php:320
-msgid "Details of the house ban"
-msgstr "Einzelheiten des Hausverbots"
-
-#: resources/views/livewire/add-incident.blade.php:324
-msgid "Personal details for issuing a house ban or trespassing notice. (optional)"
-msgstr "Personenbezogene Angaben für die Erteilung eines Hausverbots oder Hausfriedensbruchs. (optional)"
-
-#: resources/views/livewire/add-incident.blade.php:338
-msgid "Lastname"
-msgstr "Nachname"
-
-#: resources/views/livewire/add-incident.blade.php:356
-msgid "Firstname"
-msgstr "Vorname"
-
-#: resources/views/livewire/add-incident.blade.php:364
-msgid "Date of Birth"
-msgstr "Geburtsdatum"
-
-#: resources/views/livewire/add-incident.blade.php:372
-msgid "house ban until"
-msgstr "Hausverbot bis"
-
-#: resources/views/livewire/add-incident.blade.php:378
-msgid "further information"
-msgstr "weitere Informationen"
-
-#: resources/views/livewire/add-incident.blade.php:382
-msgid "existing house ban"
-msgstr "bestehendes Hausverbot"
-
-#: resources/views/livewire/add-incident.blade.php:382
-msgctxt "trespasses"
-msgid "previous trespass"
-msgid_plural "previous trespassing"
-msgstr[0] "vorheriger Hausfriedensbruch"
-msgstr[1] "vorherige Hausfriedensbrüche"
-
-#: resources/views/livewire/add-incident.blade.php:387
-msgid "No current house ban found."
-msgstr "Kein aktuelles Hausverbot gefunden."
-
-#: resources/views/livewire/add-incident.blade.php:395
-msgid "Street"
-msgstr "Straße"
-
-#: resources/views/livewire/add-incident.blade.php:401
-msgid "House Number"
-msgstr "Hausnummer"
-
-#: resources/views/livewire/add-incident.blade.php:408
-msgid "zipcode"
-msgstr "Postleitzahl"
-
-#: resources/views/livewire/add-incident.blade.php:414
-msgid "city"
-msgstr "Stadt"
-
-#: resources/views/livewire/add-incident.blade.php:429
-msgid "The form isn't filled correctly!"
-msgstr "Das Formular ist nicht korrekt ausgefüllt!"
-
 #: resources/views/livewire/change-password.blade.php:29
 msgid "Your current Password"
 msgstr "Ihr aktuelles Passwort"
@@ -238,6 +84,172 @@ msgstr "neues Passwort"
 msgid "Repeat Password"
 msgstr "Passwort wiederholen"
 
+#: resources/views/livewire/incident-form.blade.php:4
+msgid "Incident Report"
+msgstr "Bericht über einen Vorfall"
+
+#: resources/views/livewire/incident-form.blade.php:5
+msgid "This report will be read by superiors and customers. Make sure it's complete and worded correctly."
+msgstr "Dieser Bericht wird von Vorgesetzten und Kunden gelesen. Achten Sie darauf, dass er vollständig und korrekt formuliert ist."
+
+#: resources/views/livewire/incident-form.blade.php:8
+#: resources/views/livewire/journal.blade.php:34
+msgid "reported by"
+msgstr "gemeldet von"
+
+#: resources/views/livewire/incident-form.blade.php:12
+msgid "Who reported the incident?"
+msgstr "Wer hat den Vorfall gemeldet?"
+
+#: resources/views/livewire/incident-form.blade.php:13
+msgid "Sorry, no user was found for your request."
+msgstr "Es wurde leider kein Benutzer für Ihre Anfrage gefunden."
+
+#: resources/views/livewire/incident-form.blade.php:22
+#: resources/views/livewire/journal.blade.php:31
+msgid "Category"
+msgstr "Kategorie"
+
+#: resources/views/livewire/incident-form.blade.php:28
+msgid "Which category does the incident fall into?"
+msgstr "In welche Kategorie fällt der Vorfall?"
+
+#: resources/views/livewire/incident-form.blade.php:29
+msgid "No matching category found!"
+msgstr "Keine passende Kategorie gefunden!"
+
+#: resources/views/livewire/incident-form.blade.php:45
+msgid "Involved"
+msgstr "Beteiligt"
+
+#: resources/views/livewire/incident-form.blade.php:49
+msgid "No involvement of the emergency services."
+msgstr "Keine Beteiligung der Notdienste."
+
+#: resources/views/livewire/incident-form.blade.php:61
+msgid "Rescue"
+msgstr "Rettungsdienst"
+
+#: resources/views/livewire/incident-form.blade.php:72
+msgid "Fire"
+msgstr "Feuerwehr"
+
+#: resources/views/livewire/incident-form.blade.php:83
+msgid "Police"
+msgstr "Polizei"
+
+#: resources/views/livewire/incident-form.blade.php:91
+#: resources/views/livewire/journal.blade.php:30
+msgid "Date"
+msgstr "Datum"
+
+#: resources/views/livewire/incident-form.blade.php:126
+msgid "Time"
+msgstr "Zeit"
+
+#: resources/views/livewire/incident-form.blade.php:158
+msgid "Area / Location"
+msgstr "Bereich / Standort"
+
+#: resources/views/livewire/incident-form.blade.php:201
+msgid "Persons involved"
+msgstr "Beteiligte Personen"
+
+#: resources/views/livewire/incident-form.blade.php:251
+msgid "Incident Description"
+msgstr "Beschreibung des Vorfalls"
+
+#: resources/views/livewire/incident-form.blade.php:271
+msgid "The report about the Incident and what happened."
+msgstr "Der Bericht über den Vorfall und die Geschehnisse."
+
+#: resources/views/livewire/incident-form.blade.php:285
+msgid "Measures taken"
+msgstr "Getroffene Maßnahmen"
+
+#: resources/views/livewire/incident-form.blade.php:301
+msgid "List of measures taken."
+msgstr "Liste der getroffenen Maßnahmen."
+
+#: resources/views/livewire/incident-form.blade.php:314
+msgid "Details of the house ban"
+msgstr "Einzelheiten des Hausverbots"
+
+#: resources/views/livewire/incident-form.blade.php:318
+msgid "Personal details for issuing a house ban or trespassing notice. (optional)"
+msgstr "Personenbezogene Angaben für die Erteilung eines Hausverbots oder Hausfriedensbruchs. (optional)"
+
+#: resources/views/livewire/incident-form.blade.php:332
+msgid "Lastname"
+msgstr "Nachname"
+
+#: resources/views/livewire/incident-form.blade.php:350
+msgid "Firstname"
+msgstr "Vorname"
+
+#: resources/views/livewire/incident-form.blade.php:358
+msgid "Date of Birth"
+msgstr "Geburtsdatum"
+
+#: resources/views/livewire/incident-form.blade.php:366
+msgid "house ban until"
+msgstr "Hausverbot bis"
+
+#: resources/views/livewire/incident-form.blade.php:372
+msgid "further information"
+msgstr "weitere Informationen"
+
+#: resources/views/livewire/incident-form.blade.php:376
+msgid "existing house ban"
+msgstr "bestehendes Hausverbot"
+
+#: resources/views/livewire/incident-form.blade.php:376
+msgctxt "trespasses"
+msgid "previous trespass"
+msgid_plural "previous trespassing"
+msgstr[0] "vorheriger Hausfriedensbruch"
+msgstr[1] "vorherige Hausfriedensbrüche"
+
+#: resources/views/livewire/incident-form.blade.php:381
+msgid "No current house ban found."
+msgstr "Kein aktuelles Hausverbot gefunden."
+
+#: resources/views/livewire/incident-form.blade.php:389
+msgid "Street"
+msgstr "Straße"
+
+#: resources/views/livewire/incident-form.blade.php:395
+msgid "House Number"
+msgstr "Hausnummer"
+
+#: resources/views/livewire/incident-form.blade.php:402
+msgid "zipcode"
+msgstr "Postleitzahl"
+
+#: resources/views/livewire/incident-form.blade.php:408
+msgid "city"
+msgstr "Stadt"
+
+#: resources/views/livewire/incident-form.blade.php:422
+msgid "The form isn't filled correctly!"
+msgstr "Das Formular ist nicht korrekt ausgefüllt!"
+
+#: resources/views/livewire/incident-modal.blade.php:8
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: resources/views/livewire/incident-modal.blade.php:16
+msgid "Add incident"
+msgstr "Vorfall hinzufügen"
+
+#: resources/views/livewire/journal-row.blade.php:56
+msgid "Are you sure you want to delete this incident?\\n\\nType the incident # to confirm:"
+msgstr "Sind Sie sicher, dass Sie diesen Vorfall löschen möchten?\\n\\nGeben Sie zur Bestätigung die Vorgangsnummer ein:"
+
+#: resources/views/livewire/journal-row.blade.php:58
+msgid "Delete"
+msgstr "Löschen"
+
 #: resources/views/livewire/journal.blade.php:13
 msgid "Select location"
 msgstr "Standort auswählen"
@@ -247,25 +259,17 @@ msgstr "Standort auswählen"
 msgid "Sorry, no location was found for your request."
 msgstr "Es wurde leider kein Ort für Ihre Anfrage gefunden."
 
-#: resources/views/livewire/journal.blade.php:39
+#: resources/views/livewire/journal.blade.php:29
 msgid "Incident"
 msgstr "Vorfall"
 
-#: resources/views/livewire/journal.blade.php:42
+#: resources/views/livewire/journal.blade.php:32
 msgid "Description"
 msgstr "Beschreibung"
 
-#: resources/views/livewire/journal.blade.php:43
+#: resources/views/livewire/journal.blade.php:33
 msgid "Action"
 msgstr "Aktion"
-
-#: resources/views/livewire/journal.blade.php:111
-msgid "Are you sure you want to delete this incident?\\n\\nType the incident # to confirm:"
-msgstr "Sind Sie sicher, dass Sie diesen Vorfall löschen möchten?\\n\\nGeben Sie zur Bestätigung die Vorgangsnummer ein:"
-
-#: resources/views/livewire/journal.blade.php:113
-msgid "Delete"
-msgstr "Löschen"
 
 #: resources/views/livewire/shift.blade.php:20
 msgid "End your shift!"
