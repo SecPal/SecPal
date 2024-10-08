@@ -19,7 +19,7 @@
         "guava/sqids-for-laravel": "^1.1",
         "guzzlehttp/guzzle": "^7.8",
         "jfcherng/php-diff": "^6.16",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^46011.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.3",
